@@ -62,3 +62,9 @@ npm test           # todas las pruebas
 npm run test:invariantes   # solo las que protegen las reglas de arriba
 npx prisma migrate dev     # aplicar migraciones
 ```
+
+## Reglas del framework
+
+@AGENTS.md
+
+Ese archivo lo escribe `next dev` solo, con las advertencias de la versión de Next.js instalada. No lo edites a mano: se regenera. Commiteálo junto con tu trabajo para que el árbol quede limpio.

@@ -40,3 +40,15 @@ desktop.ini
 *.log
 npm-debug.log*
 yarn-error.log*
+
+# Específicos de Next.js y del despliegue
+.vercel
+*.pem
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+.pnpm-debug.log*
+yarn-debug.log*
