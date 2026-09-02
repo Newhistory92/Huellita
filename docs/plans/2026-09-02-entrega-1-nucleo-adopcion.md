@@ -23,7 +23,7 @@ Estas reglas aplican a **todas** las tareas. Copiadas literalmente de las specs.
 - **El registro de auditoría se escribe en la misma transacción que la acción** (spec §7).
 - **El original de una imagen no se sirve nunca**; el tipo se valida por contenido real, no por extensión (spec §5).
 - **Naranja = solo dinero.** El botón primario es tinta (`--brand`); el verde `--mark` es para navegación, foco y estados de interfaz (diseño §3).
-- **Fraunces solo en el titular de portada, el logo y las dos excepciones de exhibición.** El resto en Manrope; la monoespaciada solo en datos auditables (diseño §4).
+- **Fraunces en todos los títulos (`h1`–`h4`), el logo y las dos piezas de exhibición**, con el dial de suavidad de la tabla de diseño §4.1: `SOFT 100` en el titular de portada y el logo, `SOFT 70` en el resto. Manrope en interfaz y texto corrido; la monoespaciada solo en datos auditables. Fraunces nunca en texto corrido, etiquetas, botones ni cifras (diseño §4).
 - **Los tres estados de tema deben resolverse**: `:root`, `@media (prefers-color-scheme: dark)` con guarda `:root:not([data-theme="light"])`, y `:root[data-theme="dark"]`. Ningún color puede definirse únicamente dentro de un bloque de media query (diseño §2.1).
 - **Área táctil mínima 44×44px, contraste 4.5:1, foco visible siempre** (diseño §9).
 - **Idioma:** todo el código, los nombres de funciones y los mensajes en castellano rioplatense, sin voseo en la interfaz salvo donde el prototipo ya lo usa.

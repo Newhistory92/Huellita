@@ -122,13 +122,22 @@ Consecuencia práctica: el botón primario del sitio es **negro tinta**, no de c
 
 | Familia | Rol | Regla |
 |---|---|---|
-| **Fraunces** | Titular de portada y logo | Con `SOFT 100` y `WONK 1`. Serif de alta gama con terminaciones redondeadas: cálida sin ser infantil |
-| **Manrope** | Interfaz y texto corrido | Todo lo demás: títulos de sección, botones, etiquetas, párrafos |
+| **Fraunces** | Todos los títulos (`h1`–`h4`), el logo y las dos piezas de exhibición | Serif de alta gama con terminaciones redondeadas: cálida sin ser infantil |
+| **Manrope** | Interfaz y texto corrido | Botones, etiquetas, chips, párrafos, formularios, tablas |
 | **IBM Plex Mono** | Datos auditables | Importes, identificadores de transacción, fechas del libro, porcentajes, URLs |
 
-**Decisión aprobada:** la tipografía cálida queda **solo en el titular de portada y el logo**. Los títulos de sección, los importes y el libro contable mantienen el registro sobrio. La parte que emociona puede ser tierna; la parte donde se rinde cuenta de la plata tiene que verse seria.
+**Lo que cambia entre la zona emocional y la contable no es la familia: es el dial de suavidad.** Fraunces es un tipo variable, y sus ejes `SOFT` y `WONK` regulan cuánto se redondean las terminaciones y cuánto se descalzan las letras.
 
-Se admiten exactamente **dos excepciones de exhibición**, ambas fuera de la zona contable: los nombres de las veterinarias en la cinta de aliados y el título de la compuerta de imagen sensible. Cualquier uso adicional de Fraunces requiere aprobación: es la pieza que más rápido corre el sistema hacia lo genérico.
+| Uso | Ajuste |
+|---|---|
+| Titular de portada | `SOFT 100`, `WONK 1`, peso 700 — el punto más cálido del sitio |
+| Logo del encabezado | `SOFT 100`, `WONK 1`, peso 700 |
+| Títulos de sección y de tarjeta (`h2`–`h4`) | `SOFT 70`, `WONK 1`, peso 600 — la base |
+| Piezas de exhibición: nombres de la cinta de aliados y título de la compuerta de imagen sensible | `SOFT 80`, peso 600 |
+
+La sobriedad de la zona contable **no** la sostienen los títulos: la sostienen los importes en monoespaciada con cifras alineadas, las líneas finas, la paleta contenida y la ausencia de adornos. Bajar los títulos a Manrope en esa zona no agrega rigor y rompe la unidad del sitio.
+
+Lo que sí está prohibido es usar Fraunces en texto corrido, en etiquetas de interfaz, en botones o en cualquier dato numérico.
 
 **Regla de la monoespaciada:** aparece únicamente donde el dato tiene que poder auditarse. Usarla como recurso decorativo en etiquetas de interfaz vuelve la pantalla rígida y le quita significado donde sí importa. Toda columna de dígitos lleva `font-variant-numeric: tabular-nums`.
 
