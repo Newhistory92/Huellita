@@ -1,0 +1,136 @@
+:root{
+  /* Papel gris cálido + tinta. Naranja = acción/donación. Verde = solo la marca. */
+  --ground:#E9E9E7;
+  --surface:#FFFFFF;
+  --surface-2:#F2F2F0;
+  --ink:#191714;
+  --ink-2:#635D56;
+  --ink-3:#6E6862;
+  --line:#DCDAD5;
+  --line-strong:#C3BFB8;
+  --brand:#191714;
+  --brand-soft:#F2F2F0;
+  --brand-ink:#191714;
+  --on-brand:#FFFFFF;
+  --mark:#0E6B57;
+  --accent:#B85416;
+  --accent-soft:#FBEADC;
+  --on-accent:#FFFFFF;
+  --ok:#15633C;
+  --ok-soft:#E4EEE8;
+  --warn:#79571A;
+  --warn-soft:#F6EEDE;
+  --bad:#96271A;
+  --bad-soft:#F7E5E1;
+  --tshadow:0 1px 2px rgba(25,23,20,.20);
+  --tshadow-display:0 1px 0 rgba(255,255,255,.65), 0 2px 3px rgba(25,23,20,.18), 0 14px 30px rgba(25,23,20,.13);
+  --shadow-sm:0 1px 2px rgba(25,23,20,.05), 0 2px 8px -4px rgba(25,23,20,.12);
+  --shadow:0 1px 2px rgba(25,23,20,.05), 0 12px 28px -18px rgba(25,23,20,.45);
+  --shadow-lift:0 2px 4px rgba(25,23,20,.06), 0 18px 34px -18px rgba(25,23,20,.5);
+  --radius:16px;
+  --radius-sm:12px;
+  --radius-xs:10px;
+  --step--2:.75rem;
+  --step--1:.8438rem;
+  --step-0:1rem;
+  --step-1:1.125rem;
+  --step-2:1.4375rem;
+  --step-3:1.9375rem;
+  --step-4:2.75rem;
+  --maxw:640px;
+  --display:"Fraunces",Georgia,"Times New Roman",serif;
+  --body:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#14120F;
+    --surface:#1C1A17;
+    --surface-2:#252220;
+    --ink:#EDEAE5;
+    --ink-2:#A79F97;
+    --ink-3:#968E86;
+    --line:#2E2B27;
+    --line-strong:#413D38;
+    --brand:#EDEAE5;
+    --brand-soft:#252220;
+    --brand-ink:#EDEAE5;
+    --on-brand:#14120F;
+    --mark:#4FBFA1;
+    --accent:#F09B5E;
+    --accent-soft:#33231A;
+    --on-accent:#2B1408;
+    --ok:#5FBF8C;
+    --ok-soft:#16271F;
+    --warn:#D3AC5F;
+    --warn-soft:#2A2313;
+    --bad:#E58274;
+    --bad-soft:#2C1815;
+    --tshadow:0 2px 4px rgba(0,0,0,.65);
+    --tshadow-display:0 1px 0 rgba(255,255,255,.06), 0 2px 6px rgba(0,0,0,.7), 0 16px 34px rgba(0,0,0,.55);
+    --shadow-sm:0 1px 2px rgba(0,0,0,.5), 0 2px 8px -4px rgba(0,0,0,.6);
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 14px 30px -20px rgba(0,0,0,1);
+    --shadow-lift:0 2px 4px rgba(0,0,0,.55), 0 20px 38px -20px rgba(0,0,0,1);
+    /* Tokens sin variación entre temas: se repiten para que los tres bloques
+       declaren exactamente el mismo conjunto de variables. */
+    --radius:16px;
+    --radius-sm:12px;
+    --radius-xs:10px;
+    --step--2:.75rem;
+    --step--1:.8438rem;
+    --step-0:1rem;
+    --step-1:1.125rem;
+    --step-2:1.4375rem;
+    --step-3:1.9375rem;
+    --step-4:2.75rem;
+    --maxw:640px;
+    --display:"Fraunces",Georgia,"Times New Roman",serif;
+    --body:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#14120F;
+  --surface:#1C1A17;
+  --surface-2:#252220;
+  --ink:#EDEAE5;
+  --ink-2:#A79F97;
+  --ink-3:#968E86;
+  --line:#2E2B27;
+  --line-strong:#413D38;
+  --brand:#EDEAE5;
+  --brand-soft:#252220;
+  --brand-ink:#EDEAE5;
+  --on-brand:#14120F;
+  --mark:#4FBFA1;
+  --accent:#F09B5E;
+  --accent-soft:#33231A;
+  --on-accent:#2B1408;
+  --ok:#5FBF8C;
+  --ok-soft:#16271F;
+  --warn:#D3AC5F;
+  --warn-soft:#2A2313;
+  --bad:#E58274;
+  --bad-soft:#2C1815;
+  --tshadow:0 2px 4px rgba(0,0,0,.65);
+  --tshadow-display:0 1px 0 rgba(255,255,255,.06), 0 2px 6px rgba(0,0,0,.7), 0 16px 34px rgba(0,0,0,.55);
+  --shadow-sm:0 1px 2px rgba(0,0,0,.5), 0 2px 8px -4px rgba(0,0,0,.6);
+  --shadow:0 1px 2px rgba(0,0,0,.5), 0 14px 30px -20px rgba(0,0,0,1);
+  --shadow-lift:0 2px 4px rgba(0,0,0,.55), 0 20px 38px -20px rgba(0,0,0,1);
+  /* Tokens sin variación entre temas: se repiten para que los tres bloques
+     declaren exactamente el mismo conjunto de variables. */
+  --radius:16px;
+  --radius-sm:12px;
+  --radius-xs:10px;
+  --step--2:.75rem;
+  --step--1:.8438rem;
+  --step-0:1rem;
+  --step-1:1.125rem;
+  --step-2:1.4375rem;
+  --step-3:1.9375rem;
+  --step-4:2.75rem;
+  --maxw:640px;
+  --display:"Fraunces",Georgia,"Times New Roman",serif;
+  --body:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
+}
