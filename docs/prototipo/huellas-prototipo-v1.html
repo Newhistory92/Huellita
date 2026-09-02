@@ -1,0 +1,1766 @@
+<title>Refugio Huellas</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,400..700,0..100,0..1&amp;family=Manrope:wght@400..800&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap">
+<style>
+  :root{
+    /* Papel gris cálido + tinta. Naranja = acción/donación. Verde = solo la marca. */
+    --ground:#E9E9E7;
+    --surface:#FFFFFF;
+    --surface-2:#F2F2F0;
+    --ink:#191714;
+    --ink-2:#635D56;
+    --ink-3:#6E6862;
+    --line:#DCDAD5;
+    --line-strong:#C3BFB8;
+    --brand:#191714;
+    --brand-soft:#F2F2F0;
+    --brand-ink:#191714;
+    --on-brand:#FFFFFF;
+    --mark:#0E6B57;
+    --accent:#B85416;
+    --accent-soft:#FBEADC;
+    --on-accent:#FFFFFF;
+    --ok:#15633C;
+    --ok-soft:#E4EEE8;
+    --warn:#79571A;
+    --warn-soft:#F6EEDE;
+    --bad:#96271A;
+    --bad-soft:#F7E5E1;
+    --tshadow:0 1px 2px rgba(25,23,20,.20);
+    --tshadow-display:0 1px 0 rgba(255,255,255,.65), 0 2px 3px rgba(25,23,20,.18), 0 14px 30px rgba(25,23,20,.13);
+    --shadow-sm:0 1px 2px rgba(25,23,20,.05), 0 2px 8px -4px rgba(25,23,20,.12);
+    --shadow:0 1px 2px rgba(25,23,20,.05), 0 12px 28px -18px rgba(25,23,20,.45);
+    --shadow-lift:0 2px 4px rgba(25,23,20,.06), 0 18px 34px -18px rgba(25,23,20,.5);
+    --radius:16px;
+    --radius-sm:12px;
+    --radius-xs:10px;
+    --step--2:.75rem;
+    --step--1:.8438rem;
+    --step-0:1rem;
+    --step-1:1.125rem;
+    --step-2:1.4375rem;
+    --step-3:1.9375rem;
+    --step-4:2.75rem;
+    --maxw:640px;
+    --display:"Fraunces",Georgia,"Times New Roman",serif;
+    --body:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ground:#14120F;
+      --surface:#1C1A17;
+      --surface-2:#252220;
+      --ink:#EDEAE5;
+      --ink-2:#A79F97;
+      --ink-3:#968E86;
+      --line:#2E2B27;
+      --line-strong:#413D38;
+      --brand:#EDEAE5;
+      --brand-soft:#252220;
+      --brand-ink:#EDEAE5;
+      --on-brand:#14120F;
+      --mark:#4FBFA1;
+      --accent:#F09B5E;
+      --accent-soft:#33231A;
+      --on-accent:#2B1408;
+      --ok:#5FBF8C;
+      --ok-soft:#16271F;
+      --warn:#D3AC5F;
+      --warn-soft:#2A2313;
+      --bad:#E58274;
+      --bad-soft:#2C1815;
+      --tshadow:0 2px 4px rgba(0,0,0,.65);
+      --tshadow-display:0 1px 0 rgba(255,255,255,.06), 0 2px 6px rgba(0,0,0,.7), 0 16px 34px rgba(0,0,0,.55);
+      --shadow-sm:0 1px 2px rgba(0,0,0,.5), 0 2px 8px -4px rgba(0,0,0,.6);
+      --shadow:0 1px 2px rgba(0,0,0,.5), 0 14px 30px -20px rgba(0,0,0,1);
+      --shadow-lift:0 2px 4px rgba(0,0,0,.55), 0 20px 38px -20px rgba(0,0,0,1);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#14120F;
+    --surface:#1C1A17;
+    --surface-2:#252220;
+    --ink:#EDEAE5;
+    --ink-2:#A79F97;
+    --ink-3:#968E86;
+    --line:#2E2B27;
+    --line-strong:#413D38;
+    --brand:#EDEAE5;
+    --brand-soft:#252220;
+    --brand-ink:#EDEAE5;
+    --on-brand:#14120F;
+    --mark:#4FBFA1;
+    --accent:#F09B5E;
+    --accent-soft:#33231A;
+    --on-accent:#2B1408;
+    --ok:#5FBF8C;
+    --ok-soft:#16271F;
+    --warn:#D3AC5F;
+    --warn-soft:#2A2313;
+    --bad:#E58274;
+    --bad-soft:#2C1815;
+    --tshadow:0 2px 4px rgba(0,0,0,.65);
+    --tshadow-display:0 1px 0 rgba(255,255,255,.06), 0 2px 6px rgba(0,0,0,.7), 0 16px 34px rgba(0,0,0,.55);
+    --shadow-sm:0 1px 2px rgba(0,0,0,.5), 0 2px 8px -4px rgba(0,0,0,.6);
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 14px 30px -20px rgba(0,0,0,1);
+    --shadow-lift:0 2px 4px rgba(0,0,0,.55), 0 20px 38px -20px rgba(0,0,0,1);
+  }
+
+  *,*::before,*::after{box-sizing:border-box}
+  body{
+    overflow-x:clip;
+    background:var(--ground);
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:var(--step-0);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  h1,h2,h3,h4{
+    font-family:var(--display);font-weight:600;line-height:1.12;letter-spacing:-.018em;
+    font-variation-settings:"SOFT" 70,"WONK" 1;
+    text-wrap:balance;margin:0;
+  }
+  p{margin:0}
+  a{color:inherit}
+  button{font:inherit;color:inherit;cursor:pointer}
+  :focus-visible{outline:2px solid var(--mark);outline-offset:3px;border-radius:6px}
+  .num,.amount,.ledger__id,.urlbar,.photo__meta{font-family:var(--mono);font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+
+  /* ---------- chrome del prototipo: vidrio ---------- */
+  .protobar{
+    position:sticky;top:0;z-index:40;
+    background:color-mix(in srgb,var(--surface) 68%,transparent);
+    backdrop-filter:blur(18px) saturate(180%);
+    -webkit-backdrop-filter:blur(18px) saturate(180%);
+    border-bottom:1px solid color-mix(in srgb,var(--line) 70%,transparent);
+  }
+  @supports not (backdrop-filter: blur(2px)){ .protobar{background:var(--surface)} }
+  .protobar__inner{
+    max-width:1100px;margin:0 auto;padding:0 16px;
+    display:flex;align-items:stretch;gap:20px;
+  }
+  .brandmark{
+    display:flex;align-items:center;gap:8px;flex:none;
+    font-family:var(--display);font-size:1.3125rem;font-weight:700;letter-spacing:-.022em;
+    font-variation-settings:"SOFT" 100,"WONK" 1;text-shadow:var(--tshadow);
+    padding:12px 0;
+  }
+  .brandmark svg{color:var(--mark);transition:transform .45s cubic-bezier(.34,1.56,.5,1)}
+  .brandmark:hover svg{transform:rotate(-12deg) scale(1.12)}
+  .protobar__scroll{
+    display:flex;gap:0;overflow-x:auto;scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+  }
+  .protobar__scroll::-webkit-scrollbar{display:none}
+  .tab{
+    position:relative;flex:none;background:none;border:0;
+    padding:13px 14px 11px;min-height:44px;
+    font-size:var(--step--1);font-weight:600;letter-spacing:-.005em;color:var(--ink-3);
+    white-space:nowrap;transition:color .18s ease;
+  }
+  .tab::after{
+    content:"";position:absolute;left:14px;right:14px;bottom:6px;height:2px;
+    background:var(--mark);border-radius:2px;
+    transform:scaleX(0);transform-origin:left;transition:transform .3s cubic-bezier(.22,1,.3,1);
+  }
+  .tab:hover{color:var(--ink)}
+  .tab:hover::after{transform:scaleX(.4)}
+  .tab[aria-current="page"]{color:var(--ink)}
+  .tab[aria-current="page"]::after{transform:scaleX(1)}
+  .urlbar{
+    max-width:1100px;margin:0 auto;padding:0 16px 9px;
+    display:flex;align-items:center;gap:7px;
+    font-size:var(--step--2);color:var(--ink-3);
+  }
+  .urlbar code{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:.01em}
+
+  main{max-width:var(--maxw);margin:0 auto;padding:30px 18px 110px}
+  @media (min-width:900px){ main{max-width:880px;padding:46px 24px 120px} }
+  .view[hidden]{display:none}
+  .stack{display:flex;flex-direction:column;gap:26px}
+  .stack--tight{gap:12px}
+
+  /* ---------- componentes ---------- */
+  .card{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow-sm);overflow:hidden;
+  }
+  .card--lift{transition:box-shadow .3s ease,transform .3s cubic-bezier(.22,1,.3,1)}
+  .card--lift:hover{box-shadow:var(--shadow-lift);transform:translateY(-2px)}
+  .card__body{padding:20px;display:flex;flex-direction:column;gap:14px}
+  @media (min-width:620px){ .card__body{padding:24px} }
+  .card > .scroll-x{padding:0 20px 20px}
+  @media (min-width:620px){ .card > .scroll-x{padding:0 24px 24px} }
+  .eyebrow{
+    font-size:var(--step--2);font-weight:700;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+  }
+  .muted{color:var(--ink-2)}
+  .small{font-size:var(--step--1)}
+  .lead{font-size:var(--step-1);color:var(--ink-2);line-height:1.55;max-width:60ch}
+  .h-hero{
+    font-family:var(--display);font-weight:700;font-size:var(--step-4);
+    letter-spacing:-.03em;line-height:1.06;
+    font-variation-settings:"opsz" 144,"SOFT" 100,"WONK" 1;
+    text-shadow:var(--tshadow-display);
+  }
+  .h-hero .pawmark{
+    display:inline-block;font-size:.86em;line-height:1;
+    transform:rotate(-8deg) translateY(.04em);transform-origin:center;
+  }
+  .h-hero .pawmark:hover{animation:paw-wag .6s ease-in-out}
+  @keyframes paw-wag{25%{transform:rotate(4deg) translateY(.04em)}60%{transform:rotate(-14deg) translateY(.04em)}100%{transform:rotate(-8deg) translateY(.04em)}}
+  @media (min-width:620px){ .h-hero{font-size:3.25rem} }
+  .h-sec{font-size:var(--step-2)}
+  .h-card{font-size:var(--step-1);letter-spacing:-.012em}
+  hr.rule{border:0;border-top:1px solid var(--line);margin:0}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    min-height:50px;padding:13px 22px;border-radius:999px;border:1px solid transparent;
+    font-size:var(--step--1);font-weight:700;letter-spacing:-.005em;text-decoration:none;
+    transition:background .2s ease,color .2s ease,border-color .2s ease,box-shadow .25s ease,transform .18s cubic-bezier(.22,1,.3,1);
+  }
+  .btn svg{transition:transform .4s cubic-bezier(.34,1.56,.5,1)}
+  .btn:hover{transform:translateY(-1px)}
+  .btn:active{transform:translateY(0)}
+  .btn--donate{background:var(--accent);color:var(--on-accent);width:100%;box-shadow:0 6px 18px -10px color-mix(in srgb,var(--accent) 90%,transparent)}
+  .btn--donate:hover{background:color-mix(in srgb,var(--accent) 88%,var(--ink));box-shadow:0 10px 26px -12px color-mix(in srgb,var(--accent) 95%,transparent)}
+  .btn--donate:hover svg{transform:scale(1.18)}
+  .btn--brand{background:var(--brand);color:var(--on-brand)}
+  .btn--brand:hover{background:color-mix(in srgb,var(--brand) 86%,var(--ground))}
+  .btn--brand:hover svg{transform:rotate(-12deg) scale(1.12)}
+  .btn--ghost{background:transparent;border-color:var(--line-strong);color:var(--ink)}
+  .btn--ghost:hover{border-color:var(--ink);background:var(--surface-2)}
+  .btn--sm{min-height:42px;padding:9px 18px;font-size:var(--step--2)}
+  .btn--block{width:100%}
+
+  .pill{
+    display:inline-flex;align-items:center;gap:6px;border-radius:999px;
+    padding:5px 12px;font-size:var(--step--2);font-weight:700;
+    letter-spacing:.04em;text-transform:uppercase;line-height:1.5;
+    border:1px solid transparent;white-space:nowrap;
+  }
+  .pill--ok{background:var(--ok-soft);color:var(--ok);border-color:color-mix(in srgb,var(--ok) 28%,transparent)}
+  .pill--warn{background:var(--warn-soft);color:var(--warn);border-color:color-mix(in srgb,var(--warn) 28%,transparent)}
+  .pill--bad{background:var(--bad-soft);color:var(--bad);border-color:color-mix(in srgb,var(--bad) 28%,transparent)}
+  .pill--brand{background:var(--surface);color:var(--ink);border-color:var(--line-strong)}
+  .pill--neutral{background:var(--surface-2);color:var(--ink-2);border-color:var(--line)}
+  .pill--adopted{background:color-mix(in srgb,var(--mark) 12%,var(--surface));color:var(--mark);border-color:color-mix(in srgb,var(--mark) 34%,transparent)}
+  .dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex:none}
+
+  /* placa fotográfica */
+  .photo{
+    position:relative;aspect-ratio:4/3;display:grid;place-items:center;
+    background:linear-gradient(155deg, color-mix(in srgb,var(--ink) 14%,var(--surface)) 0%, var(--surface-2) 78%);
+    color:color-mix(in srgb,var(--ink) 40%,var(--surface-2));
+    overflow:hidden;
+  }
+  .photo::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(180deg,transparent 55%,color-mix(in srgb,var(--ink) 10%,transparent) 100%);
+  }
+  .photo--alt{
+    background:linear-gradient(155deg, color-mix(in srgb,var(--accent) 20%,var(--surface)) 0%, var(--surface-2) 78%);
+    color:color-mix(in srgb,var(--accent) 40%,var(--ink-3));
+  }
+  .photo > svg{width:52%;height:52%;opacity:.9;transition:filter .5s ease}
+  .photo__tag{position:absolute;left:12px;top:12px;z-index:3;background:var(--surface)}
+  .photo__meta{
+    position:absolute;right:12px;bottom:12px;z-index:3;
+    font-size:var(--step--2);letter-spacing:.02em;
+    color:var(--ink-2);background:color-mix(in srgb,var(--surface) 78%,transparent);
+    border-radius:999px;padding:3px 10px;backdrop-filter:blur(6px);
+  }
+
+  /* compuerta de imagen sensible */
+  .photo--sensitive > svg{filter:blur(24px)}
+  .photo__gate{
+    position:absolute;inset:0;z-index:4;border:0;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+    background:color-mix(in srgb,var(--surface) 58%,transparent);
+    backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);
+    color:var(--ink);text-align:center;padding:18px;
+    transition:opacity .4s ease,background .3s ease;
+  }
+  .photo__gate:hover{background:color-mix(in srgb,var(--surface) 48%,transparent)}
+  .photo__gate-icon{
+    width:44px;height:44px;border-radius:50%;display:grid;place-items:center;
+    background:color-mix(in srgb,var(--surface) 88%,transparent);
+    border:1px solid var(--line-strong);color:var(--ink);
+    box-shadow:var(--shadow-sm);
+    transition:transform .4s cubic-bezier(.34,1.56,.5,1),border-color .3s ease;
+  }
+  .photo__gate-icon svg{width:19px;height:19px}
+  .photo__gate:hover .photo__gate-icon{transform:scale(1.09);border-color:var(--ink)}
+  .photo__gate strong{
+    font-family:var(--display);font-weight:600;font-size:var(--step--1);
+    letter-spacing:-.01em;max-width:26ch;line-height:1.3;
+  }
+  .photo__gate small{font-size:var(--step--2);color:var(--ink-2);max-width:30ch;line-height:1.4}
+  .photo.is-revealed .photo__gate{opacity:0;pointer-events:none}
+  .photo.is-revealed > svg{filter:none}
+  .caserow .photo__gate{gap:7px;padding:10px}
+  .caserow .photo__gate strong,.caserow .photo__gate small{display:none}
+  .caserow .photo__gate-icon{width:36px;height:36px}
+
+  .grid{display:grid;gap:16px}
+  @media (min-width:620px){ .grid--2{grid-template-columns:repeat(2,1fr)} }
+  @media (min-width:900px){ .grid--3{grid-template-columns:repeat(3,1fr)} }
+
+  /* fila compacta de caso */
+  .caserow{
+    display:grid;grid-template-columns:88px 1fr;gap:16px;align-items:start;
+    padding:16px;text-align:left;width:100%;background:none;border:0;
+  }
+  @media (min-width:620px){ .caserow{grid-template-columns:112px 1fr;padding:20px;gap:20px} }
+  .caserow .photo{aspect-ratio:1;border-radius:var(--radius-xs)}
+  .caserow .photo > svg{width:56%;height:56%}
+  .caserow__body{display:flex;flex-direction:column;gap:9px;min-width:0}
+
+  /* banner infinito de veterinarias aliadas: cinta a sangre, sin caja */
+  .marquee{
+    position:relative;overflow:hidden;
+    width:100vw;max-width:100vw;margin-left:calc(50% - 50vw);
+    padding:10px 0;background:none;border:0;
+  }
+  .marquee::before,.marquee::after{
+    content:"";position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none;
+  }
+  .marquee::before{left:0;background:linear-gradient(90deg,var(--ground),color-mix(in srgb,var(--ground) 0%,transparent))}
+  .marquee::after{right:0;background:linear-gradient(270deg,var(--ground),color-mix(in srgb,var(--ground) 0%,transparent))}
+  .marquee__track{display:flex;width:max-content;animation:marquee-scroll 52s linear infinite}
+  .marquee__group{display:flex}
+  .marquee:hover .marquee__track,
+  .marquee:focus-within .marquee__track,
+  .marquee.is-paused .marquee__track{animation-play-state:paused}
+  @keyframes marquee-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .brandtile{
+    display:flex;align-items:center;gap:14px;flex:none;
+    padding:12px 34px;border:0;
+  }
+  .brandtile__mark{
+    width:34px;height:34px;display:grid;place-items:center;flex:none;color:var(--mark);
+    filter:drop-shadow(var(--tshadow));
+  }
+  .brandtile__mark svg{width:26px;height:26px}
+  .brandtile__text{display:flex;flex-direction:column;gap:1px;min-width:0}
+  .brandtile__name{
+    font-family:var(--display);font-weight:600;font-size:1.25rem;letter-spacing:-.015em;
+    font-variation-settings:"SOFT" 80,"WONK" 1;
+    white-space:nowrap;text-shadow:var(--tshadow);line-height:1.15;
+  }
+  .brandtile__perk{
+    font-size:var(--step-0);font-weight:600;white-space:nowrap;
+    color:var(--ink-2);text-shadow:var(--tshadow);
+  }
+
+  /* medidor */
+  .meter{display:flex;flex-direction:column;gap:10px}
+  .meter__track{
+    height:7px;background:var(--surface-2);border:1px solid var(--line);
+    border-radius:999px;overflow:hidden;position:relative;
+  }
+  .meter__fill{
+    height:100%;background:var(--accent);width:0;border-radius:999px;
+    transition:width 1.1s cubic-bezier(.22,.8,.3,1);
+  }
+  .meter__row{display:flex;justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap}
+  .amount{font-weight:500;letter-spacing:-.02em}
+  .amount--xl{font-size:2.375rem;letter-spacing:-.045em;line-height:1}
+  .amount--in{color:var(--ok)}
+  .amount--out{color:var(--bad)}
+
+  .datagrid{
+    display:grid;grid-template-columns:repeat(2,1fr);gap:1px;
+    background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;
+  }
+  @media (min-width:620px){ .datagrid{grid-template-columns:repeat(4,1fr)} }
+  .datagrid > div{background:var(--surface);padding:15px}
+  .datagrid dt{font-size:var(--step--2);font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+  .datagrid dd{margin:5px 0 0;font-size:var(--step--1);font-weight:600}
+
+  .stat{
+    position:relative;display:flex;flex-direction:column;padding:22px;overflow:hidden;
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow-sm);
+    transition:box-shadow .3s ease,transform .3s cubic-bezier(.22,1,.3,1),border-color .3s ease;
+  }
+  .stat::before{
+    content:"";position:absolute;left:22px;right:22px;top:0;height:1px;
+    background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--mark) 55%,transparent),transparent);
+    opacity:.7;
+  }
+  .stat:hover{box-shadow:var(--shadow-lift);transform:translateY(-2px);border-color:var(--line-strong)}
+  .stat__icon{
+    width:34px;height:34px;border-radius:50%;display:grid;place-items:center;margin-bottom:16px;
+    background:color-mix(in srgb,var(--mark) 9%,var(--surface));
+    border:1px solid color-mix(in srgb,var(--mark) 26%,transparent);
+    color:var(--mark);
+  }
+  .stat__icon svg{width:17px;height:17px}
+  .stat--money .stat__icon{
+    background:color-mix(in srgb,var(--ok) 9%,var(--surface));
+    border-color:color-mix(in srgb,var(--ok) 26%,transparent);color:var(--ok);
+  }
+  .stat--money::before{background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--ok) 55%,transparent),transparent)}
+  .stat--spent .stat__icon{
+    background:color-mix(in srgb,var(--bad) 9%,var(--surface));
+    border-color:color-mix(in srgb,var(--bad) 26%,transparent);color:var(--bad);
+  }
+  .stat--spent::before{background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--bad) 55%,transparent),transparent)}
+  .stat__label{
+    font-size:var(--step--2);font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+    color:var(--ink-3);line-height:1.4;
+  }
+  .stat__n{
+    font-family:var(--mono);font-size:2rem;font-weight:500;letter-spacing:-.05em;
+    font-variant-numeric:tabular-nums;line-height:1.05;margin-top:9px;
+    text-shadow:var(--tshadow);
+  }
+  .stat--money .stat__n{color:var(--ok)}
+  .stat--spent .stat__n{color:var(--bad)}
+  .stat__note{
+    display:flex;align-items:center;gap:9px;margin-top:12px;
+    font-size:var(--step--2);color:var(--ink-2);line-height:1.4;
+  }
+  .stat__note::before{content:"";width:16px;height:1px;background:var(--line-strong);flex:none}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{
+    min-height:42px;padding:10px 17px;border-radius:999px;border:1px solid var(--line-strong);
+    background:var(--surface);font-size:var(--step--1);font-weight:600;color:var(--ink-2);
+    transition:background .18s ease,color .18s ease,border-color .18s ease,box-shadow .25s ease;
+  }
+  .chip:hover{border-color:var(--ink);color:var(--ink);box-shadow:var(--shadow-sm)}
+  .chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface);box-shadow:var(--shadow-sm)}
+  :root[data-theme="dark"] .chip[aria-pressed="true"],
+  :root:not([data-theme="light"]) .chip[aria-pressed="true"]{color:var(--on-brand)}
+
+  /* libro contable */
+  .ledger{display:flex;flex-direction:column}
+  .ledger__row{
+    display:grid;grid-template-columns:1fr auto;gap:5px 16px;align-items:start;
+    padding:16px 20px;border-top:1px solid var(--line);
+  }
+  @media (min-width:620px){ .ledger__row{padding:16px 24px} }
+  .ledger__row:first-child{border-top:0}
+  .ledger__meta{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:5px}
+  .ledger__id{font-size:var(--step--2);color:var(--ink-3);letter-spacing:.01em}
+  .doclink{
+    display:inline-flex;align-items:center;gap:7px;text-decoration:none;
+    font-size:var(--step--2);font-weight:600;letter-spacing:.01em;
+    color:var(--ink);background:var(--surface-2);border:1px solid var(--line);
+    border-radius:999px;padding:6px 13px;min-height:34px;
+    transition:border-color .2s ease,color .2s ease,background .2s ease;
+  }
+  .doclink:hover{color:var(--mark);border-color:color-mix(in srgb,var(--mark) 45%,transparent);background:color-mix(in srgb,var(--mark) 9%,var(--surface))}
+
+  /* línea de tiempo */
+  .timeline{display:flex;flex-direction:column;padding:6px 0}
+  .tl{display:grid;grid-template-columns:18px 1fr;gap:14px;padding:14px 20px;position:relative}
+  @media (min-width:620px){ .tl{padding:14px 24px} }
+  .tl::before{content:"";position:absolute;left:28px;top:0;bottom:0;width:1px;background:var(--line)}
+  @media (min-width:620px){ .tl::before{left:32px} }
+  .tl:first-child::before{top:24px}
+  .tl:last-child::before{bottom:calc(100% - 24px)}
+  .tl__marker{
+    width:18px;height:18px;border-radius:50%;display:grid;place-items:center;
+    background:var(--surface);border:1px solid var(--line-strong);z-index:1;margin-top:4px;color:var(--ink-2);
+  }
+  .tl__marker svg{width:10px;height:10px}
+  .tl--in .tl__marker{border-color:var(--ok);color:var(--ok)}
+  .tl--out .tl__marker{border-color:var(--bad);color:var(--bad)}
+  .tl--note .tl__marker{border-color:var(--mark);color:var(--mark)}
+  .tl__date{font-size:var(--step--2);font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+  .tl__body{display:flex;flex-direction:column;gap:7px;align-items:flex-start}
+
+  /* pestañas internas */
+  .subtabs{display:flex;gap:0;overflow-x:auto;border-bottom:1px solid var(--line);scrollbar-width:none}
+  .subtabs::-webkit-scrollbar{display:none}
+  .subtab{
+    position:relative;background:none;border:0;padding:15px 17px 13px;min-height:48px;
+    font-size:var(--step--1);font-weight:600;color:var(--ink-3);
+    white-space:nowrap;transition:color .18s ease;
+  }
+  .subtab::after{
+    content:"";position:absolute;left:17px;right:17px;bottom:0;height:2px;background:var(--mark);
+    transform:scaleX(0);transform-origin:left;transition:transform .3s cubic-bezier(.22,1,.3,1);
+  }
+  .subtab:hover{color:var(--ink)}
+  .subtab[aria-selected="true"]{color:var(--ink)}
+  .subtab[aria-selected="true"]::after{transform:scaleX(1)}
+
+  /* formulario */
+  .field{display:flex;flex-direction:column;gap:7px}
+  .field label,.field legend{font-size:var(--step--1);font-weight:700}
+  .field .hint{font-size:var(--step--2);color:var(--ink-2);line-height:1.5}
+  .field input,.field textarea,.field select{
+    font:inherit;font-size:var(--step--1);color:var(--ink);background:var(--surface);
+    border:1px solid var(--line-strong);border-radius:var(--radius-xs);
+    padding:13px 15px;min-height:50px;width:100%;
+    transition:border-color .18s ease,box-shadow .25s ease;
+  }
+  .field input:hover,.field textarea:hover,.field select:hover{border-color:var(--ink-2)}
+  .field input:focus,.field textarea:focus,.field select:focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--mark) 20%,transparent)}
+  .field textarea{min-height:104px;resize:vertical}
+  .radios{display:flex;gap:8px;flex-wrap:wrap}
+
+  .callout{
+    border:1px solid var(--line);background:var(--surface);border-radius:var(--radius);
+    box-shadow:var(--shadow-sm);
+    padding:20px;display:flex;flex-direction:column;gap:11px;
+  }
+  @media (min-width:620px){ .callout{padding:24px} }
+  .callout--warn{border-color:color-mix(in srgb,var(--warn) 32%,var(--line));background:var(--warn-soft);box-shadow:none}
+  .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:var(--step--2);font-weight:600;color:var(--ink-2)}
+  .flow span{border:1px solid var(--line);border-radius:999px;padding:5px 12px;background:var(--surface)}
+  .flow em{font-style:normal;color:var(--accent)}
+
+  .sharebar{display:flex;gap:8px;flex-wrap:wrap}
+  .share{
+    display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:10px 17px;
+    border-radius:999px;border:1px solid var(--line-strong);background:var(--surface);
+    font-size:var(--step--1);font-weight:600;
+    transition:border-color .18s ease,color .18s ease,box-shadow .25s ease;
+  }
+  .share svg{transition:transform .4s cubic-bezier(.34,1.56,.5,1)}
+  .share:hover{border-color:var(--ink);color:var(--ink);box-shadow:var(--shadow-sm)}
+  .share:hover svg{transform:scale(1.14)}
+
+  .sticky-cta{
+    position:sticky;bottom:16px;z-index:20;margin-top:6px;
+    background:color-mix(in srgb,var(--surface) 82%,transparent);
+    backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%);
+    border:1px solid var(--line-strong);border-radius:999px;
+    box-shadow:var(--shadow);
+    padding:9px;display:flex;gap:10px;align-items:center;
+  }
+  .sticky-cta .amount{font-size:var(--step--1);padding-left:14px;white-space:nowrap}
+
+  table.tbl{width:100%;border-collapse:collapse;font-size:var(--step--1)}
+  table.tbl th,table.tbl td{text-align:left;padding:12px 0;border-top:1px solid var(--line);vertical-align:top}
+  table.tbl th{font-weight:600;color:var(--ink)}
+  table.tbl tr:first-child th,table.tbl tr:first-child td{border-top:0}
+  .tbl--head tr:first-child th{
+    font-size:var(--step--2);font-weight:700;
+    letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);padding-bottom:8px;
+  }
+  .tbl--head th,.tbl--head td{padding-right:18px}
+  .scroll-x{overflow-x:auto}
+
+  .toast{
+    position:fixed;left:50%;bottom:24px;transform:translate(-50%,16px);
+    background:var(--ink);color:var(--surface);border-radius:999px;padding:12px 22px;
+    font-size:var(--step--1);font-weight:600;opacity:0;pointer-events:none;
+    box-shadow:var(--shadow);
+    transition:opacity .22s ease,transform .22s cubic-bezier(.22,1,.3,1);z-index:60;max-width:calc(100vw - 32px);
+  }
+  :root[data-theme="dark"] .toast,:root:not([data-theme="light"]) .toast{color:var(--on-brand)}
+  .toast.is-on{opacity:1;transform:translate(-50%,0)}
+
+  .footnote{
+    font-size:var(--step--2);font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--ink-3);text-align:center;padding:40px 8px 0;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important;transition-duration:.001ms !important}
+    .btn:hover,.stat:hover,.card--lift:hover{transform:none}
+    .marquee__track{animation:none;flex-wrap:wrap;width:auto}
+    .marquee__group{flex-wrap:wrap}
+    .brandtile{padding:10px 24px 10px 0}
+    .marquee__group[aria-hidden="true"]{display:none}
+    .marquee::before,.marquee::after{display:none}
+  }
+</style>
+
+<!-- Iconografía SVG reutilizable -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-paw" viewBox="0 0 24 24" fill="currentColor">
+      <ellipse cx="6.5" cy="9" rx="2.3" ry="3"/><ellipse cx="11" cy="6.4" rx="2.3" ry="3.2"/>
+      <ellipse cx="16" cy="7.4" rx="2.2" ry="3"/><ellipse cx="20" cy="11.4" rx="2" ry="2.6"/>
+      <path d="M12.6 12.4c2.6 0 5 1.9 5.6 4.3.5 2.1-1 3.9-3.2 3.9-1.1 0-2-.3-3-.3s-1.9.3-3 .3c-2.2 0-3.7-1.8-3.2-3.9.6-2.4 3-4.3 5.6-4.3z"/>
+    </symbol>
+    <symbol id="i-dog" viewBox="0 0 64 64" fill="currentColor">
+      <path d="M14 12c4 0 7 3 8 7 3-1.5 6.5-2.3 10-2.3s7 .8 10 2.3c1-4 4-7 8-7 1.6 0 2.6 1.3 2.4 2.9l-1.6 11c1.4 3 2.2 6.3 2.2 9.6C53 47 44 55 32 55S11 47 11 35.5c0-3.3.8-6.6 2.2-9.6l-1.6-11C11.4 13.3 12.4 12 14 12z"/>
+      <circle cx="24" cy="33" r="3.2" fill="var(--surface)"/><circle cx="40" cy="33" r="3.2" fill="var(--surface)"/>
+      <path d="M32 40c2.6 0 4.4 1.4 4.4 2.9 0 2-2.2 3.6-4.4 3.6s-4.4-1.6-4.4-3.6c0-1.5 1.8-2.9 4.4-2.9z" fill="var(--surface)"/>
+    </symbol>
+    <symbol id="i-cat" viewBox="0 0 64 64" fill="currentColor">
+      <path d="M13 10l9 6.5c3.1-1 6.5-1.5 10-1.5s6.9.5 10 1.5L51 10c1.3-.9 2.9 0 2.9 1.6l-.6 13.9c1.1 2.6 1.7 5.4 1.7 8.3C55 46 45 54 32 54S9 46 9 33.8c0-2.9.6-5.7 1.7-8.3l-.6-13.9C10.1 10 11.7 9.1 13 10z"/>
+      <circle cx="23" cy="32" r="3" fill="var(--surface)"/><circle cx="41" cy="32" r="3" fill="var(--surface)"/>
+      <path d="M28 41h8l-4 4z" fill="var(--surface)"/>
+    </symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/>
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 6 9 17l-5-5"/>
+    </symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3l7 3v6c0 4.4-3 8.2-7 9-4-.8-7-4.6-7-9V6z"/><path d="M9.5 12.2l1.8 1.8 3.4-3.6"/>
+    </symbol>
+    <symbol id="i-in" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 5v14M5 12l7 7 7-7"/>
+    </symbol>
+    <symbol id="i-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 19V5M5 12l7-7 7 7"/>
+    </symbol>
+    <symbol id="i-share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+      <path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/>
+    </symbol>
+    <symbol id="i-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7L12.2 19"/>
+    </symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 21s-7.5-4.6-9.3-9.1C1.3 8.3 3.3 4.8 6.9 4.8c2 0 3.8 1.1 5.1 2.8 1.3-1.7 3-2.8 5.1-2.8 3.6 0 5.6 3.5 4.2 7.1C19.5 16.4 12 21 12 21z"/>
+    </symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17.2v.1"/>
+    </symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+    </symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>
+    </symbol>
+    <symbol id="i-cross" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M9.4 3h5.2a1.4 1.4 0 0 1 1.4 1.4v3.6h3.6A1.4 1.4 0 0 1 21 9.4v5.2a1.4 1.4 0 0 1-1.4 1.4H16v3.6a1.4 1.4 0 0 1-1.4 1.4H9.4A1.4 1.4 0 0 1 8 19.6V16H4.4A1.4 1.4 0 0 1 3 14.6V9.4A1.4 1.4 0 0 1 4.4 8H8V4.4A1.4 1.4 0 0 1 9.4 3z"/>
+    </symbol>
+    <symbol id="i-flask" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9.5 3h5M10.5 3v6.2L5.6 17.4A2 2 0 0 0 7.3 20.5h9.4a2 2 0 0 0 1.7-3.1L13.5 9.2V3"/><path d="M8.2 14.5h7.6"/>
+    </symbol>
+    <symbol id="i-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5.2 8h13.6l-1.1 11.2a2 2 0 0 1-2 1.8H8.3a2 2 0 0 1-2-1.8z"/><path d="M9 8V6.6a3 3 0 0 1 6 0V8"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="protobar">
+  <div class="protobar__inner">
+    <div class="brandmark">
+      <svg width="22" height="22" aria-hidden="true"><use href="#i-paw"></use></svg>
+      <span>Huellas</span>
+    </div>
+    <nav class="protobar__scroll" aria-label="Pantallas del prototipo">
+      <button class="tab" data-go="home" aria-current="page">Inicio</button>
+      <button class="tab" data-go="adoptar">Adoptar</button>
+      <button class="tab" data-go="animal">Ficha de Juanito</button>
+      <button class="tab" data-go="postular">Postulación</button>
+      <button class="tab" data-go="caso">Caso: Luna</button>
+      <button class="tab" data-go="transparencia">Transparencia</button>
+      <button class="tab" data-go="admin">Panel interno</button>
+    </nav>
+  </div>
+  <div class="urlbar">
+    <svg width="13" height="13" aria-hidden="true"><use href="#i-lock"></use></svg>
+    <code id="urlSlug">refugiohuellas.org.ar/</code>
+  </div>
+</div>
+
+<main>
+
+<!-- ============ INICIO ============ -->
+<section class="view stack" id="view-home" aria-label="Inicio">
+  <div class="stack stack--tight">
+    <p class="eyebrow">Asociación Civil Huellas · Rosario</p>
+    <h1 class="h-hero">Cada rescate deja un rastro <span class="pawmark" aria-hidden="true">🐾</span> que se puede verificar.</h1>
+    <p class="lead">Acá vive la información que en Facebook se pierde en tres días: quién es cada animal, cuánta plata se juntó, en qué se gastó y con qué comprobante.</p>
+  </div>
+
+  <div class="grid grid--2">
+    <a class="btn btn--brand" href="#" data-go="adoptar">
+      <svg width="18" height="18" aria-hidden="true"><use href="#i-paw"></use></svg>
+      Quiero adoptar
+    </a>
+    <a class="btn btn--donate" href="#" data-go="caso">
+      <svg width="18" height="18" aria-hidden="true"><use href="#i-heart"></use></svg>
+      Ayudar a un animal
+    </a>
+  </div>
+
+  <div class="grid grid--3">
+    <div class="stat"><span class="stat__icon"><svg aria-hidden="true"><use href="#i-paw"></use></svg></span><span class="stat__label">Animales rescatados</span><span class="stat__n" data-count="312">312</span><span class="stat__note">Desde 2019 · 24 en lo que va de 2026</span></div>
+    <div class="stat"><span class="stat__icon"><svg aria-hidden="true"><use href="#i-heart"></use></svg></span><span class="stat__label">Adopciones concretadas</span><span class="stat__n" data-count="248">248</span><span class="stat__note">79% de los animales rescatados</span></div>
+    <div class="stat stat--money"><span class="stat__icon"><svg aria-hidden="true"><use href="#i-shield"></use></svg></span><span class="stat__label">Donaciones verificadas</span><span class="stat__n" data-count="8.94" data-prefix="$" data-suffix="M" data-decimals="2">$8,94M</span><span class="stat__note">3.417 pagos confirmados uno por uno</span></div>
+  </div>
+
+  <section class="stack stack--tight" aria-labelledby="urg">
+    <div class="meter__row">
+      <h2 class="h-sec" id="urg">Casos abiertos ahora</h2>
+      <button class="btn btn--ghost btn--sm" data-go="transparencia">Ver todos</button>
+    </div>
+
+    <article class="card card--lift">
+      <div class="caserow">
+        <div class="photo photo--alt photo--sensitive">
+          <svg aria-hidden="true"><use href="#i-dog"></use></svg>
+          <button class="photo__gate" data-reveal aria-label="Ver la foto de Luna del día del rescate">
+            <span class="photo__gate-icon"><svg aria-hidden="true"><use href="#i-eye"></use></svg></span>
+            <strong>Foto del rescate</strong>
+            <small>Puede impresionar</small>
+          </button>
+        </div>
+        <div class="caserow__body">
+          <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+            <span class="pill pill--bad"><span class="dot"></span>Urgente</span>
+            <span class="eyebrow">Cirugía · 12 de septiembre</span>
+          </div>
+          <div>
+            <h3 class="h-card">Luna necesita una cirugía de cadera</h3>
+            <p class="small muted">Atropellada en Av. Provincias Unidas. Fractura de pelvis con indicación quirúrgica.</p>
+          </div>
+          <div class="meter" data-meter="65.5">
+            <div class="meter__track"><div class="meter__fill"></div></div>
+            <div class="meter__row">
+              <span class="amount small">$327.500 <span class="muted">de $500.000</span></span>
+              <span class="small muted num">65,5% · 47 donantes</span>
+            </div>
+          </div>
+          <a class="btn btn--donate btn--sm" href="#" data-go="caso">
+            <svg width="15" height="15" aria-hidden="true"><use href="#i-heart"></use></svg>
+            Ver el caso y donar
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card card--lift">
+      <div class="caserow">
+        <div class="photo">
+          <svg aria-hidden="true"><use href="#i-cat"></use></svg>
+        </div>
+        <div class="caserow__body">
+          <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+            <span class="pill pill--warn"><span class="dot"></span>Tratamiento</span>
+            <span class="eyebrow">Hasta diciembre</span>
+          </div>
+          <div>
+            <h3 class="h-card">Mora: tratamiento por leucemia felina</h3>
+            <p class="small muted">Medicación mensual y controles de laboratorio.</p>
+          </div>
+          <div class="meter" data-meter="38">
+            <div class="meter__track"><div class="meter__fill"></div></div>
+            <div class="meter__row">
+              <span class="amount small">$68.400 <span class="muted">de $180.000</span></span>
+              <span class="small muted num">38% · 12 donantes</span>
+            </div>
+          </div>
+          <a class="btn btn--ghost btn--sm" href="#" data-go="caso" style="align-self:flex-start">Ver el caso</a>
+        </div>
+      </div>
+    </article>
+
+    <p class="small muted" style="display:flex;gap:8px;align-items:flex-start">
+      <svg width="15" height="15" aria-hidden="true" style="flex:none;margin-top:4px;color:var(--ink-3)"><use href="#i-alert"></use></svg>
+      Las fotos de rescates recientes se publican difuminadas. Se ven solo si la persona decide abrirlas.
+    </p>
+  </section>
+
+  <section class="stack stack--tight" aria-labelledby="aliados">
+    <div class="meter__row">
+      <h2 class="h-sec" id="aliados">Veterinarias que nos bancan</h2>
+      <button class="btn btn--ghost btn--sm" data-marquee-toggle aria-pressed="false" aria-controls="aliadosBanner">Pausar</button>
+    </div>
+    <p class="small muted">Nos hacen descuentos en cirugías, estudios y medicación. A cambio, su nombre viaja en cada caso que publicamos y en cada factura que subimos.</p>
+
+    <div class="marquee" id="aliadosBanner" data-marquee role="group" aria-label="Veterinarias y comercios aliados">
+      <div class="marquee__track">
+        <div class="marquee__group">
+          <div class="brandtile">
+            <span class="brandtile__mark"><svg aria-hidden="true"><use href="#i-cross"></use></svg></span>
+            <span class="brandtile__text"><span class="brandtile__name">Veterinaria San Roque</span><span class="brandtile__perk">Av. Pellegrini 1840</span></span>
+          </div>
+          <div class="brandtile">
+            <span class="brandtile__mark"><svg aria-hidden="true"><use href="#i-flask"></use></svg></span>
+            <span class="brandtile__text"><span class="brandtile__name">Laboratorio Vetlab</span><span class="brandtile__perk">San Martín 2145</span></span>
+          </div>
+          <div class="brandtile">
+            <span class="brandtile__mark"><svg aria-hidden="true"><use href="#i-bag"></use></svg></span>
+            <span class="brandtile__text"><span class="brandtile__name">Farmacia Veterinaria Central</span><span class="brandtile__perk">Bv. Oroño 960</span></span>
+          </div>
+          <div class="brandtile">
+            <span class="brandtile__mark"><svg aria-hidden="true"><use href="#i-cross"></use></svg></span>
+            <span class="brandtile__text"><span class="brandtile__name">Centro Quirúrgico Sur</span><span class="brandtile__perk">Av. Uriburu 2380</span></span>
+          </div>
+          <div class="brandtile">
+            <span class="brandtile__mark"><svg aria-hidden="true"><use href="#i-paw"></use></svg></span>
+            <span class="brandtile__text"><span class="brandtile__name">Pet Shop Colibrí</span><span class="brandtile__perk">Mendoza 3450</span></span>
+          </div>
+          <div class="brandtile">
+            <span class="brandtile__mark"><svg aria-hidden="true"><use href="#i-cross"></use></svg></span>
+            <span class="brandtile__text"><span class="brandtile__name">Clínica Sarmiento</span><span class="brandtile__perk">Sarmiento 1720</span></span>
+          </div>
+        </div>
+        <div class="marquee__group" aria-hidden="true">
+          <div class="brandtile">
+            <span class="brandtile__mark"><svg aria-hidden="true"><use href="#i-cross"></use></svg></span>
+            <span class="brandtile__text"><span class="brandtile__name">Veterinaria San Roque</span><span class="brandtile__perk">Av. Pellegrini 1840</span></span>
+          </div>
+          <div class="brandtile">
+            <span class="brandtile__mark"><svg aria-hidden="true"><use href="#i-flask"></use></svg></span>
+            <span class="brandtile__text"><span class="brandtile__name">Laboratorio Vetlab</span><span class="brandtile__perk">San Martín 2145</span></span>
+          </div>
+          <div class="brandtile">
+            <span class="brandtile__mark"><svg aria-hidden="true"><use href="#i-bag"></use></svg></span>
+            <span class="brandtile__text"><span class="brandtile__name">Farmacia Veterinaria Central</span><span class="brandtile__perk">Bv. Oroño 960</span></span>
+          </div>
+          <div class="brandtile">
+            <span class="brandtile__mark"><svg aria-hidden="true"><use href="#i-cross"></use></svg></span>
+            <span class="brandtile__text"><span class="brandtile__name">Centro Quirúrgico Sur</span><span class="brandtile__perk">Av. Uriburu 2380</span></span>
+          </div>
+          <div class="brandtile">
+            <span class="brandtile__mark"><svg aria-hidden="true"><use href="#i-paw"></use></svg></span>
+            <span class="brandtile__text"><span class="brandtile__name">Pet Shop Colibrí</span><span class="brandtile__perk">Mendoza 3450</span></span>
+          </div>
+          <div class="brandtile">
+            <span class="brandtile__mark"><svg aria-hidden="true"><use href="#i-cross"></use></svg></span>
+            <span class="brandtile__text"><span class="brandtile__name">Clínica Sarmiento</span><span class="brandtile__perk">Sarmiento 1720</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="small muted">Cada descuento queda registrado en el caso: la factura muestra el precio de lista y lo que realmente pagamos. Eso también es transparencia — y es la mejor publicidad para ellos.</p>
+  </section>
+
+  <div class="callout">
+    <p class="eyebrow" style="display:flex;align-items:center;gap:7px">
+      <svg width="15" height="15" aria-hidden="true"><use href="#i-shield"></use></svg> Cómo funciona la plata acá
+    </p>
+    <p class="small">Ningún administrador puede escribir a mano "recaudamos $500.000". El número público sale de sumar transacciones verificadas, una por una.</p>
+    <div class="flow">
+      <span>Donación</span>→<span>Mercado Pago</span>→<span>Webhook</span>→<span>Verificación</span>→<span><em>Asiento contable</em></span>→<span>Total público</span>
+    </div>
+    <button class="btn btn--ghost btn--sm" data-go="transparencia" style="align-self:flex-start">Leer la metodología</button>
+  </div>
+
+  <section class="stack stack--tight" aria-labelledby="adop">
+    <h2 class="h-sec" id="adop">Buscan familia</h2>
+    <div class="grid grid--3">
+      <article class="card card--lift">
+        <div class="photo"><svg aria-hidden="true"><use href="#i-dog"></use></svg><span class="photo__tag pill pill--brand">Disponible</span></div>
+        <div class="card__body" style="gap:10px">
+          <h3 class="h-card">Juanito</h3>
+          <p class="small muted">Perro · Mediano · 2 años · Macho</p>
+          <a class="btn btn--brand btn--sm btn--block" href="#" data-go="animal">Conocer a Juanito</a>
+        </div>
+      </article>
+      <article class="card card--lift">
+        <div class="photo photo--alt"><svg aria-hidden="true"><use href="#i-cat"></use></svg><span class="photo__tag pill pill--brand">Disponible</span></div>
+        <div class="card__body" style="gap:10px">
+          <h3 class="h-card">Pesto</h3>
+          <p class="small muted">Gato · Pequeño · 8 meses · Macho</p>
+          <a class="btn btn--brand btn--sm btn--block" href="#" data-go="adoptar">Conocer a Pesto</a>
+        </div>
+      </article>
+      <article class="card card--lift">
+        <div class="photo"><svg aria-hidden="true"><use href="#i-dog"></use></svg><span class="photo__tag pill pill--adopted">Adoptada</span></div>
+        <div class="card__body" style="gap:10px">
+          <h3 class="h-card">Nala</h3>
+          <p class="small muted">Perra · Grande · 4 años · Hembra</p>
+          <a class="btn btn--ghost btn--sm btn--block" href="#" data-go="animal" data-note="En el sitio real abre /adopcion/nala">Ver la ficha de Nala</a>
+        </div>
+      </article>
+    </div>
+  </section>
+</section>
+<!-- ============ ADOPTAR ============ -->
+<section class="view stack" id="view-adoptar" hidden aria-label="Adoptar">
+  <div class="stack stack--tight">
+    <p class="eyebrow">/adopcion</p>
+    <h1 class="h-hero">Adoptar</h1>
+    <p class="lead">Filtrá por lo que hoy podés ofrecer. La ficha de cada animal queda en línea para siempre, incluso después de la adopción.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__body">
+      <fieldset style="border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:8px">
+        <legend class="eyebrow" style="padding:0">Tamaño</legend>
+        <div class="chips" role="group" aria-label="Filtrar por tamaño">
+          <button class="chip" data-filter="size" data-value="all" aria-pressed="true">Todos</button>
+          <button class="chip" data-filter="size" data-value="pequeño" aria-pressed="false">Pequeño</button>
+          <button class="chip" data-filter="size" data-value="mediano" aria-pressed="false">Mediano</button>
+          <button class="chip" data-filter="size" data-value="grande" aria-pressed="false">Grande</button>
+        </div>
+      </fieldset>
+      <fieldset style="border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:8px">
+        <legend class="eyebrow" style="padding:0">Especie</legend>
+        <div class="chips" role="group" aria-label="Filtrar por especie">
+          <button class="chip" data-filter="species" data-value="all" aria-pressed="true">Todas</button>
+          <button class="chip" data-filter="species" data-value="perro" aria-pressed="false">Perro</button>
+          <button class="chip" data-filter="species" data-value="gato" aria-pressed="false">Gato</button>
+        </div>
+      </fieldset>
+      <fieldset style="border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:8px">
+        <legend class="eyebrow" style="padding:0">Estado</legend>
+        <div class="chips" role="group" aria-label="Filtrar por estado">
+          <button class="chip" data-filter="status" data-value="all" aria-pressed="true">Todos</button>
+          <button class="chip" data-filter="status" data-value="disponible" aria-pressed="false">Disponible</button>
+          <button class="chip" data-filter="status" data-value="adoptado" aria-pressed="false">Adoptado</button>
+        </div>
+      </fieldset>
+      <p class="small muted" style="display:flex;align-items:center;gap:7px">
+        <svg width="14" height="14" aria-hidden="true"><use href="#i-alert"></use></svg>
+        Los filtros de edad, convivencia con niños y necesidades especiales ya están previstos en el modelo de datos: se agregan desde el panel sin tocar código.
+      </p>
+    </div>
+  </div>
+
+  <p class="small muted" aria-live="polite" id="resultCount">6 animales</p>
+
+  <div class="grid grid--2" id="animalGrid">
+    <article class="card" data-size="mediano" data-species="perro" data-status="disponible">
+      <div class="photo"><svg aria-hidden="true"><use href="#i-dog"></use></svg><span class="photo__tag pill pill--brand">Disponible</span></div>
+      <div class="card__body" style="gap:9px">
+        <div><h3 class="h-card">Juanito</h3><p class="small muted">Perro · Mediano · 2 años · Macho · Rosario centro</p></div>
+        <p class="small">Tranquilo, camina impecable con correa y ya convive con otros dos perros en el tránsito.</p>
+        <div style="display:flex;gap:8px">
+          <a class="btn btn--brand btn--sm" href="#" data-go="animal" style="flex:1">Adoptame</a>
+          <button class="share" data-share="Juanito - Perro en adopción" aria-label="Compartir la ficha de Juanito">
+            <svg width="15" height="15" aria-hidden="true"><use href="#i-share"></use></svg>Compartir
+          </button>
+        </div>
+      </div>
+    </article>
+
+    <article class="card" data-size="pequeño" data-species="gato" data-status="disponible">
+      <div class="photo photo--alt"><svg aria-hidden="true"><use href="#i-cat"></use></svg><span class="photo__tag pill pill--brand">Disponible</span></div>
+      <div class="card__body" style="gap:9px">
+        <div><h3 class="h-card">Pesto</h3><p class="small muted">Gato · Pequeño · 8 meses · Macho · Fisherton</p></div>
+        <p class="small">Rescatado de un techo. Curioso, sociable y ya usa la bandeja sin errores.</p>
+        <div style="display:flex;gap:8px">
+          <a class="btn btn--brand btn--sm" href="#" data-go="postular" style="flex:1">Adoptame</a>
+          <button class="share" data-share="Pesto - Gato en adopción" aria-label="Compartir la ficha de Pesto">
+            <svg width="15" height="15" aria-hidden="true"><use href="#i-share"></use></svg>Compartir
+          </button>
+        </div>
+      </div>
+    </article>
+
+    <article class="card" data-size="grande" data-species="perro" data-status="disponible">
+      <div class="photo"><svg aria-hidden="true"><use href="#i-dog"></use></svg><span class="photo__tag pill pill--warn">En evaluación</span></div>
+      <div class="card__body" style="gap:9px">
+        <div><h3 class="h-card">Duna</h3><p class="small muted">Perra · Grande · 3 años · Hembra · Granadero Baigorria</p></div>
+        <p class="small">Tiene dos postulaciones en revisión. Necesita patio y una familia con experiencia.</p>
+        <div style="display:flex;gap:8px">
+          <a class="btn btn--ghost btn--sm" href="#" data-go="animal" style="flex:1">Ver ficha</a>
+          <button class="share" data-share="Duna - Perra en adopción" aria-label="Compartir la ficha de Duna">
+            <svg width="15" height="15" aria-hidden="true"><use href="#i-share"></use></svg>Compartir
+          </button>
+        </div>
+      </div>
+    </article>
+
+    <article class="card" data-size="pequeño" data-species="perro" data-status="disponible">
+      <div class="photo"><svg aria-hidden="true"><use href="#i-dog"></use></svg><span class="photo__tag pill pill--brand">Disponible</span></div>
+      <div class="card__body" style="gap:9px">
+        <div><h3 class="h-card">Ramón</h3><p class="small muted">Perro · Pequeño · 7 años · Macho · Rosario sur</p></div>
+        <p class="small">Adulto mayor, ideal para departamento. Tres paseos cortos por día y a dormir.</p>
+        <div style="display:flex;gap:8px">
+          <a class="btn btn--brand btn--sm" href="#" data-go="postular" style="flex:1">Adoptame</a>
+          <button class="share" data-share="Ramón - Perro en adopción" aria-label="Compartir la ficha de Ramón">
+            <svg width="15" height="15" aria-hidden="true"><use href="#i-share"></use></svg>Compartir
+          </button>
+        </div>
+      </div>
+    </article>
+
+    <article class="card" data-size="grande" data-species="perro" data-status="adoptado">
+      <div class="photo"><svg aria-hidden="true"><use href="#i-dog"></use></svg><span class="photo__tag pill pill--adopted">Adoptada</span></div>
+      <div class="card__body" style="gap:9px">
+        <div><h3 class="h-card">Nala</h3><p class="small muted">Perra · Grande · 4 años · Hembra</p></div>
+        <p class="small">Adoptada el 14 de junio de 2026 por la familia Ledesma. Su ficha queda publicada: el link que circuló en Facebook sigue funcionando.</p>
+        <a class="btn btn--ghost btn--sm btn--block" href="#" data-go="animal" data-note="En el sitio real abre /adopcion/nala">Ver la ficha de Nala</a>
+      </div>
+    </article>
+
+    <article class="card" data-size="mediano" data-species="gato" data-status="adoptado">
+      <div class="photo photo--alt"><svg aria-hidden="true"><use href="#i-cat"></use></svg><span class="photo__tag pill pill--adopted">Adoptado</span></div>
+      <div class="card__body" style="gap:9px">
+        <div><h3 class="h-card">Tomás</h3><p class="small muted">Gato · Mediano · 2 años · Macho</p></div>
+        <p class="small">Adoptado el 2 de agosto de 2026. Su caso de castración quedó cerrado con comprobantes.</p>
+        <a class="btn btn--ghost btn--sm btn--block" href="#" data-go="animal" data-note="En el sitio real abre /adopcion/tomas">Ver la ficha de Tomás</a>
+      </div>
+    </article>
+  </div>
+
+  <p class="card__body small muted" id="emptyState" hidden style="text-align:center">
+    Ningún animal coincide con esos filtros. Probá ampliando el tamaño o el estado.
+  </p>
+</section>
+
+<!-- ============ FICHA ANIMAL ============ -->
+<section class="view stack" id="view-animal" hidden aria-label="Ficha de Juanito">
+  <div class="card">
+    <div class="photo" style="aspect-ratio:16/11">
+      <svg aria-hidden="true"><use href="#i-dog"></use></svg>
+      <span class="photo__tag pill pill--brand"><span class="dot"></span>Disponible para adopción</span>
+      <span class="photo__meta">1 / 5</span>
+    </div>
+    <div style="display:flex;gap:6px;padding:8px;overflow-x:auto">
+      <div class="photo" style="aspect-ratio:1;width:64px;flex:none;border-radius:2px"><svg aria-hidden="true"><use href="#i-dog"></use></svg></div>
+      <div class="photo photo--alt" style="aspect-ratio:1;width:64px;flex:none;border-radius:2px"><svg aria-hidden="true"><use href="#i-dog"></use></svg></div>
+      <div class="photo" style="aspect-ratio:1;width:64px;flex:none;border-radius:2px"><svg aria-hidden="true"><use href="#i-paw"></use></svg></div>
+      <div class="photo photo--alt" style="aspect-ratio:1;width:64px;flex:none;border-radius:2px"><svg aria-hidden="true"><use href="#i-dog"></use></svg></div>
+      <div class="photo" style="aspect-ratio:1;width:64px;flex:none;border-radius:2px"><svg aria-hidden="true"><use href="#i-paw"></use></svg></div>
+    </div>
+  </div>
+
+  <div class="stack stack--tight">
+    <p class="eyebrow">/adopcion/juanito · publicado el 3 de julio de 2026</p>
+    <h1 class="h-hero">Juanito</h1>
+    <p class="lead">Lo encontraron atado a un poste en barrio Tablada. Pesaba 11 kilos; hoy pesa 18 y duerme panza arriba.</p>
+  </div>
+
+  <dl class="datagrid">
+    <div><dt>Especie</dt><dd>Perro</dd></div>
+    <div><dt>Edad</dt><dd>2 años</dd></div>
+    <div><dt>Sexo</dt><dd>Macho</dd></div>
+    <div><dt>Tamaño</dt><dd>Mediano · 18 kg</dd></div>
+    <div><dt>Castrado</dt><dd>Sí</dd></div>
+    <div><dt>Vacunas</dt><dd>Al día</dd></div>
+    <div><dt>Zona</dt><dd>Rosario centro</dd></div>
+    <div><dt>Tránsito</dt><dd>Casa de Marina</dd></div>
+  </dl>
+
+  <div class="card">
+    <div class="card__body">
+      <h2 class="h-card">Cómo es</h2>
+      <p class="small">Tranquilo adentro, jugador afuera. Camina bien con correa y no tira. Le tiene miedo a los ruidos fuertes: en fin de año necesita un lugar cerrado y compañía.</p>
+      <div class="chips" aria-label="Convivencia">
+        <span class="pill pill--ok"><svg width="13" height="13" aria-hidden="true"><use href="#i-check"></use></svg>Con perros</span>
+        <span class="pill pill--ok"><svg width="13" height="13" aria-hidden="true"><use href="#i-check"></use></svg>Con chicos</span>
+        <span class="pill pill--warn">Con gatos: sin evaluar</span>
+        <span class="pill pill--neutral">Energía media</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__body">
+      <h2 class="h-card">Salud</h2>
+      <table class="tbl">
+        <tr><th>Castración</th><td>19/07/2026 — Veterinaria San Roque</td></tr>
+        <tr><th>Vacuna séxtuple</th><td>05/07/2026 · refuerzo 26/07/2026</td></tr>
+        <tr><th>Antirrábica</th><td>26/07/2026</td></tr>
+        <tr><th>Desparasitación</th><td>Interna y externa al día</td></tr>
+        <tr><th>Tratamientos</th><td>Sarna sarcóptica tratada y dada de alta el 20/08/2026</td></tr>
+      </table>
+      <p class="small muted">Su tratamiento se financió con el caso <a href="#" data-go="caso">Juanito — sarna y castración</a>, ya cerrado con comprobantes públicos.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__body">
+      <h2 class="h-card">Requisitos para adoptarlo</h2>
+      <ul class="small" style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px">
+        <li>Ser mayor de 21 años y presentar DNI.</li>
+        <li>Balcón cerrado o patio con cerco de al menos 1,60 m.</li>
+        <li>Entrevista previa y visita al domicilio.</li>
+        <li>Compromiso de seguimiento durante los primeros 6 meses.</li>
+        <li>Acuerdo de adopción firmado.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sharebar">
+    <button class="share" data-share="Juanito - Perro en adopción">
+      <svg width="15" height="15" aria-hidden="true"><use href="#i-share"></use></svg>Facebook
+    </button>
+    <button class="share" data-share="Juanito - Perro en adopción">
+      <svg width="15" height="15" aria-hidden="true"><use href="#i-share"></use></svg>WhatsApp
+    </button>
+    <button class="share" data-share="refugiohuellas.org.ar/adopcion/juanito">
+      <svg width="15" height="15" aria-hidden="true"><use href="#i-link"></use></svg>Copiar link
+    </button>
+  </div>
+
+  <div class="callout">
+    <p class="eyebrow">Vista previa al compartir</p>
+    <div style="display:flex;gap:12px;align-items:center">
+      <div class="photo" style="width:88px;aspect-ratio:1;border-radius:2px;flex:none"><svg aria-hidden="true"><use href="#i-dog"></use></svg></div>
+      <div style="min-width:0">
+        <p class="small muted num" style="text-transform:uppercase;font-size:11px">refugiohuellas.org.ar</p>
+        <p style="font-weight:700;line-height:1.3">Juanito — Perro en adopción en Rosario</p>
+        <p class="small muted">Mediano, 2 años, castrado y vacunado. Conocé su historia y postulate.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="sticky-cta">
+    <a class="btn btn--brand btn--block" href="#" data-go="postular">Postularme para adoptar a Juanito</a>
+  </div>
+</section>
+
+<!-- ============ POSTULACIÓN ============ -->
+<section class="view stack" id="view-postular" hidden aria-label="Formulario de postulación">
+  <div class="stack stack--tight">
+    <p class="eyebrow">/adopcion/juanito/postulacion</p>
+    <h1 class="h-hero">Postulación para Juanito</h1>
+    <p class="lead">Cinco minutos. No hace falta crear una cuenta.</p>
+  </div>
+
+  <div class="callout">
+    <p class="small" style="display:flex;gap:8px;align-items:flex-start">
+      <svg width="16" height="16" aria-hidden="true" style="flex:none;margin-top:3px;color:var(--brand)"><use href="#i-lock"></use></svg>
+      Tus datos personales son privados: los ven únicamente las personas del refugio con permiso de adopciones. Nunca aparecen en la parte pública del sitio.
+    </p>
+  </div>
+
+  <form class="card" id="applyForm" novalidate>
+    <div class="card__body" style="gap:18px">
+      <div class="field">
+        <label for="f-nombre">Nombre y apellido <span class="muted">(obligatorio)</span></label>
+        <input id="f-nombre" name="nombre" type="text" autocomplete="name" required>
+      </div>
+      <div class="field">
+        <label for="f-tel">Teléfono / WhatsApp <span class="muted">(obligatorio)</span></label>
+        <input id="f-tel" name="tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="341 555 0000" required>
+      </div>
+      <div class="field">
+        <label for="f-mail">Email</label>
+        <input id="f-mail" name="mail" type="email" autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="f-vivienda">¿Dónde vivís?</label>
+        <select id="f-vivienda" name="vivienda">
+          <option>Casa con patio cerrado</option>
+          <option>Casa sin patio</option>
+          <option>Departamento con balcón cerrado</option>
+          <option>Departamento sin balcón</option>
+        </select>
+      </div>
+      <fieldset class="field" style="border:0;padding:0;margin:0">
+        <legend style="font-weight:600;font-size:var(--step--1);padding:0">¿Tenés otros animales en casa?</legend>
+        <div class="radios">
+          <label class="chip" style="display:inline-flex;align-items:center;gap:8px"><input type="radio" name="otros" value="si" style="min-height:auto;width:auto"> Sí</label>
+          <label class="chip" style="display:inline-flex;align-items:center;gap:8px"><input type="radio" name="otros" value="no" style="min-height:auto;width:auto"> No</label>
+        </div>
+      </fieldset>
+      <div class="field">
+        <label for="f-por">¿Por qué querés adoptar a Juanito?</label>
+        <textarea id="f-por" name="porque"></textarea>
+        <span class="hint">Contanos cómo sería su día a día con vos.</span>
+      </div>
+      <fieldset class="field" style="border:0;padding:0;margin:0">
+        <legend style="font-weight:600;font-size:var(--step--1);padding:0">¿Podés hacerte cargo de los gastos veterinarios?</legend>
+        <div class="radios">
+          <label class="chip" style="display:inline-flex;align-items:center;gap:8px"><input type="radio" name="gastos" value="si" style="min-height:auto;width:auto"> Sí</label>
+          <label class="chip" style="display:inline-flex;align-items:center;gap:8px"><input type="radio" name="gastos" value="parcial" style="min-height:auto;width:auto"> Con ayuda</label>
+        </div>
+      </fieldset>
+      <button class="btn btn--brand btn--block" type="submit">Enviar postulación</button>
+      <p class="small muted" style="text-align:center">Te contestamos dentro de las 72 horas hábiles.</p>
+    </div>
+  </form>
+
+  <div class="callout" hidden id="applyDone">
+    <p class="eyebrow" style="color:var(--ok)">Postulación enviada</p>
+    <p class="small">Quedó registrada como <span class="num">POST-2026-0148</span> con estado <strong>Nueva</strong>. Marina, del equipo de adopciones, te escribe por WhatsApp.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__body">
+      <p class="eyebrow">Detrás de escena</p>
+      <p class="small muted">Cada pregunta de este formulario se crea desde el panel interno: tipo de respuesta, orden y si es obligatoria. Nadie del refugio necesita tocar código para pedir un dato nuevo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CASO FINANCIERO ============ -->
+<section class="view stack" id="view-caso" hidden aria-label="Caso de Luna">
+  <div class="card">
+    <div class="photo photo--alt photo--sensitive" style="aspect-ratio:16/11">
+      <svg aria-hidden="true"><use href="#i-dog"></use></svg>
+      <span class="photo__tag pill pill--bad"><span class="dot"></span>Cirugía programada 12/09</span>
+      <span class="photo__meta">luna_ingreso_01.jpg</span>
+      <button class="photo__gate" data-reveal aria-label="Ver la foto de Luna del día del rescate">
+        <span class="photo__gate-icon"><svg aria-hidden="true"><use href="#i-eye"></use></svg></span>
+        <strong>Foto del día del rescate</strong>
+        <small>Muestra las lesiones de Luna. Tocá para verla.</small>
+      </button>
+    </div>
+  </div>
+
+  <div class="stack stack--tight">
+    <p class="eyebrow">/ayudar/luna-cirugia · caso abierto el 27 de agosto de 2026</p>
+    <h1 class="h-hero">Luna necesita una cirugía de cadera</h1>
+    <p class="lead">La atropellaron el 26 de agosto en Provincias Unidas. Tiene fractura de pelvis y cadera derecha: sin cirugía no vuelve a caminar bien.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__body">
+      <div class="meter" data-meter="65.5">
+        <div class="meter__row">
+          <span class="amount amount--xl">$327.500</span>
+          <span class="pill pill--ok"><svg width="13" height="13" aria-hidden="true"><use href="#i-shield"></use></svg>Verificado</span>
+        </div>
+        <div class="meter__track"><div class="meter__fill"></div></div>
+        <div class="meter__row">
+          <span class="small muted">Meta <span class="num">$500.000</span></span>
+          <span class="small muted">Faltan <span class="num">$172.500</span> · 47 donantes</span>
+        </div>
+      </div>
+      <a class="btn btn--donate" href="#" data-donate>Donar para Luna</a>
+      <p class="small muted" style="text-align:center">Mercado Pago, tarjeta o dinero en cuenta. También hay transferencia por CBU.</p>
+    </div>
+  </div>
+
+  <div class="sharebar">
+    <button class="share" data-share="Luna necesita ayuda para su cirugía"><svg width="15" height="15" aria-hidden="true"><use href="#i-share"></use></svg>Facebook</button>
+    <button class="share" data-share="Luna necesita ayuda para su cirugía"><svg width="15" height="15" aria-hidden="true"><use href="#i-share"></use></svg>WhatsApp</button>
+    <button class="share" data-share="refugiohuellas.org.ar/ayudar/luna-cirugia"><svg width="15" height="15" aria-hidden="true"><use href="#i-link"></use></svg>Copiar link</button>
+  </div>
+
+  <div class="card">
+    <div class="subtabs" role="tablist" aria-label="Secciones del caso">
+      <button class="subtab" role="tab" aria-selected="true" data-panel="p-resumen">Resumen</button>
+      <button class="subtab" role="tab" aria-selected="false" data-panel="p-gastos">Gastos</button>
+      <button class="subtab" role="tab" aria-selected="false" data-panel="p-libro">Libro contable</button>
+      <button class="subtab" role="tab" aria-selected="false" data-panel="p-updates">Novedades</button>
+    </div>
+
+    <div class="card__body" id="p-resumen" role="tabpanel">
+      <h2 class="h-card">¿En qué se usó la plata?</h2>
+      <table class="tbl">
+        <tr><th>Dinero recibido y verificado</th><td class="amount amount--in" style="text-align:right">+$327.500</td></tr>
+        <tr><th>Dinero gastado y documentado</th><td class="amount amount--out" style="text-align:right">−$212.000</td></tr>
+        <tr><th>Saldo disponible del caso</th><td class="amount" style="text-align:right">$115.500</td></tr>
+      </table>
+      <hr class="rule">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <p class="eyebrow">Origen de lo recibido</p>
+        <table class="tbl">
+          <tr><th>Mercado Pago (43 pagos aprobados)</th><td class="amount" style="text-align:right">$289.500</td></tr>
+          <tr><th>Transferencias verificadas (4)</th><td class="amount" style="text-align:right">$38.000</td></tr>
+          <tr><th style="color:var(--warn)">Transferencias pendientes de verificar (2)</th><td class="amount muted" style="text-align:right">$15.000 <span class="small">no computadas</span></td></tr>
+        </table>
+        <p class="small muted">Lo pendiente no suma al total público hasta que alguien del refugio confirma el comprobante contra el extracto bancario.</p>
+      </div>
+    </div>
+
+    <div class="card__body" id="p-gastos" role="tabpanel" hidden>
+      <h2 class="h-card">Gastos con comprobante</h2>
+      <div class="ledger" style="margin:0 -16px">
+        <div class="ledger__row">
+          <div><strong>Estudios prequirúrgicos y radiografías</strong><div class="small muted">Veterinaria San Roque · 28/08/2026</div></div>
+          <span class="amount amount--out">−$62.000</span>
+          <div class="ledger__meta">
+            <a class="doclink" href="#" data-doc><svg width="13" height="13" aria-hidden="true"><use href="#i-doc"></use></svg>Factura B 0003-00012884</a>
+            <span class="ledger__id">TXN-8f2a41</span>
+          </div>
+        </div>
+        <div class="ledger__row">
+          <div><strong>Análisis de laboratorio preanestésico</strong><div class="small muted">Laboratorio Vetlab · 30/08/2026</div></div>
+          <span class="amount amount--out">−$48.000</span>
+          <div class="ledger__meta">
+            <a class="doclink" href="#" data-doc><svg width="13" height="13" aria-hidden="true"><use href="#i-doc"></use></svg>Factura C 0001-0000733</a>
+            <span class="ledger__id">TXN-1c93be</span>
+          </div>
+        </div>
+        <div class="ledger__row">
+          <div><strong>Analgésicos y antibióticos</strong><div class="small muted">Farmacia Veterinaria Central · 31/08/2026</div></div>
+          <span class="amount amount--out">−$27.000</span>
+          <div class="ledger__meta">
+            <a class="doclink" href="#" data-doc><svg width="13" height="13" aria-hidden="true"><use href="#i-doc"></use></svg>Ticket 00457821</a>
+            <span class="ledger__id">TXN-77dd05</span>
+          </div>
+        </div>
+        <div class="ledger__row">
+          <div><strong>Seña de la cirugía traumatológica</strong><div class="small muted">Centro Quirúrgico Veterinario Sur · 01/09/2026</div></div>
+          <span class="amount amount--out">−$75.000</span>
+          <div class="ledger__meta">
+            <a class="doclink" href="#" data-doc><svg width="13" height="13" aria-hidden="true"><use href="#i-doc"></use></svg>Recibo X 0002-000159</a>
+            <span class="ledger__id">TXN-4ba6e2</span>
+          </div>
+        </div>
+      </div>
+      <p class="small muted">Los comprobantes se publican sin datos personales de ninguna persona: se tachan antes de subirlos. Se ve el concepto, el importe, la fecha y el número de comprobante.</p>
+    </div>
+
+    <div class="card__body" id="p-libro" role="tabpanel" hidden>
+      <h2 class="h-card">Movimientos del caso</h2>
+      <p class="small muted">Cada línea es un asiento inmutable. Si hay un error, no se borra: se registra un ajuste que también queda visible.</p>
+      <div class="timeline" style="margin:0 -16px">
+        <div class="tl tl--in">
+          <span class="tl__marker"><svg aria-hidden="true"><use href="#i-in"></use></svg></span>
+          <div class="tl__body">
+            <span class="tl__date">27 de agosto</span>
+            <p class="small"><strong class="amount amount--in">+$25.000</strong> · Donación por Mercado Pago <span class="pill pill--ok" style="margin-left:4px">Aprobada</span></p>
+            <span class="ledger__id">TXN-0a11f7 · pago MP 1327884391 · anónima</span>
+          </div>
+        </div>
+        <div class="tl tl--out">
+          <span class="tl__marker"><svg aria-hidden="true"><use href="#i-out"></use></svg></span>
+          <div class="tl__body">
+            <span class="tl__date">28 de agosto</span>
+            <p class="small"><strong class="amount amount--out">−$62.000</strong> · Estudios prequirúrgicos</p>
+            <a class="doclink" href="#" data-doc><svg width="13" height="13" aria-hidden="true"><use href="#i-doc"></use></svg>Factura adjunta</a>
+          </div>
+        </div>
+        <div class="tl tl--in">
+          <span class="tl__marker"><svg aria-hidden="true"><use href="#i-in"></use></svg></span>
+          <div class="tl__body">
+            <span class="tl__date">29 de agosto</span>
+            <p class="small"><strong class="amount amount--in">+$118.500</strong> · 19 donaciones tras la publicación en Facebook</p>
+            <span class="ledger__id">19 asientos verificados por webhook</span>
+          </div>
+        </div>
+        <div class="tl tl--note">
+          <span class="tl__marker"><svg aria-hidden="true"><use href="#i-check"></use></svg></span>
+          <div class="tl__body">
+            <span class="tl__date">30 de agosto</span>
+            <p class="small">Transferencia por CBU de $20.000 <strong>verificada</strong> por Carla (finanzas) contra el extracto del Banco Nación.</p>
+            <span class="ledger__id">TXN-93b2aa · verificación manual registrada en auditoría</span>
+          </div>
+        </div>
+        <div class="tl tl--out">
+          <span class="tl__marker"><svg aria-hidden="true"><use href="#i-out"></use></svg></span>
+          <div class="tl__body">
+            <span class="tl__date">1 de septiembre</span>
+            <p class="small"><strong class="amount amount--out">−$75.000</strong> · Seña de la cirugía</p>
+            <a class="doclink" href="#" data-doc><svg width="13" height="13" aria-hidden="true"><use href="#i-doc"></use></svg>Recibo adjunto</a>
+          </div>
+        </div>
+      </div>
+      <hr class="rule">
+      <div class="callout callout--warn">
+        <p class="eyebrow">Si el caso supera la meta</p>
+        <p class="small">El excedente no desaparece. Queda como saldo del caso hasta que la comisión decida su destino, y ese traslado se registra como un movimiento con origen y destino.</p>
+        <div class="flow"><span>Excedente de Rocky $120.000</span>→<span><em>Max — tratamiento</em></span><span>05/09/2026</span></div>
+      </div>
+    </div>
+
+    <div class="card__body" id="p-updates" role="tabpanel" hidden>
+      <h2 class="h-card">Novedades</h2>
+      <div class="timeline" style="margin:0 -16px">
+        <div class="tl tl--note">
+          <span class="tl__marker"><svg aria-hidden="true"><use href="#i-paw"></use></svg></span>
+          <div class="tl__body">
+            <span class="tl__date">1 de septiembre</span>
+            <p class="small"><strong>Fecha de cirugía confirmada.</strong> El traumatólogo la programó para el 12 de septiembre a las 8:00. Luna está estable, con analgesia y comiendo bien en el tránsito de Andrea.</p>
+          </div>
+        </div>
+        <div class="tl tl--note">
+          <span class="tl__marker"><svg aria-hidden="true"><use href="#i-paw"></use></svg></span>
+          <div class="tl__body">
+            <span class="tl__date">30 de agosto</span>
+            <p class="small"><strong>Llegaron los análisis.</strong> Está apta para anestesia. Publicamos la factura del laboratorio en la sección de gastos.</p>
+          </div>
+        </div>
+        <div class="tl tl--note">
+          <span class="tl__marker"><svg aria-hidden="true"><use href="#i-paw"></use></svg></span>
+          <div class="tl__body">
+            <span class="tl__date">27 de agosto</span>
+            <p class="small"><strong>Abrimos el caso.</strong> Presupuesto total estimado: $500.000 entre estudios, cirugía, internación y rehabilitación.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <p class="eyebrow" style="display:flex;align-items:center;gap:7px">
+      <svg width="15" height="15" aria-hidden="true"><use href="#i-shield"></use></svg>Por qué podés confiar en este número
+    </p>
+    <p class="small">Los $327.500 no los escribió nadie: son la suma de 47 pagos que Mercado Pago confirmó como aprobados más 4 transferencias verificadas contra el extracto. Un pago rechazado, cancelado o duplicado no suma.</p>
+  </div>
+
+  <div class="sticky-cta">
+    <span class="amount">$327.500 / $500.000</span>
+    <a class="btn btn--donate" href="#" data-donate style="flex:1;width:auto">Donar</a>
+  </div>
+</section>
+
+<!-- ============ TRANSPARENCIA ============ -->
+<section class="view stack" id="view-transparencia" hidden aria-label="Transparencia">
+  <div class="stack stack--tight">
+    <p class="eyebrow">/transparencia</p>
+    <h1 class="h-hero">Transparencia</h1>
+    <p class="lead">Todo lo que entró, todo lo que salió y el comprobante de cada gasto. Actualizado automáticamente.</p>
+  </div>
+
+  <div class="grid grid--2">
+    <div class="stat stat--money"><span class="stat__icon"><svg aria-hidden="true"><use href="#i-shield"></use></svg></span><span class="stat__label">Donaciones verificadas</span><span class="stat__n" data-count="8943200" data-prefix="$">$8.943.200</span><span class="stat__note">Ejercicio 2026 · 3.417 movimientos</span></div>
+    <div class="stat stat--spent"><span class="stat__icon"><svg aria-hidden="true"><use href="#i-doc"></use></svg></span><span class="stat__label">Gastos documentados</span><span class="stat__n" data-count="8107400" data-prefix="$">$8.107.400</span><span class="stat__note">91% de lo recibido, ya ejecutado</span></div>
+    <div class="stat"><span class="stat__icon"><svg aria-hidden="true"><use href="#i-shield"></use></svg></span><span class="stat__label">Saldo disponible</span><span class="stat__n" data-count="835800" data-prefix="$">$835.800</span><span class="stat__note">En casos abiertos y fondo de rescate</span></div>
+    <div class="stat"><span class="stat__icon"><svg aria-hidden="true"><use href="#i-doc"></use></svg></span><span class="stat__label">Gastos con comprobante</span><span class="stat__n" data-count="96" data-suffix="%">96%</span><span class="stat__note">Meta interna: 100% para diciembre</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card__body" style="padding-bottom:6px">
+      <h2 class="h-card">Casos</h2>
+      <p class="small muted">Los casos cerrados siguen publicados: el link que circuló en Facebook nunca deja de funcionar.</p>
+    </div>
+    <div class="scroll-x">
+      <table class="tbl tbl--head">
+        <tr><th>Caso</th><th>Meta</th><th>Recibido</th><th>Gastado</th><th>Estado</th></tr>
+        <tr>
+          <td><a href="#" data-go="caso" style="font-weight:600">Luna — cirugía de cadera</a></td>
+          <td class="num">$500.000</td><td class="num">$327.500</td><td class="num">$212.000</td>
+          <td><span class="pill pill--warn"><span class="dot"></span>Abierto</span></td>
+        </tr>
+        <tr>
+          <td><a href="#" data-go="caso" style="font-weight:600">Mora — leucemia felina</a></td>
+          <td class="num">$180.000</td><td class="num">$68.400</td><td class="num">$41.200</td>
+          <td><span class="pill pill--warn"><span class="dot"></span>Abierto</span></td>
+        </tr>
+        <tr>
+          <td><a href="#" data-go="caso" style="font-weight:600">Rocky — fractura de fémur</a></td>
+          <td class="num">$500.000</td><td class="num">$620.000</td><td class="num">$500.000</td>
+          <td><span class="pill pill--ok"><svg width="12" height="12" aria-hidden="true"><use href="#i-check"></use></svg>Cerrado</span></td>
+        </tr>
+        <tr>
+          <td><a href="#" data-go="caso" style="font-weight:600">Juanito — sarna y castración</a></td>
+          <td class="num">$95.000</td><td class="num">$95.000</td><td class="num">$93.700</td>
+          <td><span class="pill pill--ok"><svg width="12" height="12" aria-hidden="true"><use href="#i-check"></use></svg>Cerrado</span></td>
+        </tr>
+        <tr>
+          <td><a href="#" data-go="caso" style="font-weight:600">Campaña de castración julio</a></td>
+          <td class="num">$1.200.000</td><td class="num">$1.243.500</td><td class="num">$1.243.500</td>
+          <td><span class="pill pill--ok"><svg width="12" height="12" aria-hidden="true"><use href="#i-check"></use></svg>Cerrado</span></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__body">
+      <h2 class="h-card">El excedente de Rocky</h2>
+      <p class="small">Rocky juntó $120.000 más de lo necesario. En vez de quedar en un limbo, la comisión decidió su destino y el traslado quedó asentado.</p>
+      <div class="flow">
+        <span>Rocky · excedente $120.000</span>→<span><em>Max — tratamiento veterinario</em></span>→<span>TRF-2026-0031 · 05/09/2026</span>
+      </div>
+      <a class="doclink" href="#" data-doc style="align-self:flex-start"><svg width="13" height="13" aria-hidden="true"><use href="#i-doc"></use></svg>Acta de comisión N.º 47</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__body">
+      <h2 class="h-card">Cómo se calcula lo que ves</h2>
+      <ol class="small" style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:8px">
+        <li>Cada caso tiene su propio destino de cobro. Una donación para Luna nunca puede terminar contada en el caso de Mora.</li>
+        <li>Cuando Mercado Pago confirma un pago, avisa al sitio. El sitio vuelve a preguntarle a Mercado Pago si ese pago existe y está aprobado, antes de contarlo.</li>
+        <li>Si el mismo aviso llega dos veces, se cuenta una sola vez.</li>
+        <li>Las transferencias por CBU no suman hasta que una persona del refugio las verifica contra el extracto bancario.</li>
+        <li>Nadie puede editar el total. Solo se pueden agregar movimientos, y cada movimiento queda con autor, fecha y motivo.</li>
+        <li>Un error se corrige con un ajuste visible, nunca borrando el historial.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__body">
+      <h2 class="h-card">Historias que terminaron bien</h2>
+      <div class="grid grid--3">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div class="photo" style="border-radius:2px"><svg aria-hidden="true"><use href="#i-dog"></use></svg><span class="photo__tag pill pill--adopted">Adoptada</span></div>
+          <p class="small"><strong>Nala</strong> — 14/06/2026</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div class="photo photo--alt" style="border-radius:2px"><svg aria-hidden="true"><use href="#i-cat"></use></svg><span class="photo__tag pill pill--adopted">Adoptado</span></div>
+          <p class="small"><strong>Tomás</strong> — 02/08/2026</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div class="photo" style="border-radius:2px"><svg aria-hidden="true"><use href="#i-dog"></use></svg><span class="photo__tag pill pill--ok">Recuperado</span></div>
+          <p class="small"><strong>Rocky</strong> — alta 21/07/2026</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PANEL INTERNO ============ -->
+<section class="view stack" id="view-admin" hidden aria-label="Panel interno">
+  <div class="stack stack--tight">
+    <p class="eyebrow">/panel · Carla · rol Finanzas</p>
+    <h1 class="h-hero">Panel interno</h1>
+    <p class="lead">Lo que el refugio ve al entrar. Sin conocimientos técnicos y sin poder tocar los totales públicos.</p>
+  </div>
+
+  <div class="grid grid--2">
+    <div class="stat"><span class="stat__icon"><svg aria-hidden="true"><use href="#i-paw"></use></svg></span><span class="stat__label">Animales disponibles</span><span class="stat__n">14</span><span class="stat__note">3 con postulaciones en curso</span></div>
+    <div class="stat"><span class="stat__icon"><svg aria-hidden="true"><use href="#i-heart"></use></svg></span><span class="stat__label">Postulaciones nuevas</span><span class="stat__n">7</span><span class="stat__note">La más antigua espera hace 2 días</span></div>
+    <div class="stat"><span class="stat__icon"><svg aria-hidden="true"><use href="#i-shield"></use></svg></span><span class="stat__label">Casos abiertos</span><span class="stat__n">2</span><span class="stat__note">Luna 65,5% · Mora 38%</span></div>
+    <div class="stat"><span class="stat__icon"><svg aria-hidden="true"><use href="#i-alert"></use></svg></span><span class="stat__label">Transferencias por verificar</span><span class="stat__n">2</span><span class="stat__note">$15.000 sin computar al total público</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card__body">
+      <div class="meter__row">
+        <h2 class="h-card">Transferencias pendientes</h2>
+        <span class="pill pill--warn"><span class="dot"></span>No suman al total público</span>
+      </div>
+      <div class="ledger" style="margin:0 -16px">
+        <div class="ledger__row" data-pending>
+          <div><strong>Luna — cirugía de cadera</strong><div class="small muted">Comprobante subido por el donante · 31/08/2026</div></div>
+          <span class="amount">$10.000</span>
+          <div class="ledger__meta">
+            <a class="doclink" href="#" data-doc><svg width="13" height="13" aria-hidden="true"><use href="#i-doc"></use></svg>Comprobante</a>
+            <button class="btn btn--brand btn--sm" data-verify>Verificar y asentar</button>
+            <button class="btn btn--ghost btn--sm" data-reject>Rechazar</button>
+          </div>
+        </div>
+        <div class="ledger__row" data-pending>
+          <div><strong>Mora — leucemia felina</strong><div class="small muted">Comprobante subido por el donante · 01/09/2026</div></div>
+          <span class="amount">$5.000</span>
+          <div class="ledger__meta">
+            <a class="doclink" href="#" data-doc><svg width="13" height="13" aria-hidden="true"><use href="#i-doc"></use></svg>Comprobante</a>
+            <button class="btn btn--brand btn--sm" data-verify>Verificar y asentar</button>
+            <button class="btn btn--ghost btn--sm" data-reject>Rechazar</button>
+          </div>
+        </div>
+      </div>
+      <p class="small muted" id="pendingEmpty" hidden>No quedan transferencias pendientes.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__body">
+      <h2 class="h-card">Editar el caso de Luna</h2>
+      <div class="field">
+        <label for="a-meta">Meta de recaudación</label>
+        <input id="a-meta" type="text" value="$500.000">
+        <span class="hint">Editable: es un objetivo, no un hecho contable.</span>
+      </div>
+      <div class="field">
+        <label for="a-rec">Recaudado</label>
+        <input id="a-rec" type="text" value="$327.500" readonly aria-describedby="a-rec-hint" style="background:var(--surface-2);color:var(--ink-2)">
+        <span class="hint" id="a-rec-hint" style="display:flex;gap:6px;align-items:center">
+          <svg width="14" height="14" aria-hidden="true"><use href="#i-lock"></use></svg>
+          Calculado a partir de 51 movimientos verificados. No se puede editar desde ninguna pantalla.
+        </span>
+      </div>
+      <button class="btn btn--ghost btn--sm" style="align-self:flex-start" data-adjust>Registrar un ajuste contable</button>
+      <div class="callout callout--warn" hidden id="adjustBox">
+        <p class="eyebrow">Ajuste contable</p>
+        <p class="small">Un ajuste no reescribe el pasado: crea un movimiento nuevo con tu usuario, la fecha, el motivo, el valor anterior y el nuevo. Queda visible en el libro público del caso.</p>
+        <div class="field"><label for="a-mot">Motivo del ajuste</label><input id="a-mot" type="text" placeholder="Ej.: contracargo del pago MP 1327884391"></div>
+        <div class="field"><label for="a-doc">Documentación de respaldo</label><input id="a-doc" type="text" placeholder="Adjuntar archivo (obligatorio)"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__body">
+      <h2 class="h-card">Últimos movimientos registrados</h2>
+      <div class="scroll-x">
+        <table class="tbl tbl--head">
+          <tr><th>Fecha</th><th>Caso</th><th>Tipo</th><th>Monto</th><th>Origen</th></tr>
+          <tr><td class="num">01/09 14:22</td><td>Luna</td><td>Donación</td><td class="num amount--in">+$8.000</td><td>Webhook MP</td></tr>
+          <tr><td class="num">01/09 11:05</td><td>Luna</td><td>Gasto</td><td class="num amount--out">−$75.000</td><td>Carla · Finanzas</td></tr>
+          <tr><td class="num">31/08 19:47</td><td>Mora</td><td>Donación</td><td class="num amount--in">+$3.500</td><td>Webhook MP</td></tr>
+          <tr><td class="num">31/08 09:12</td><td>Luna</td><td>Gasto</td><td class="num amount--out">−$27.000</td><td>Carla · Finanzas</td></tr>
+          <tr><td class="num">30/08 16:30</td><td>Luna</td><td>Transferencia verificada</td><td class="num amount--in">+$20.000</td><td>Carla · Finanzas</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__body">
+      <h2 class="h-card">Quién puede hacer qué</h2>
+      <div class="scroll-x">
+        <table class="tbl tbl--head">
+          <tr><th>Rol</th><th>Animales</th><th>Postulaciones</th><th>Dinero</th></tr>
+          <tr><td><strong>Administración</strong></td><td>Todo</td><td>Todo</td><td>Todo</td></tr>
+          <tr><td><strong>Animales</strong></td><td>Todo</td><td>Todo</td><td>Solo lectura</td></tr>
+          <tr><td><strong>Finanzas</strong></td><td>Solo lectura</td><td>Sin acceso</td><td>Todo</td></tr>
+          <tr><td><strong>Redacción</strong></td><td>Novedades</td><td>Sin acceso</td><td>Solo lectura</td></tr>
+        </table>
+      </div>
+      <p class="small muted">Ninguno de los cuatro roles puede escribir directamente el total recaudado. Toda acción queda en la bitácora de auditoría con usuario, fecha y valores anterior y nuevo.</p>
+    </div>
+  </div>
+</section>
+
+<p class="footnote">Prototipo visual · Asociación Civil Huellas · Datos de ejemplo</p>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  var views = {
+    home:{el:'view-home', url:'refugiohuellas.org.ar/'},
+    adoptar:{el:'view-adoptar', url:'refugiohuellas.org.ar/adopcion'},
+    animal:{el:'view-animal', url:'refugiohuellas.org.ar/adopcion/juanito'},
+    postular:{el:'view-postular', url:'refugiohuellas.org.ar/adopcion/juanito/postulacion'},
+    caso:{el:'view-caso', url:'refugiohuellas.org.ar/ayudar/luna-cirugia'},
+    transparencia:{el:'view-transparencia', url:'refugiohuellas.org.ar/transparencia'},
+    admin:{el:'view-admin', url:'refugiohuellas.org.ar/panel'}
+  };
+  var slug = document.getElementById('urlSlug');
+
+  function animateMeters(root){
+    root.querySelectorAll('[data-meter]').forEach(function(m){
+      var fill = m.querySelector('.meter__fill');
+      fill.style.width = '0%';
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){ fill.style.width = m.dataset.meter + '%'; });
+      });
+    });
+  }
+
+  function go(name){
+    if(!views[name]) return;
+    Object.keys(views).forEach(function(k){
+      document.getElementById(views[k].el).hidden = (k !== name);
+    });
+    document.querySelectorAll('.tab').forEach(function(t){
+      if(t.dataset.go === name){ t.setAttribute('aria-current','page'); }
+      else { t.removeAttribute('aria-current'); }
+    });
+    slug.textContent = views[name].url;
+    window.scrollTo({top:0, behavior:'instant'});
+    animateMeters(document.getElementById(views[name].el));
+    animateCounts(document.getElementById(views[name].el));
+  }
+
+  document.addEventListener('click', function(e){
+    var nav = e.target.closest('[data-go]');
+    if(nav){
+      e.preventDefault();
+      go(nav.dataset.go);
+      if(nav.dataset.note) toast(nav.dataset.note);
+      return;
+    }
+
+    var sh = e.target.closest('[data-share]');
+    if(sh){ e.preventDefault(); toast('Link copiado: ' + sh.dataset.share); return; }
+
+    var doc = e.target.closest('[data-doc]');
+    if(doc){ e.preventDefault(); toast('Se abriría el comprobante en PDF'); return; }
+
+    var don = e.target.closest('[data-donate]');
+    if(don){ e.preventDefault(); toast('Iría al checkout de Mercado Pago del caso de Luna'); return; }
+
+    var rev = e.target.closest('[data-reveal]');
+    if(rev){ e.preventDefault(); rev.closest('.photo').classList.add('is-revealed'); return; }
+
+    var rev = e.target.closest('[data-reveal]');
+    if(rev){ e.preventDefault(); rev.closest('.photo').classList.add('is-revealed'); return; }
+
+    var mqt = e.target.closest('[data-marquee-toggle]');
+    if(mqt){
+      var band = document.querySelector('[data-marquee]');
+      var paused = band.classList.toggle('is-paused');
+      mqt.setAttribute('aria-pressed', String(paused));
+      mqt.textContent = paused ? 'Reanudar' : 'Pausar';
+      return;
+    }
+
+    var tab = e.target.closest('.subtab');
+    if(tab){
+      var box = tab.closest('.card');
+      box.querySelectorAll('.subtab').forEach(function(t){ t.setAttribute('aria-selected', String(t === tab)); });
+      box.querySelectorAll('[role="tabpanel"]').forEach(function(p){ p.hidden = (p.id !== tab.dataset.panel); });
+      return;
+    }
+
+    var chip = e.target.closest('.chip[data-filter]');
+    if(chip){
+      document.querySelectorAll('.chip[data-filter="'+chip.dataset.filter+'"]').forEach(function(c){
+        c.setAttribute('aria-pressed', String(c === chip));
+      });
+      applyFilters();
+      return;
+    }
+
+    var ver = e.target.closest('[data-verify]');
+    if(ver){
+      var row = ver.closest('[data-pending]');
+      row.style.opacity = '.45';
+      ver.closest('.ledger__meta').innerHTML = '<span class="pill pill--ok"><span class="dot"></span>Verificada y asentada en el libro</span>';
+      toast('Movimiento creado. El total público subió.');
+      checkPending();
+      return;
+    }
+    var rej = e.target.closest('[data-reject]');
+    if(rej){
+      rej.closest('.ledger__meta').innerHTML = '<span class="pill pill--bad"><span class="dot"></span>Rechazada · no computa</span>';
+      rej.closest('[data-pending]').style.opacity = '.45';
+      checkPending();
+      return;
+    }
+    var adj = e.target.closest('[data-adjust]');
+    if(adj){
+      var bx = document.getElementById('adjustBox');
+      bx.hidden = !bx.hidden;
+      return;
+    }
+  });
+
+  function checkPending(){
+    var left = document.querySelectorAll('#view-admin [data-pending] [data-verify]').length;
+    document.getElementById('pendingEmpty').hidden = left > 0;
+  }
+
+  function applyFilters(){
+    function val(f){
+      var c = document.querySelector('.chip[data-filter="'+f+'"][aria-pressed="true"]');
+      return c ? c.dataset.value : 'all';
+    }
+    var s = val('size'), sp = val('species'), st = val('status');
+    var shown = 0;
+    document.querySelectorAll('#animalGrid > .card').forEach(function(card){
+      var ok = (s === 'all' || card.dataset.size === s)
+            && (sp === 'all' || card.dataset.species === sp)
+            && (st === 'all' || card.dataset.status === st);
+      card.hidden = !ok;
+      if(ok) shown++;
+    });
+    document.getElementById('resultCount').textContent = shown === 1 ? '1 animal' : shown + ' animales';
+    document.getElementById('emptyState').hidden = shown > 0;
+  }
+
+  var toastEl = document.getElementById('toast'), toastTimer;
+  function toast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add('is-on');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toastEl.classList.remove('is-on'); }, 2400);
+  }
+
+  document.getElementById('applyForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    this.hidden = true;
+    document.getElementById('applyDone').hidden = false;
+    toast('Postulación registrada');
+  });
+
+  animateMeters(document.getElementById('view-home'));
+  animateCounts(document.getElementById('view-home'));
+
+  var prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function fmtNum(v, d){
+    return v.toLocaleString('es-AR', {minimumFractionDigits:d, maximumFractionDigits:d});
+  }
+  function animateCounts(root){
+    root.querySelectorAll('[data-count]').forEach(function(el){
+      var target = parseFloat(el.dataset.count);
+      var d = parseInt(el.dataset.decimals || '0', 10);
+      var pre = el.dataset.prefix || '';
+      var suf = el.dataset.suffix || '';
+      if(prefersReduce || isNaN(target)){ el.textContent = pre + fmtNum(target, d) + suf; return; }
+      var t0 = null, dur = 1200;
+      el.textContent = pre + fmtNum(0, d) + suf;
+      function step(ts){
+        if(t0 === null) t0 = ts;
+        var p = Math.min((ts - t0) / dur, 1);
+        var eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = pre + fmtNum(target * eased, d) + suf;
+        if(p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    });
+  }
+})();
+</script>
