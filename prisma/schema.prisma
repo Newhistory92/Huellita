@@ -1,0 +1,196 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Dominio animales (entrega 1)
+
+model Animal {
+  id                   String           @id @default(cuid())
+  slug                 String           @unique // permanente, nunca cambia
+  nombre               String
+  especie              Especie
+  sexo                 Sexo
+  tamano               Tamano
+  fechaNacimientoAprox DateTime?
+  peso                 Int? // gramos
+  descripcion          String
+  personalidad         String?
+  zona                 String?
+  transito             String?
+  castrado             Boolean          @default(false)
+  vacunasAlDia         Boolean          @default(false)
+  requisitos           String?
+  estado               EstadoAnimal     @default(BORRADOR)
+  archivado            Boolean          @default(false)
+  publicadoEn          DateTime?
+  adoptadoEn           DateTime?
+  // compatibilidades: extensible sin migración de esquema
+  atributos            Json             @default("{}")
+  fotos                FotoAnimal[]
+  casos                CasoFinanciero[]
+  creadoEn             DateTime         @default(now())
+  actualizadoEn        DateTime         @updatedAt
+
+  @@index([estado, archivado])
+  @@index([especie, tamano, estado])
+}
+
+model FotoAnimal {
+  id           String   @id @default(cuid())
+  animalId     String
+  animal       Animal   @relation(fields: [animalId], references: [id])
+  claveArchivo String // clave en el almacén, sin URL completa
+  alt          String
+  orden        Int
+  principal    Boolean  @default(false)
+  sensible     Boolean  @default(false)
+  ancho        Int
+  alto         Int
+  placeholder  String // miniatura mínima embebida
+  creadoEn     DateTime @default(now())
+
+  @@index([animalId, orden])
+}
+
+model RedireccionDireccion {
+  slugAnterior String   @id
+  animalId     String?
+  casoId       String?
+  creadoEn     DateTime @default(now())
+}
+
+enum EstadoAnimal {
+  BORRADOR
+  DISPONIBLE
+  EN_EVALUACION
+  RESERVADO
+  ADOPTADO
+  TRANSITO
+  TRATAMIENTO
+  NO_DISPONIBLE
+  FALLECIDO
+}
+
+enum Especie {
+  PERRO
+  GATO
+  OTRO
+}
+
+enum Sexo {
+  MACHO
+  HEMBRA
+}
+
+enum Tamano {
+  PEQUENO
+  MEDIANO
+  GRANDE
+}
+
+// Dominio usuarios y auditoría (entrega 1)
+
+model Usuario {
+  id           String    @id @default(cuid())
+  email        String    @unique // debe coincidir con el de Google
+  nombre       String
+  rol          Rol
+  activo       Boolean   @default(true)
+  ultimoAcceso DateTime?
+  creadoEn     DateTime  @default(now())
+}
+
+enum Rol {
+  ADMINISTRACION
+  ANIMALES
+  FINANZAS
+  REDACCION
+}
+
+model RegistroAuditoria {
+  id            String   @id @default(cuid())
+  usuarioId     String?
+  usuarioEmail  String // copia: sobrevive al borrado del usuario
+  accion        String // "animal.publicar", "asiento.crear"
+  entidad       String
+  entidadId     String
+  valorAnterior Json?
+  valorNuevo    Json?
+  ip            String?
+  creadoEn      DateTime @default(now())
+
+  @@index([entidad, entidadId])
+  @@index([creadoEn])
+}
+
+// Dominio finanzas (diseñado ahora, se implementa en la entrega 2)
+
+model CasoFinanciero {
+  id               String            @id @default(cuid())
+  slug             String            @unique
+  animalId         String?
+  animal           Animal?           @relation(fields: [animalId], references: [id])
+  titulo           String
+  situacion        String
+  metaCentavos     BigInt
+  moneda           String            @default("ARS")
+  estado           EstadoCaso        @default(ABIERTO)
+  // saldo derivado, escrito solo por el dominio finanzas
+  recibidoCentavos BigInt            @default(0)
+  gastadoCentavos  BigInt            @default(0)
+  cantidadDonantes Int               @default(0)
+  asientos         AsientoContable[]
+  creadoEn         DateTime          @default(now())
+}
+
+model AsientoContable {
+  id               String      @id @default(cuid())
+  casoId           String
+  caso             CasoFinanciero @relation(fields: [casoId], references: [id])
+  tipo             TipoAsiento
+  centavos         BigInt // positivo entra, negativo sale
+  moneda           String      @default("ARS")
+  descripcion      String
+  proveedor        String? // "mercadopago", "transferencia", "manual"
+  pagoExternoId    String?
+  ajustaAId        String? // el asiento que corrige
+  documentoId      String?
+  creadoPorId      String?
+  creadoPorSistema Boolean     @default(false)
+  fechaEfectiva    DateTime
+  creadoEn         DateTime    @default(now())
+
+  @@index([casoId, fechaEfectiva])
+  @@unique([proveedor, pagoExternoId]) // segunda barrera contra duplicados
+}
+
+enum TipoAsiento {
+  DONACION
+  GASTO
+  REEMBOLSO
+  TRANSFERENCIA
+  AJUSTE
+}
+
+enum EstadoCaso {
+  ABIERTO
+  META_ALCANZADA
+  CERRADO
+}
+
+model EventoWebhook {
+  id              String    @id @default(cuid())
+  proveedor       String
+  eventoExternoId String
+  cargaUtil       Json
+  procesadoEn     DateTime?
+  resultado       String?
+  recibidoEn      DateTime  @default(now())
+
+  @@unique([proveedor, eventoExternoId]) // la idempotencia vive acá
+}
