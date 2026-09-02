@@ -1,0 +1,42 @@
+# Dependencias
+node_modules/
+.pnp
+.pnp.js
+
+# Compilación y caché de Next.js
+.next/
+out/
+build/
+dist/
+*.tsbuildinfo
+next-env.d.ts
+
+# Variables de entorno: nunca al repositorio
+.env
+.env.*
+!.env.example
+
+# Configuración local de herramientas
+.claude/settings.local.json
+.serena/
+
+# Archivos subidos en desarrollo (fotos de animales)
+almacenamiento/
+
+# Cobertura de pruebas
+coverage/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Registros
+*.log
+npm-debug.log*
+yarn-error.log*
