@@ -1,0 +1,50 @@
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.campo label,
+.campo legend {
+  font-size: var(--step--1);
+  font-weight: 700;
+}
+.ayuda {
+  font-size: var(--step--2);
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+.error {
+  font-size: var(--step--2);
+  color: var(--bad);
+  line-height: 1.5;
+}
+.campo input,
+.campo textarea,
+.campo select {
+  font: inherit;
+  font-size: var(--step--1);
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-xs);
+  padding: 13px 15px;
+  min-height: 50px;
+  width: 100%;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.25s ease;
+}
+.campo input:hover,
+.campo textarea:hover,
+.campo select:hover {
+  border-color: var(--ink-2);
+}
+.campo input:focus,
+.campo textarea:focus,
+.campo select:focus {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--mark) 20%, transparent);
+}
+.campo textarea {
+  min-height: 104px;
+  resize: vertical;
+}

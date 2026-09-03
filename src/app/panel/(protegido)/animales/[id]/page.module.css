@@ -1,0 +1,32 @@
+.contenedor {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 40px 18px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.permanente {
+  color: var(--ink-2);
+}
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.fila {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.casilla {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--step--1);
+}
+.acciones {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}

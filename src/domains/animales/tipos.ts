@@ -14,6 +14,11 @@ export interface Animal {
   sexo: Sexo;
   tamano: Tamano;
   descripcion: string;
+  personalidad?: string | null;
+  zona?: string | null;
+  requisitos?: string | null;
+  castrado: boolean;
+  vacunasAlDia: boolean;
   estado: EstadoAnimal;
   archivado: boolean;
   publicadoEn: Date | null;

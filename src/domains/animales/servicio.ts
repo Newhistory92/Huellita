@@ -1,6 +1,6 @@
 import { esquemaAnimal, type EntradaAnimal } from "./esquemas";
 import { generarSlug, slugDisponible } from "./slug";
-import type { Animal, Contexto, EstadoAnimal } from "./tipos";
+import type { Animal, Contexto, EstadoAnimal, FiltroAnimales } from "./tipos";
 import { puede } from "@/domains/usuarios/autorizacion";
 
 /** El permiso se verifica acá, no en la pantalla: esconder un botón no es seguridad. */
@@ -8,6 +8,17 @@ function exigirPermisoSobreAnimales(ctx: Contexto): void {
   if (!puede(ctx.rol, "animales.escribir")) {
     throw new Error(`El rol ${ctx.rol} no tiene permiso para gestionar animales`);
   }
+}
+
+function exigirLecturaDeAnimales(ctx: Contexto): void {
+  if (!puede(ctx.rol, "animales.leer")) {
+    throw new Error(`El rol ${ctx.rol} no tiene permiso para ver animales`);
+  }
+}
+
+export async function listarAnimales(filtro: FiltroAnimales, ctx: Contexto): Promise<Animal[]> {
+  exigirLecturaDeAnimales(ctx);
+  return ctx.repositorio.listar(filtro);
 }
 
 export async function crearAnimal(entrada: EntradaAnimal, ctx: Contexto): Promise<Animal> {
@@ -41,6 +52,11 @@ async function exigirAnimal(id: string, ctx: Contexto): Promise<Animal> {
   const animal = await ctx.repositorio.porId(id);
   if (!animal) throw new Error("No existe el animal");
   return animal;
+}
+
+export async function obtenerAnimal(id: string, ctx: Contexto): Promise<Animal> {
+  exigirLecturaDeAnimales(ctx);
+  return exigirAnimal(id, ctx);
 }
 
 export async function publicarAnimal(id: string, ctx: Contexto): Promise<Animal> {

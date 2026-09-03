@@ -1,0 +1,27 @@
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.etiqueta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--step--1);
+  font-weight: 700;
+}
+.valor {
+  display: flex;
+  align-items: center;
+  min-height: 50px;
+  padding: 13px 15px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xs);
+  background: var(--surface-2);
+  color: var(--ink-2);
+}
+.explicacion {
+  font-size: var(--step--2);
+  color: var(--ink-2);
+  line-height: 1.5;
+}

@@ -9,6 +9,8 @@ export const esquemaAnimal = z.object({
   personalidad: z.string().trim().optional(),
   zona: z.string().trim().optional(),
   requisitos: z.string().trim().optional(),
+  castrado: z.boolean().default(false),
+  vacunasAlDia: z.boolean().default(false),
   atributos: z.record(z.string(), z.unknown()).default({}),
 });
 

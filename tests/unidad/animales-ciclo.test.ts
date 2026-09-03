@@ -32,7 +32,8 @@ describe("ciclo de vida del animal", () => {
     const ctx = contexto();
     const animal = await ctx.repositorio.crear({
       slug: "corto", nombre: "Corto", especie: "PERRO", sexo: "MACHO", tamano: "MEDIANO",
-      descripcion: "corta", estado: "BORRADOR", archivado: false, publicadoEn: null, atributos: {},
+      descripcion: "corta", castrado: false, vacunasAlDia: false,
+      estado: "BORRADOR", archivado: false, publicadoEn: null, atributos: {},
     });
     await expect(publicarAnimal(animal.id, ctx)).rejects.toThrow(/descripción/i);
   });
