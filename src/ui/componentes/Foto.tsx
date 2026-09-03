@@ -11,6 +11,7 @@ export function Foto({
   aclaracionSensible = "Puede mostrar al animal lastimado o en tratamiento.",
   etiqueta,
   meta,
+  estilo,
   children,
 }: {
   alt: string;
@@ -19,6 +20,7 @@ export function Foto({
   aclaracionSensible?: string;
   etiqueta?: React.ReactNode;
   meta?: string;
+  estilo?: React.CSSProperties;
   children: React.ReactNode;
 }) {
   const [revelada, setRevelada] = useState(false);
@@ -27,7 +29,7 @@ export function Foto({
   const clases = [estilos.foto, mostrarCompuerta ? estilos.sensible : ""].join(" ").trim();
 
   return (
-    <div className={clases} role="img" aria-label={alt}>
+    <div className={clases} style={estilo} role="img" aria-label={alt}>
       {children}
       {etiqueta ? <span className={estilos.etiqueta}>{etiqueta}</span> : null}
       {meta ? <span className={estilos.meta}>{meta}</span> : null}

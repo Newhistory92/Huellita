@@ -16,3 +16,8 @@ export function elegirPrincipal(fotos: FotoOrdenable[], idPrincipal: string | nu
   const objetivo = idPrincipal ?? fotos[0]?.id;
   return fotos.map((f) => ({ ...f, principal: f.id === objetivo }));
 }
+
+/** El original no se sirve nunca: la clave apunta a una de las medidas que generó el pipeline de imágenes. */
+export function urlDeFoto(claveArchivo: string, ancho: number): string {
+  return `/archivos/${claveArchivo}-${ancho}.webp`;
+}

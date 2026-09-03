@@ -1,0 +1,19 @@
+.barra {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.compartir {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-2);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: var(--step--1);
+  font-weight: 600;
+  cursor: pointer;
+}
+.compartir:hover {
+  border-color: var(--mark);
+  color: var(--mark);
+}
