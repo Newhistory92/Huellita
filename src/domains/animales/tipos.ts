@@ -60,3 +60,41 @@ export interface Contexto {
   repositorio: RepositorioAnimales;
   auditoria: PuertoAuditoria;
 }
+
+export interface Foto {
+  id: string;
+  animalId: string;
+  claveArchivo: string;
+  alt: string;
+  orden: number;
+  principal: boolean;
+  sensible: boolean;
+  ancho: number;
+  alto: number;
+  placeholder: string;
+}
+
+export interface NuevaFoto {
+  animalId: string;
+  claveArchivo: string;
+  alt: string;
+  sensible: boolean;
+  ancho: number;
+  alto: number;
+  placeholder: string;
+}
+
+export interface RepositorioFotos {
+  crear(datos: Omit<Foto, "id">): Promise<Foto>;
+  listarPorAnimal(animalId: string): Promise<Foto[]>;
+  porId(id: string): Promise<Foto | null>;
+  actualizar(id: string, cambios: Partial<Foto>): Promise<Foto>;
+  reordenar(cambios: Array<{ id: string; orden: number }>): Promise<void>;
+}
+
+export interface ContextoFotos {
+  usuarioEmail: string;
+  rol: Contexto["rol"];
+  repositorio: RepositorioFotos;
+  auditoria: PuertoAuditoria;
+}

@@ -1,12 +1,15 @@
 import { notFound } from "next/navigation";
 import { auth } from "@/infra/auth";
 import { repositorioPrisma, auditoriaPrisma } from "@/infra/repositorios/animales";
+import { repositorioFotosPrisma } from "@/infra/repositorios/fotos";
 import { obtenerAnimal } from "@/domains/animales/servicio";
-import type { Contexto, Especie, Sexo, Tamano } from "@/domains/animales/tipos";
+import { listarFotos } from "@/domains/animales/fotos-servicio";
+import type { Contexto, ContextoFotos, Especie, Sexo, Tamano } from "@/domains/animales/tipos";
 import { Card, CardCuerpo } from "@/ui/componentes/Card";
 import { Campo } from "@/ui/componentes/Campo";
 import { Boton } from "@/ui/componentes/Boton";
 import { accionCrearAnimal, accionEditarAnimal, accionPublicarAnimal, accionArchivarAnimal } from "../acciones";
+import { Fotos } from "./fotos";
 import estilos from "./page.module.css";
 
 async function contexto(): Promise<Contexto> {
@@ -16,6 +19,17 @@ async function contexto(): Promise<Contexto> {
     usuarioEmail: sesion.user.email,
     rol: sesion.user.rol as Contexto["rol"],
     repositorio: repositorioPrisma(),
+    auditoria: auditoriaPrisma(),
+  };
+}
+
+async function contextoFotos(): Promise<ContextoFotos> {
+  const sesion = await auth();
+  if (!sesion?.user?.email || !sesion.user.rol) throw new Error("Sesión requerida");
+  return {
+    usuarioEmail: sesion.user.email,
+    rol: sesion.user.rol as ContextoFotos["rol"],
+    repositorio: repositorioFotosPrisma(),
     auditoria: auditoriaPrisma(),
   };
 }
@@ -31,6 +45,7 @@ export default async function FormularioDeAnimal({ params }: { params: Promise<{
   const animal = esAlta ? null : await obtenerAnimal(id, await contexto()).catch(() => null);
   if (!esAlta && !animal) notFound();
 
+  const fotos = animal ? await listarFotos(animal.id, await contextoFotos()) : [];
   const accionGuardar = esAlta ? accionCrearAnimal : accionEditarAnimal.bind(null, id);
 
   return (
@@ -135,6 +150,8 @@ export default async function FormularioDeAnimal({ params }: { params: Promise<{
           </CardCuerpo>
         </Card>
       ) : null}
+
+      {animal ? <Fotos animalId={animal.id} fotos={fotos} /> : null}
     </main>
   );
 }

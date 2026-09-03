@@ -1,0 +1,56 @@
+.vacio {
+  color: var(--ink-2);
+}
+.grilla {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xs);
+  padding: 10px;
+  cursor: grab;
+}
+.item:active {
+  cursor: grabbing;
+}
+.controles {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: var(--step--2);
+}
+.mover {
+  display: flex;
+  gap: 6px;
+}
+.mover button {
+  min-height: 44px;
+  min-width: 44px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-xs);
+  background: var(--surface);
+}
+.mover button:disabled {
+  opacity: 0.4;
+}
+.casilla {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.subida {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
