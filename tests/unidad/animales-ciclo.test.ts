@@ -38,6 +38,19 @@ describe("ciclo de vida del animal", () => {
     await expect(publicarAnimal(animal.id, ctx)).rejects.toThrow(/descripción/i);
   });
 
+  it("publica un animal aunque los campos opcionales vengan en null, como los devuelve Prisma", async () => {
+    const ctx = contexto();
+    const animal = await ctx.repositorio.crear({
+      slug: "sinopcionales", nombre: "Sin Opcionales", especie: "PERRO", sexo: "MACHO", tamano: "MEDIANO",
+      descripcion: "Lo encontraron atado a un poste en barrio Tablada.",
+      personalidad: null, zona: null, requisitos: null,
+      castrado: false, vacunasAlDia: false,
+      estado: "BORRADOR", archivado: false, publicadoEn: null, atributos: {},
+    });
+    const publicado = await publicarAnimal(animal.id, ctx);
+    expect(publicado.estado).toBe("DISPONIBLE");
+  });
+
   it("la dirección permanente NO cambia al corregir el nombre", async () => {
     const ctx = contexto();
     const animal = await crearAnimal(base, ctx);

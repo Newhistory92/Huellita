@@ -6,9 +6,10 @@ export const esquemaAnimal = z.object({
   sexo: z.enum(["MACHO", "HEMBRA"]),
   tamano: z.enum(["PEQUENO", "MEDIANO", "GRANDE"]),
   descripcion: z.string().trim().min(20, "La descripción tiene que contar su historia"),
-  personalidad: z.string().trim().optional(),
-  zona: z.string().trim().optional(),
-  requisitos: z.string().trim().optional(),
+  // Prisma devuelve null en las columnas opcionales sin valor, no undefined.
+  personalidad: z.string().trim().nullable().optional().transform((v) => v ?? undefined),
+  zona: z.string().trim().nullable().optional().transform((v) => v ?? undefined),
+  requisitos: z.string().trim().nullable().optional().transform((v) => v ?? undefined),
   castrado: z.boolean().default(false),
   vacunasAlDia: z.boolean().default(false),
   atributos: z.record(z.string(), z.unknown()).default({}),
