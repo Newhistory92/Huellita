@@ -1,4 +1,4 @@
-import { mkdir, writeFile, unlink } from "node:fs/promises";
+import { mkdir, writeFile, unlink, readFile } from "node:fs/promises";
 import path from "node:path";
 import type { AlmacenDeArchivos } from "./tipos";
 
@@ -19,6 +19,9 @@ export function almacenLocal(directorio = process.env.ALMACEN_DIRECTORIO_LOCAL ?
     },
     async borrar(clave) {
       await unlink(path.join(directorio, clave)).catch(() => {});
+    },
+    async leer(clave) {
+      return await readFile(path.join(directorio, clave)).catch(() => null);
     },
   };
 }

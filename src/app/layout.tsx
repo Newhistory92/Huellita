@@ -18,6 +18,7 @@ const mono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_URL_BASE ?? "http://localhost:3000"),
   title: { default: "Huellas", template: "%s — Huellas" },
   description: "Asociación Civil Huellas. Adopción responsable y transparencia.",
 };

@@ -1,5 +1,7 @@
-import { notFound } from "next/navigation";
-import { animalPorSlug, animalesPublicados, fotosDeAnimal } from "@/domains/animales/consultas";
+import type { Metadata } from "next";
+import { notFound, permanentRedirect } from "next/navigation";
+import { animalPorSlug, animalesPublicados, fotosDeAnimal, slugActualDe } from "@/domains/animales/consultas";
+import { metadatosDeAnimal } from "@/domains/animales/metadatos";
 import { Card, CardCuerpo } from "@/ui/componentes/Card";
 import { Pildora } from "@/ui/componentes/Pildora";
 import { ESPECIE_EN_TEXTO, SEXO_EN_TEXTO, TAMANO_EN_TEXTO, TONO_POR_ESTADO, etiquetaEstado } from "../estado-texto";
@@ -12,10 +14,23 @@ export async function generateStaticParams() {
   return animales.map((animal) => ({ slug: animal.slug }));
 }
 
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const animal = await animalPorSlug(slug);
+  if (!animal) return {};
+  return metadatosDeAnimal(animal);
+}
+
 export default async function FichaAnimal({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const animal = await animalPorSlug(slug);
-  if (!animal) notFound();
+  if (!animal) {
+    // Una dirección que circuló por Facebook nunca puede terminar en 404: si el nombre
+    // se corrigió, la redirección lleva a la dirección actual con código 308.
+    const actual = await slugActualDe(slug);
+    if (actual) permanentRedirect(`/adopcion/${actual}`);
+    notFound();
+  }
   // Un animal adoptado o archivado SIGUE mostrando su ficha: los enlaces que
   // circularon por Facebook tienen que seguir funcionando (spec de diseño §6.2).
 
