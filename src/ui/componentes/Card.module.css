@@ -1,0 +1,27 @@
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.conElevacion {
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.3s cubic-bezier(0.22, 1, 0.3, 1);
+}
+.conElevacion:hover {
+  box-shadow: var(--shadow-lift);
+  transform: translateY(-2px);
+}
+.cuerpo {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+@media (min-width: 620px) {
+  .cuerpo {
+    padding: 24px;
+  }
+}

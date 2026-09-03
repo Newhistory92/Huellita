@@ -1,0 +1,62 @@
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 50px;
+  padding: 13px 22px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.25s ease,
+    transform 0.18s cubic-bezier(0.22, 1, 0.3, 1);
+}
+.boton:hover {
+  transform: translateY(-1px);
+}
+.boton:active {
+  transform: translateY(0);
+}
+
+.donar {
+  background: var(--accent);
+  color: var(--on-accent);
+  width: 100%;
+  box-shadow: 0 6px 18px -10px color-mix(in srgb, var(--accent) 90%, transparent);
+}
+.donar:hover {
+  background: color-mix(in srgb, var(--accent) 88%, var(--ink));
+  box-shadow: 0 10px 26px -12px color-mix(in srgb, var(--accent) 95%, transparent);
+}
+
+.primario {
+  background: var(--brand);
+  color: var(--on-brand);
+}
+.primario:hover {
+  background: color-mix(in srgb, var(--brand) 86%, var(--ground));
+}
+
+.fantasma {
+  background: transparent;
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+.fantasma:hover {
+  border-color: var(--ink);
+  background: var(--surface-2);
+}
+
+.chico {
+  min-height: 42px;
+  padding: 9px 18px;
+  font-size: var(--step--2);
+}

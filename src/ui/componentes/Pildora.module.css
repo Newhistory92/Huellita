@@ -1,0 +1,45 @@
+.pildora {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: var(--step--2);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.5;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.ok {
+  background: var(--ok-soft);
+  color: var(--ok);
+  border-color: color-mix(in srgb, var(--ok) 28%, transparent);
+}
+.warn {
+  background: var(--warn-soft);
+  color: var(--warn);
+  border-color: color-mix(in srgb, var(--warn) 28%, transparent);
+}
+.bad {
+  background: var(--bad-soft);
+  color: var(--bad);
+  border-color: color-mix(in srgb, var(--bad) 28%, transparent);
+}
+.marca {
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--line-strong);
+}
+.neutro {
+  background: var(--surface-2);
+  color: var(--ink-2);
+  border-color: var(--line);
+}
+.adoptado {
+  background: color-mix(in srgb, var(--mark) 12%, var(--surface));
+  color: var(--mark);
+  border-color: color-mix(in srgb, var(--mark) 34%, transparent);
+}
