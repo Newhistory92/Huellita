@@ -1,12 +1,11 @@
 import { esquemaAnimal, type EntradaAnimal } from "./esquemas";
 import { generarSlug, slugDisponible } from "./slug";
 import type { Animal, Contexto, EstadoAnimal } from "./tipos";
-
-const ROLES_QUE_GESTIONAN_ANIMALES = ["ADMINISTRACION", "ANIMALES"];
+import { puede } from "@/domains/usuarios/autorizacion";
 
 /** El permiso se verifica acá, no en la pantalla: esconder un botón no es seguridad. */
 function exigirPermisoSobreAnimales(ctx: Contexto): void {
-  if (!ROLES_QUE_GESTIONAN_ANIMALES.includes(ctx.rol)) {
+  if (!puede(ctx.rol, "animales.escribir")) {
     throw new Error(`El rol ${ctx.rol} no tiene permiso para gestionar animales`);
   }
 }
