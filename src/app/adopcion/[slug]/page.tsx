@@ -1,12 +1,10 @@
 import { notFound } from "next/navigation";
 import { animalPorSlug, animalesPublicados, fotosDeAnimal } from "@/domains/animales/consultas";
-import { urlDeFoto } from "@/domains/animales/fotos";
 import { Card, CardCuerpo } from "@/ui/componentes/Card";
-import { Foto } from "@/ui/componentes/Foto";
 import { Pildora } from "@/ui/componentes/Pildora";
-import { IconoPata } from "../IconoPata";
 import { ESPECIE_EN_TEXTO, SEXO_EN_TEXTO, TAMANO_EN_TEXTO, TONO_POR_ESTADO, etiquetaEstado } from "../estado-texto";
 import { Compartir } from "./Compartir";
+import { Galeria } from "./Galeria";
 import estilos from "./page.module.css";
 
 export async function generateStaticParams() {
@@ -22,40 +20,23 @@ export default async function FichaAnimal({ params }: { params: Promise<{ slug: 
   // circularon por Facebook tienen que seguir funcionando (spec de diseño §6.2).
 
   const fotos = await fotosDeAnimal(animal.id);
-  const principal = fotos.find((foto) => foto.principal) ?? fotos[0] ?? null;
-  const secundarias = fotos.filter((foto) => foto.id !== principal?.id);
+  const indicePrincipal = fotos.findIndex((foto) => foto.principal);
 
+  // La caché de unstable_cache serializa a JSON entre builds: publicadoEn puede llegar como texto, no como Date.
   const publicada = animal.publicadoEn
-    ? new Intl.DateTimeFormat("es-AR", { day: "numeric", month: "long", year: "numeric" }).format(animal.publicadoEn)
+    ? new Intl.DateTimeFormat("es-AR", { day: "numeric", month: "long", year: "numeric" }).format(new Date(animal.publicadoEn))
     : null;
 
   return (
     <main className={estilos.contenedor}>
       <article className={estilos.stack}>
         <Card>
-          <Foto
-            alt={principal?.alt ?? `${animal.nombre}, todavía sin foto`}
-            sensible={principal?.sensible ?? false}
-            estilo={{ aspectRatio: "16/11" }}
+          <Galeria
+            fotos={fotos}
+            alt={`${animal.nombre}, todavía sin foto`}
             etiqueta={<Pildora tono={TONO_POR_ESTADO[animal.estado]}>{etiquetaEstado(animal)}</Pildora>}
-          >
-            {principal ? (
-              // eslint-disable-next-line @next/next/no-img-element -- las medidas ya salen del pipeline de imágenes, no de Next
-              <img src={urlDeFoto(principal.claveArchivo, 1024)} alt={principal.alt} />
-            ) : (
-              <IconoPata />
-            )}
-          </Foto>
-          {secundarias.length > 0 && (
-            <div className={estilos.miniaturas}>
-              {secundarias.map((foto) => (
-                <Foto key={foto.id} alt={foto.alt} sensible={foto.sensible} estilo={{ aspectRatio: "1", width: 64, flex: "none" }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element -- las medidas ya salen del pipeline de imágenes, no de Next */}
-                  <img src={urlDeFoto(foto.claveArchivo, 320)} alt={foto.alt} />
-                </Foto>
-              ))}
-            </div>
-          )}
+            indiceInicial={indicePrincipal >= 0 ? indicePrincipal : 0}
+          />
         </Card>
 
         <div className={estilos.encabezado}>

@@ -8,12 +8,6 @@
   flex-direction: column;
   gap: 20px;
 }
-.miniaturas {
-  display: flex;
-  gap: 6px;
-  padding: 8px;
-  overflow-x: auto;
-}
 .encabezado {
   display: flex;
   flex-direction: column;
