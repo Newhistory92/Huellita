@@ -28,41 +28,49 @@ async function conContextoFotos<T>(fn: (ctx: ContextoFotos) => Promise<T>): Prom
 }
 
 export async function accionSubirFoto(animalId: string, formulario: FormData) {
-  const archivo = formulario.get("archivo");
+  const archivos = formulario.getAll("archivo").filter((valor): valor is File => valor instanceof File);
   const alt = String(formulario.get("alt") ?? "").trim();
-  if (!(archivo instanceof File)) throw new Error("Falta el archivo");
+  const sensible = formulario.get("sensible") === "on";
+
+  if (archivos.length === 0) throw new Error("Falta el archivo");
   if (alt.length === 0) {
     throw new Error("Escribí una descripción de la foto: sin ella, quien no ve la imagen no sabe qué muestra");
   }
-  if (archivo.size > TAMANO_MAXIMO_BYTES) {
-    throw new Error("La foto pesa más de 12 MB. Sacale peso antes de subirla.");
+  if (archivos.some((archivo) => archivo.size > TAMANO_MAXIMO_BYTES)) {
+    throw new Error("Una de las fotos pesa más de 12 MB. Sacale peso antes de subirla.");
   }
 
-  const datos = Buffer.from(await archivo.arrayBuffer());
-  await validarImagen(datos); // por contenido real, no por extensión
-  const procesada = await procesarImagen(datos);
-
-  // El original no se guarda: solo las medidas en WebP que arma procesarImagen.
   const almacen = almacenLocal();
-  const base = `animales/${animalId}/${randomUUID()}`;
-  for (const medida of procesada.medidas) {
-    await almacen.guardar(`${base}-${medida.ancho}.webp`, medida.datos, "image/webp");
-  }
 
-  await conContextoFotos((ctx) =>
-    agregarFoto(
-      {
-        animalId,
-        claveArchivo: base,
-        alt,
-        sensible: formulario.get("sensible") === "on",
-        ancho: procesada.ancho,
-        alto: procesada.alto,
-        placeholder: procesada.placeholder,
-      },
-      ctx
-    )
-  );
+  for (const [indice, archivo] of archivos.entries()) {
+    const datos = Buffer.from(await archivo.arrayBuffer());
+    await validarImagen(datos); // por contenido real, no por extensión
+    const procesada = await procesarImagen(datos);
+
+    // El original no se guarda: solo las medidas en WebP que arma procesarImagen.
+    const base = `animales/${animalId}/${randomUUID()}`;
+    for (const medida of procesada.medidas) {
+      await almacen.guardar(`${base}-${medida.ancho}.webp`, medida.datos, "image/webp");
+    }
+
+    // Con una sola foto el texto queda tal cual; con varias se numera para que cada una sea distinguible.
+    const altDeEsta = archivos.length > 1 ? `${alt} (${indice + 1}/${archivos.length})` : alt;
+
+    await conContextoFotos((ctx) =>
+      agregarFoto(
+        {
+          animalId,
+          claveArchivo: base,
+          alt: altDeEsta,
+          sensible,
+          ancho: procesada.ancho,
+          alto: procesada.alto,
+          placeholder: procesada.placeholder,
+        },
+        ctx
+      )
+    );
+  }
 
   revalidateTag("animales");
 }

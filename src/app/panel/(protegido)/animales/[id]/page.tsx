@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { auth } from "@/infra/auth";
 import { repositorioPrisma, auditoriaPrisma } from "@/infra/repositorios/animales";
@@ -51,6 +52,9 @@ export default async function FormularioDeAnimal({ params }: { params: Promise<{
   return (
     <main className={estilos.contenedor}>
       <div>
+        <Link href="/panel/animales" className={estilos.volver}>
+          ← Volver al listado
+        </Link>
         <h1>{esAlta ? "Dar de alta un animal" : `Editar a ${animal!.nombre}`}</h1>
         {animal ? <p className={estilos.permanente}>Dirección permanente: /animales/{animal.slug}</p> : null}
       </div>

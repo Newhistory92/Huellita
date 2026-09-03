@@ -6,6 +6,12 @@
   flex-direction: column;
   gap: 20px;
 }
+.volver {
+  display: inline-block;
+  margin-bottom: 12px;
+  font-size: var(--step--1);
+  color: var(--ink-2);
+}
 .permanente {
   color: var(--ink-2);
 }

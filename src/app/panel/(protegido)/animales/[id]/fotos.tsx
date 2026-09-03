@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Boton } from "@/ui/componentes/Boton";
 import { Card, CardCuerpo } from "@/ui/componentes/Card";
@@ -19,6 +19,13 @@ export function Fotos({ animalId, fotos }: { animalId: string; fotos: FotoDeAnim
   const [orden, setOrden] = useState(fotos.map((f) => f.id));
   const [arrastrada, setArrastrada] = useState<string | null>(null);
   const [pendiente, iniciarTransicion] = useTransition();
+
+  // router.refresh() trae fotos nuevas desde el servidor: sin esto, el
+  // estado local se queda con la lista vieja y la foto recién subida no
+  // aparece hasta recargar la página a mano.
+  useEffect(() => {
+    setOrden(fotos.map((f) => f.id));
+  }, [fotos]);
 
   const porId = new Map(fotos.map((f) => [f.id, f]));
   const ordenadas = orden.map((id) => porId.get(id)).filter((f): f is FotoDeAnimal => Boolean(f));
@@ -111,10 +118,14 @@ export function Fotos({ animalId, fotos }: { animalId: string; fotos: FotoDeAnim
           }}
           className={estilos.subida}
         >
-          <Campo etiqueta="Nueva foto" nombre="archivo">
-            <input id="archivo" name="archivo" type="file" accept="image/png,image/jpeg,image/webp" required />
+          <Campo etiqueta="Nuevas fotos" nombre="archivo" ayuda="Podés elegir varias a la vez.">
+            <input id="archivo" name="archivo" type="file" accept="image/png,image/jpeg,image/webp" multiple required />
           </Campo>
-          <Campo etiqueta="Descripción de la imagen" nombre="alt" ayuda="Obligatoria: la necesita quien no puede ver la foto.">
+          <Campo
+            etiqueta="Descripción de la imagen"
+            nombre="alt"
+            ayuda="Obligatoria: la necesita quien no puede ver la foto. Si subís varias, se numera automáticamente."
+          >
             <input id="alt" name="alt" required />
           </Campo>
           <label className={estilos.casilla}>
@@ -122,7 +133,7 @@ export function Fotos({ animalId, fotos }: { animalId: string; fotos: FotoDeAnim
             Esta imagen puede impresionar
           </label>
           <Boton type="submit" variante="primario">
-            Subir foto
+            Subir fotos
           </Boton>
         </form>
       </CardCuerpo>
