@@ -102,9 +102,15 @@ export function Fotos({ animalId, fotos }: { animalId: string; fotos: FotoDeAnim
                     Puede impresionar
                   </label>
 
-                  <button type="button" disabled={foto.principal} onClick={() => ejecutar(() => accionDefinirPrincipal(foto.id))}>
+                  <Boton
+                    type="button"
+                    variante="fantasma"
+                    tamano="sm"
+                    disabled={foto.principal}
+                    onClick={() => ejecutar(() => accionDefinirPrincipal(foto.id))}
+                  >
                     {foto.principal ? "Es la principal" : "Definir como principal"}
-                  </button>
+                  </Boton>
                 </div>
               </li>
             ))}
