@@ -42,9 +42,25 @@ describe("reglas del sistema de diseño", () => {
     expect(reglaImagen![1]).toMatch(/width:\s*100%/);
     expect(reglaImagen![1]).toMatch(/height:\s*100%/);
     expect(reglaImagen![1]).toMatch(/object-fit:\s*cover/);
+    // La altura del marco sale de aspect-ratio, que para un hijo de grilla es
+    // una altura indefinida: contra eso, height:100% cae en auto y la foto se
+    // desborda hacia abajo, recortada por arriba. Posicionarla sobre el marco
+    // la despega del cálculo de la grilla.
+    expect(reglaImagen![1], "la foto tiene que cubrir el marco sin depender del alto de la grilla").toMatch(
+      /position:\s*absolute/
+    );
 
     const reglaSilueta = hoja.match(/\.foto\s*>\s*svg\s*\{([^}]*)\}/);
     expect(reglaSilueta, "Foto.module.css no define una regla propia para .foto > svg").not.toBeNull();
     expect(reglaSilueta![1]).toMatch(/width:\s*52%/);
+  });
+
+  // La etiqueta es solo un envoltorio que posiciona: la píldora que va adentro
+  // trae su propio fondo y es ovalada. Si el envoltorio pinta su fondo, ese
+  // rectángulo asoma por las puntas del óvalo.
+  it("el envoltorio de la etiqueta no pinta fondo propio", () => {
+    const reglaEtiqueta = contenido("Foto.module.css").match(/\.etiqueta\s*\{([^}]*)\}/);
+    expect(reglaEtiqueta, "Foto.module.css no define .etiqueta").not.toBeNull();
+    expect(reglaEtiqueta![1]).not.toMatch(/(^|[^-])background\s*:/);
   });
 });

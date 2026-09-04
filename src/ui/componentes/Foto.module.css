@@ -22,8 +22,17 @@
   transition: filter 0.5s ease;
 }
 
-/* La foto real, en cambio, llena el marco entero y se recorta al centro. */
+/*
+ * La foto real, en cambio, llena el marco entero y se recorta al centro.
+ *
+ * Va posicionada sobre el marco y no como celda de la grilla: la altura del
+ * marco sale de aspect-ratio, que para un hijo de grilla es indefinida, y
+ * contra una altura indefinida el height:100% cae en auto. La foto se
+ * desbordaba hacia abajo y se veía recortada por arriba, nunca centrada.
+ */
 .foto > img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -33,12 +42,13 @@
 .sensible > img {
   filter: blur(24px);
 }
+/* Solo posiciona. El fondo lo trae la píldora, que es ovalada: si lo pintara
+   acá, el rectángulo asomaría por las puntas del óvalo. */
 .etiqueta {
   position: absolute;
   left: 12px;
   top: 12px;
   z-index: 3;
-  background: var(--surface);
 }
 .meta {
   position: absolute;
