@@ -1,0 +1,40 @@
+name: Pruebas
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  unidad:
+    name: Pruebas de unidad
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx prisma generate
+      - run: npx vitest run tests/unidad
+
+  # Sin el secreto no hay base de datos de prueba contra la cual correr: en
+  # un fork de un tercero, o mientras nadie lo configuró, este job se saltea.
+  integracion:
+    name: Pruebas de integración
+    runs-on: ubuntu-latest
+    if: ${{ secrets.DATABASE_URL_TEST != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx prisma generate
+      - run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL_TEST }}
+      - run: npx vitest run tests/integracion
+        env:
+          DATABASE_URL_TEST: ${{ secrets.DATABASE_URL_TEST }}
