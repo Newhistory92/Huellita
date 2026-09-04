@@ -51,3 +51,31 @@ describe("urlDeFoto", () => {
     expect(urlDeFoto({ claveArchivo: "animales/a/x", ancho: 200 }, 320)).toBe("/archivos/animales/a/x-200.webp");
   });
 });
+
+describe("urlDeFoto según dónde vivan los archivos", () => {
+  const foto = { claveArchivo: "animales/a/x", ancho: 2000 };
+
+  it("sin almacén en la nube, sirve por la ruta propia de la aplicación", () => {
+    expect(urlDeFoto(foto, 640, "")).toBe("/archivos/animales/a/x-640.webp");
+  });
+
+  it("con almacén en la nube, apunta directo al depósito", () => {
+    expect(urlDeFoto(foto, 640, "https://fotos.refugiohuellas.org.ar")).toBe(
+      "https://fotos.refugiohuellas.org.ar/animales/a/x-640.webp"
+    );
+  });
+
+  // Una barra de más produce direcciones con doble barra: funcionan en algunos
+  // servidores y en otros no, y el error aparece recién en producción.
+  it("tolera que la dirección base termine en barra", () => {
+    expect(urlDeFoto(foto, 640, "https://fotos.refugiohuellas.org.ar/")).toBe(
+      "https://fotos.refugiohuellas.org.ar/animales/a/x-640.webp"
+    );
+  });
+
+  it("sigue recortando la medida al ancho real aunque esté en la nube", () => {
+    expect(urlDeFoto({ claveArchivo: "animales/a/x", ancho: 480 }, 1024, "https://fotos.org.ar")).toBe(
+      "https://fotos.org.ar/animales/a/x-480.webp"
+    );
+  });
+});

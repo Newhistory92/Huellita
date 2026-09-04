@@ -6,7 +6,8 @@ import { auth } from "@/infra/auth";
 import { prisma } from "@/infra/prisma";
 import { repositorioFotosPrisma } from "@/infra/repositorios/fotos";
 import { auditoriaPrisma } from "@/infra/repositorios/animales";
-import { almacenLocal } from "@/infra/almacen/local";
+import { almacen } from "@/infra/almacen";
+import { exigirAlmacenPersistente } from "@/infra/almacen/configuracion";
 import { validarImagen, TAMANO_MAXIMO_BYTES } from "@/infra/imagenes/validar";
 import { procesarImagen } from "@/infra/imagenes/procesar";
 import { agregarFoto, reordenarFotos, marcarSensible, definirPrincipal } from "@/domains/animales/fotos-servicio";
@@ -40,7 +41,8 @@ export async function accionSubirFoto(animalId: string, formulario: FormData) {
     throw new Error("Una de las fotos pesa más de 12 MB. Sacale peso antes de subirla.");
   }
 
-  const almacen = almacenLocal();
+  exigirAlmacenPersistente();
+  const deposito = almacen();
 
   for (const [indice, archivo] of archivos.entries()) {
     const datos = Buffer.from(await archivo.arrayBuffer());
@@ -50,7 +52,7 @@ export async function accionSubirFoto(animalId: string, formulario: FormData) {
     // El original no se guarda: solo las medidas en WebP que arma procesarImagen.
     const base = `animales/${animalId}/${randomUUID()}`;
     for (const medida of procesada.medidas) {
-      await almacen.guardar(`${base}-${medida.ancho}.webp`, medida.datos, "image/webp");
+      await deposito.guardar(`${base}-${medida.ancho}.webp`, medida.datos, "image/webp");
     }
 
     // Con una sola foto el texto queda tal cual; con varias se numera para que cada una sea distinguible.

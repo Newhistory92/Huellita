@@ -26,7 +26,14 @@ export function elegirPrincipal(fotos: FotoOrdenable[], idPrincipal: string | nu
  * -768. Por eso acá se aplica el mismo recorte: pedir una medida que el
  * pipeline no generó devuelve 404 y la foto aparece rota.
  */
-export function urlDeFoto(foto: { claveArchivo: string; ancho: number }, anchoDeseado: number): string {
+export function urlDeFoto(
+  foto: { claveArchivo: string; ancho: number },
+  anchoDeseado: number,
+  urlPublica = process.env.NEXT_PUBLIC_ALMACEN_URL ?? ""
+): string {
   const anchoDisponible = Math.min(anchoDeseado, foto.ancho);
-  return `/archivos/${foto.claveArchivo}-${anchoDisponible}.webp`;
+  const archivo = `${foto.claveArchivo}-${anchoDisponible}.webp`;
+  const base = urlPublica.trim().replace(/\/+$/, "");
+  // Sin almacén en la nube, las sirve la propia aplicación desde el disco.
+  return base ? `${base}/${archivo}` : `/archivos/${archivo}`;
 }

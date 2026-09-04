@@ -1,7 +1,7 @@
 import sharp from "sharp";
 import { ImageResponse } from "next/og";
 import { animalPorSlug, fotosDeAnimal } from "@/domains/animales/consultas";
-import { almacenLocal } from "@/infra/almacen/local";
+import { almacen } from "@/infra/almacen";
 
 export const runtime = "nodejs";
 export const size = { width: 1200, height: 630 };
@@ -25,7 +25,7 @@ export default async function ImagenSocial({ params }: { params: Promise<{ slug:
       // -480. Pedir la medida fija dejaría sin imagen la vista previa de
       // Facebook, que es de donde llega la mayoría de las visitas.
       const anchoDisponible = Math.min(640, principal.ancho);
-      const webp = await almacenLocal().leer(`${principal.claveArchivo}-${anchoDisponible}.webp`);
+      const webp = await almacen().leer(`${principal.claveArchivo}-${anchoDisponible}.webp`);
       // satori (el motor de ImageResponse) no entiende WebP: hay que pasarlo a JPEG antes de incrustarlo.
       if (webp) {
         const jpeg = await sharp(webp).resize(420, 630, { fit: "cover" }).jpeg({ quality: 82 }).toBuffer();

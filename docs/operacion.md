@@ -36,6 +36,40 @@ tar -czf "almacen-$(date +%Y-%m-%d).tar.gz" -C "$ALMACEN_DIRECTORIO_LOCAL" .
 
 Programar ambas copias con la misma periodicidad y guardarlas juntas: una base sin sus fotos, o fotos sin la base que las referencia, no sirve para recuperar nada.
 
+## Almacenamiento de las fotos
+
+En desarrollo las fotos se guardan en la carpeta `almacenamiento/`. **En producción eso no sirve:** los servidores sin estado borran el disco en cada despliegue, así que las fotos desaparecerían sin ningún mensaje de error. La aplicación se niega a subir fotos en producción si no hay un almacén configurado.
+
+### Por qué Cloudflare R2
+
+La aplicación habla el protocolo S3, así que funciona con R2, Supabase Storage, MinIO o el propio S3. Para esta asociación conviene **Cloudflare R2** por una razón concreta: **no cobra el tráfico de salida**.
+
+Ese es el costo que importa acá. Cuando un caso se comparte en Facebook y lo abren diez mil personas, cada visita descarga fotos. En S3 eso se factura por gigabyte; en R2 es gratis. El plan gratuito de R2 incluye 10 GB de almacenamiento, que a razón de unas cuatro medidas por foto alcanza para varios miles de animales.
+
+### Configuración, paso a paso
+
+1. Crear una cuenta en Cloudflare y entrar a **R2**.
+2. **Create bucket**, nombre `huellas-fotos`. Región automática.
+3. En el bucket, **Settings → Public access**: habilitar el acceso público. R2 da una dirección del estilo `https://pub-xxxxx.r2.dev`. Para producción conviene conectar un subdominio propio, por ejemplo `fotos.refugiohuellas.org.ar`.
+4. En **R2 → Manage API Tokens**, crear un token con permiso de **Object Read & Write** sobre ese bucket. Anotar la clave y el secreto: el secreto se muestra una sola vez.
+5. Completar las variables de entorno:
+
+```
+ALMACEN_S3_ENDPOINT="https://<id-de-cuenta>.r2.cloudflarestorage.com"
+ALMACEN_S3_BUCKET="huellas-fotos"
+ALMACEN_S3_CLAVE="<la clave del token>"
+ALMACEN_S3_SECRETO="<el secreto del token>"
+NEXT_PUBLIC_ALMACEN_URL="https://fotos.refugiohuellas.org.ar"
+```
+
+Las cuatro primeras van juntas: con una sola que falte, la aplicación considera que no hay almacén configurado y avisa cuáles faltan. Es deliberado — una configuración a medias es peor que ninguna, porque parece funcionar.
+
+`NEXT_PUBLIC_ALMACEN_URL` es aparte: define desde dónde las ve el público. Si queda vacía, las fotos se sirven a través de la propia aplicación, que funciona pero paga el tráfico.
+
+### Mudar las fotos que ya están
+
+Si ya se cargaron animales con el almacén local, hay que copiar el contenido de `almacenamiento/` al bucket conservando la estructura de carpetas. La base guarda la clave del archivo, nunca la dirección completa, así que no hace falta tocar ningún dato.
+
 ## Qué cambia si mañana hay presupuesto
 
 | Con plan gratuito | Con presupuesto |
