@@ -4,7 +4,7 @@ import { animalPorSlug, animalesPublicados, fotosDeAnimal, slugActualDe } from "
 import { metadatosDeAnimal } from "@/domains/animales/metadatos";
 import { Card, CardCuerpo } from "@/ui/componentes/Card";
 import { Pildora } from "@/ui/componentes/Pildora";
-import { ESPECIE_EN_TEXTO, SEXO_EN_TEXTO, TAMANO_EN_TEXTO, TONO_POR_ESTADO, etiquetaEstado } from "../estado-texto";
+import { ESPECIE_EN_TEXTO, SEXO_EN_TEXTO, TAMANO_EN_TEXTO, TONO_POR_ESTADO, etiquetaEstado } from "@/ui/animales/estado-texto";
 import { Compartir } from "./Compartir";
 import { Galeria } from "./Galeria";
 import estilos from "./page.module.css";

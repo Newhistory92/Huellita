@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Foto } from "@/ui/componentes/Foto";
 import { urlDeFoto } from "@/domains/animales/fotos";
 import type { Foto as FotoDeAnimal } from "@/domains/animales/tipos";
-import { IconoPata } from "../IconoPata";
+import { IconoPata } from "@/ui/animales/IconoPata";
 import estilos from "./Galeria.module.css";
 
 /** Las miniaturas nunca revelan una foto sensible: para verla hay que elegirla como la principal y abrir la compuerta ahí. */

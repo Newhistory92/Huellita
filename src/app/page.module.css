@@ -1,11 +1,19 @@
 .contenedor {
-  max-width: 640px;
+  max-width: 960px;
   margin: 0 auto;
-  padding: 80px 18px;
+  padding: 64px 18px 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+}
+.presentacion {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 16px;
+  /* El texto de presentación conserva el ancho de lectura aunque la columna
+     se ensanche para la grilla de animales. */
+  max-width: 640px;
 }
 .eyebrow {
   margin: 0;
@@ -19,4 +27,34 @@
   margin: 0;
   color: var(--ink-2);
   max-width: 50ch;
+}
+.seccion {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.encabezado {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.encabezado h2 {
+  margin: 0;
+}
+.grilla {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 620px) {
+  .grilla {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 900px) {
+  .grilla {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }

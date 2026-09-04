@@ -1,0 +1,12 @@
+.tarjeta {
+  display: flex;
+  flex-direction: column;
+}
+.meta {
+  margin: 4px 0 0;
+  color: var(--ink-2);
+  font-size: var(--step--1);
+}
+.descripcion {
+  font-size: var(--step--1);
+}
