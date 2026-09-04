@@ -56,7 +56,7 @@
 }
 
 .chico {
-  min-height: 42px;
+  min-height: 44px;
   padding: 9px 18px;
   font-size: var(--step--2);
 }

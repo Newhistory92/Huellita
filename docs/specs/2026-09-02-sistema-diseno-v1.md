@@ -157,13 +157,15 @@ Cada componente define sus estados. Un estado no declarado es un estado que la i
 
 ### 5.1 Botón
 
-Tres variantes: **donar** (naranja, ancho completo), **primario** (tinta) y **fantasma** (borde, fondo transparente). Dos tamaños: normal (50px de alto) y chico (42px). Siempre en cápsula.
+Tres variantes: **donar** (naranja, ancho completo), **primario** (tinta) y **fantasma** (borde, fondo transparente). Dos tamaños: normal (50px de alto) y chico (44px). Siempre en cápsula.
+
+El tamaño chico no baja de 44px aunque el prototipo dibuje 42: el mínimo táctil de la §9 manda sobre la medida estética. La diferencia no se percibe; la de no poder apretar el botón, sí.
 
 Estados: reposo, hover (elevación de 1px y oscurecimiento), activo (vuelve a su posición), foco visible, deshabilitado. El ícono del botón tiene su propio movimiento en hover: la huella rota, el corazón crece.
 
 ### 5.2 Chip de filtro
 
-Cápsula de 42px con borde. Estado seleccionado: fondo tinta, texto invertido. Se comunica con `aria-pressed`, no solo con color.
+Cápsula de 44px con borde. Estado seleccionado: fondo tinta, texto invertido. Se comunica con `aria-pressed`, no solo con color.
 
 ### 5.3 Píldora de estado
 

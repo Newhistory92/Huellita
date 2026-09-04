@@ -24,9 +24,16 @@ describe("reglas del sistema de diseño", () => {
     }
   });
 
+  // Antes esta prueba solo pedía que el archivo tuviera alguna altura de 44px
+  // o más. El botón chico declaraba 42 en otra regla del mismo archivo y
+  // pasaba igual. Ahora se revisa cada altura declarada, una por una.
   it("todo control interactivo declara un área táctil suficiente", () => {
     for (const hoja of ["Boton.module.css", "Chip.module.css"]) {
-      expect(contenido(hoja)).toMatch(/min-height:\s*(4[4-9]|[5-9]\d)px/);
+      const alturas = [...contenido(hoja).matchAll(/min-height:\s*(\d+)px/g)].map((m) => Number(m[1]));
+      expect(alturas.length, `${hoja} no declara ninguna altura mínima`).toBeGreaterThan(0);
+      for (const altura of alturas) {
+        expect(altura, `${hoja} declara un control de ${altura}px: el mínimo táctil es 44px`).toBeGreaterThanOrEqual(44);
+      }
     }
   });
 

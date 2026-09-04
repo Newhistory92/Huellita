@@ -57,8 +57,11 @@
   z-index: 3;
   font-size: var(--step--2);
   letter-spacing: 0.02em;
-  color: var(--ink-2);
-  background: color-mix(in srgb, var(--surface) 78%, transparent);
+  /* Va sobre la foto, así que el contraste depende de lo que haya detrás. Con
+     el gris atenuado y un fondo al 78% daba 3,2:1, por debajo del mínimo. Con
+     tinta plena sobre un fondo casi opaco, la foto deja de influir. */
+  color: var(--ink);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
   border-radius: 999px;
   padding: 3px 10px;
   backdrop-filter: blur(6px);
