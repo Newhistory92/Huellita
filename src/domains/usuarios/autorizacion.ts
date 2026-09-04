@@ -6,7 +6,7 @@ export type Accion =
   | "finanzas.leer" | "finanzas.escribir"
   | "novedades.escribir";
 
-/** Tabla de la spec §7. Ningún rol puede escribir el total recaudado: eso no es una acción. */
+/** Tabla de la spec §7. El total que resulta del libro contable no tiene acción de escritura para ningún rol: es siempre un cálculo derivado. */
 const PERMISOS: Record<Rol, Accion[]> = {
   ADMINISTRACION: [
     "animales.leer", "animales.escribir",
