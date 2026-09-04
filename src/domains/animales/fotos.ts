@@ -17,7 +17,16 @@ export function elegirPrincipal(fotos: FotoOrdenable[], idPrincipal: string | nu
   return fotos.map((f) => ({ ...f, principal: f.id === objetivo }));
 }
 
-/** El original no se sirve nunca: la clave apunta a una de las medidas que generó el pipeline de imágenes. */
-export function urlDeFoto(claveArchivo: string, ancho: number): string {
-  return `/archivos/${claveArchivo}-${ancho}.webp`;
+/**
+ * El original no se sirve nunca: la clave apunta a una de las medidas que
+ * generó el pipeline de imágenes.
+ *
+ * El pipeline nunca agranda una imagen: recorta cada medida al ancho real del
+ * original. Una foto de 768px de ancho guarda su medida de 1024 con el nombre
+ * -768. Por eso acá se aplica el mismo recorte: pedir una medida que el
+ * pipeline no generó devuelve 404 y la foto aparece rota.
+ */
+export function urlDeFoto(foto: { claveArchivo: string; ancho: number }, anchoDeseado: number): string {
+  const anchoDisponible = Math.min(anchoDeseado, foto.ancho);
+  return `/archivos/${foto.claveArchivo}-${anchoDisponible}.webp`;
 }

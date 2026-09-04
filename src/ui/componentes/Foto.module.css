@@ -14,12 +14,19 @@
   pointer-events: none;
   background: linear-gradient(180deg, transparent 55%, color-mix(in srgb, var(--ink) 10%, transparent) 100%);
 }
-.foto > svg,
-.foto > img {
+/* La silueta es un marcador de posición: va chica y centrada en la placa. */
+.foto > svg {
   width: 52%;
   height: 52%;
-  object-fit: cover;
   opacity: 0.9;
+  transition: filter 0.5s ease;
+}
+
+/* La foto real, en cambio, llena el marco entero y se recorta al centro. */
+.foto > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   transition: filter 0.5s ease;
 }
 .sensible > svg,

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { ordenarTrasReordenar, elegirPrincipal } from "@/domains/animales/fotos";
+import { ordenarTrasReordenar, elegirPrincipal, urlDeFoto } from "@/domains/animales/fotos";
 
 const fotos = [
   { id: "a", orden: 0, principal: true },
@@ -31,5 +31,23 @@ describe("foto principal", () => {
   it("si no hay ninguna marcada, la primera es la principal", () => {
     const sinPrincipal = fotos.map((f) => ({ ...f, principal: false }));
     expect(elegirPrincipal(sinPrincipal, null)[0].principal).toBe(true);
+  });
+});
+
+describe("urlDeFoto", () => {
+  it("pide la medida solicitada cuando la foto es más grande", () => {
+    expect(urlDeFoto({ claveArchivo: "animales/a/x", ancho: 2000 }, 1024)).toBe("/archivos/animales/a/x-1024.webp");
+  });
+
+  // El pipeline nunca agranda una imagen: para una foto de 768px de ancho,
+  // la medida de 1024 se guarda como -768. Pedir -1024 da 404 y la ficha
+  // aparece con la foto rota, que es lo que le pasaría a cualquier animal
+  // cuya foto venga de un teléfono viejo o de una captura de Facebook.
+  it("no pide una medida mayor que el original", () => {
+    expect(urlDeFoto({ claveArchivo: "animales/a/x", ancho: 768 }, 1024)).toBe("/archivos/animales/a/x-768.webp");
+  });
+
+  it("recorta también las medidas chicas en una foto diminuta", () => {
+    expect(urlDeFoto({ claveArchivo: "animales/a/x", ancho: 200 }, 320)).toBe("/archivos/animales/a/x-200.webp");
   });
 });

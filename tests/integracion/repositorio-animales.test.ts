@@ -33,11 +33,16 @@ describe("repositorio Prisma de animales", () => {
   });
 
   it("si falla la auditoría, no queda el animal: van en la misma transacción", async () => {
-    const antes = await prisma.animal.count();
+    // El nombre es único por corrida y la verificación mira solo ese animal.
+    // Contar el total de la tabla volvía la prueba inestable: Vitest corre los
+    // archivos en paralelo contra la misma base, así que otro archivo podía
+    // insertar una fila entre la medición inicial y la final.
+    const nombre = `Fallará ${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+
     await expect(
       prisma.$transaction(async (tx) =>
         crearAnimal(
-          { nombre: "Fallará", especie: "PERRO", sexo: "MACHO", tamano: "MEDIANO", descripcion: "Descripción de prueba suficientemente larga." },
+          { nombre, especie: "PERRO", sexo: "MACHO", tamano: "MEDIANO", descripcion: "Descripción de prueba suficientemente larga." },
           {
             usuarioEmail: "prueba@huellas.org.ar",
             rol: "ANIMALES",
@@ -47,6 +52,7 @@ describe("repositorio Prisma de animales", () => {
         )
       )
     ).rejects.toThrow(/auditoría caída/);
-    expect(await prisma.animal.count()).toBe(antes);
+
+    expect(await prisma.animal.count({ where: { nombre } })).toBe(0);
   });
 });

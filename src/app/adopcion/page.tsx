@@ -66,7 +66,7 @@ export default async function Adopcion({
                 >
                   {principal ? (
                     // eslint-disable-next-line @next/next/no-img-element -- las medidas ya salen del pipeline de imágenes, no de Next
-                    <img src={urlDeFoto(principal.claveArchivo, 640)} alt={principal.alt} />
+                    <img src={urlDeFoto(principal, 640)} alt={principal.alt} />
                   ) : (
                     <IconoPata />
                   )}

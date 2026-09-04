@@ -8,11 +8,8 @@ import { Campo } from "@/ui/componentes/Campo";
 import { Foto } from "@/ui/componentes/Foto";
 import type { Foto as FotoDeAnimal } from "@/domains/animales/tipos";
 import { accionSubirFoto, accionReordenarFotos, accionMarcarSensible, accionDefinirPrincipal } from "./acciones-fotos";
+import { urlDeFoto } from "@/domains/animales/fotos";
 import estilos from "./fotos.module.css";
-
-function urlMiniatura(claveArchivo: string): string {
-  return `/archivos/${claveArchivo}-320.webp`;
-}
 
 export function Fotos({ animalId, fotos }: { animalId: string; fotos: FotoDeAnimal[] }) {
   const router = useRouter();
@@ -70,7 +67,7 @@ export function Fotos({ animalId, fotos }: { animalId: string; fotos: FotoDeAnim
                 onDrop={() => alSoltar(foto.id)}
               >
                 <Foto alt={foto.alt} sensible={foto.sensible} etiqueta={foto.principal ? "Principal" : undefined}>
-                  <img src={urlMiniatura(foto.claveArchivo)} alt={foto.alt} />
+                  <img src={urlDeFoto(foto, 320)} alt={foto.alt} />
                 </Foto>
 
                 <div className={estilos.controles}>

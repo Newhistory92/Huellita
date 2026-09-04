@@ -21,7 +21,11 @@ export default async function ImagenSocial({ params }: { params: Promise<{ slug:
     const principal = fotos.find((foto) => foto.principal) ?? fotos[0] ?? null;
     // Una foto marcada como sensible nunca aparece en la vista previa social: ahí no hay compuerta que abrir.
     if (principal && !principal.sensible) {
-      const webp = await almacenLocal().leer(`${principal.claveArchivo}-640.webp`);
+      // El pipeline no agranda: una foto de 480px guarda su medida de 640 como
+      // -480. Pedir la medida fija dejaría sin imagen la vista previa de
+      // Facebook, que es de donde llega la mayoría de las visitas.
+      const anchoDisponible = Math.min(640, principal.ancho);
+      const webp = await almacenLocal().leer(`${principal.claveArchivo}-${anchoDisponible}.webp`);
       // satori (el motor de ImageResponse) no entiende WebP: hay que pasarlo a JPEG antes de incrustarlo.
       if (webp) {
         const jpeg = await sharp(webp).resize(420, 630, { fit: "cover" }).jpeg({ quality: 82 }).toBuffer();

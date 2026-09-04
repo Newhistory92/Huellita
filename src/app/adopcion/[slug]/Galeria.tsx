@@ -33,7 +33,7 @@ export function Galeria({
       >
         {actual ? (
           // eslint-disable-next-line @next/next/no-img-element -- las medidas ya salen del pipeline de imágenes, no de Next
-          <img src={urlDeFoto(actual.claveArchivo, 1024)} alt={actual.alt} />
+          <img src={urlDeFoto(actual, 1024)} alt={actual.alt} />
         ) : (
           <IconoPata />
         )}
@@ -51,7 +51,7 @@ export function Galeria({
             >
               {/* eslint-disable-next-line @next/next/no-img-element -- las medidas ya salen del pipeline de imágenes, no de Next */}
               <img
-                src={urlDeFoto(foto.claveArchivo, 320)}
+                src={urlDeFoto(foto, 320)}
                 alt=""
                 className={foto.sensible ? estilos.miniaturaSensible : undefined}
               />
