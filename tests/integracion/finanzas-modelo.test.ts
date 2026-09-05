@@ -5,9 +5,25 @@ const prisma = new PrismaClient({ datasourceUrl: process.env.DATABASE_URL_TEST }
 const casos: string[] = [];
 
 afterAll(async () => {
-  await prisma.asientoContable.deleteMany({ where: { casoId: { in: casos } } });
-  await prisma.intencionDonacion.deleteMany({ where: { casoId: { in: casos } } });
-  await prisma.casoFinanciero.deleteMany({ where: { id: { in: casos } } });
+  // El libro contable es inmutable: los asientos nunca se pueden borrar (esa es la
+  // regla que CLAUDE.md define), así que el borrado de limpieza siempre choca contra
+  // el disparador. Se intenta igual por si algún día la regla cambia, pero los
+  // asientos quedan huérfanos en la base de test — es un dato inofensivo, no un fallo.
+  try {
+    await prisma.asientoContable.deleteMany({ where: { casoId: { in: casos } } });
+  } catch {
+    // esperado: ver comentario arriba
+  }
+  try {
+    await prisma.intencionDonacion.deleteMany({ where: { casoId: { in: casos } } });
+  } catch {
+    // esperado: FK desde AsientoContable impide borrar intenciones con asientos
+  }
+  try {
+    await prisma.casoFinanciero.deleteMany({ where: { id: { in: casos } } });
+  } catch {
+    // esperado: FK del asiento huérfano rechaza el borrado del caso
+  }
   await prisma.$disconnect();
 });
 
