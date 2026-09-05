@@ -145,6 +145,7 @@ model CasoFinanciero {
   gastadoCentavos  BigInt            @default(0)
   cantidadDonantes Int               @default(0)
   asientos         AsientoContable[]
+  intenciones      IntencionDonacion[]
   creadoEn         DateTime          @default(now())
 }
 
@@ -164,6 +165,14 @@ model AsientoContable {
   creadoPorSistema Boolean     @default(false)
   fechaEfectiva    DateTime
   creadoEn         DateTime    @default(now())
+
+  intencionId String?            @unique
+  intencion   IntencionDonacion? @relation(fields: [intencionId], references: [id])
+
+  // Las dos puntas de un traslado entre casos quedan vinculadas.
+  contraparteId String?          @unique
+  contraparte   AsientoContable? @relation("Traslado", fields: [contraparteId], references: [id])
+  reverso       AsientoContable? @relation("Traslado")
 
   @@index([casoId, fechaEfectiva])
   @@unique([proveedor, pagoExternoId]) // segunda barrera contra duplicados
@@ -193,4 +202,52 @@ model EventoWebhook {
   recibidoEn      DateTime  @default(now())
 
   @@unique([proveedor, eventoExternoId]) // la idempotencia vive acá
+}
+
+model IntencionDonacion {
+  id                String            @id @default(cuid())
+  casoId            String
+  caso              CasoFinanciero    @relation(fields: [casoId], references: [id])
+  centavos          BigInt
+  moneda            String            @default("ARS")
+
+  // Lo que la persona decide antes de pagar. El aviso del proveedor no trae
+  // nada de esto: allá nunca se le preguntó.
+  nombreDonante     String?
+  publicarNombre    Boolean           @default(false)
+  mensaje           String?
+
+  proveedor         String            // "mercadopago" | "transferencia"
+  estado            EstadoIntencion   @default(INICIADA)
+  referenciaExterna String?           // id de preferencia en el proveedor
+  pagoExternoId     String?           // id del pago, cuando existe
+  comprobanteId     String?           // solo transferencias: lo sube quien dona
+
+  asiento           AsientoContable?
+  creadoEn          DateTime          @default(now())
+  resueltoEn        DateTime?
+
+  @@index([casoId, estado])
+  @@index([proveedor, pagoExternoId])
+}
+
+enum EstadoIntencion {
+  INICIADA                  // se creó, la persona todavía no pagó
+  PENDIENTE_VERIFICACION    // transferencia declarada, falta que alguien la confirme
+  APROBADA                  // hay asiento
+  RECHAZADA                 // el proveedor la rechazó, o Finanzas no la encontró en el extracto
+  ABANDONADA                // se inició y nunca se completó
+}
+
+model Documento {
+  id                 String   @id @default(cuid())
+  claveArchivo       String
+  nombre             String
+  tipo               String   // "factura" | "recibo" | "comprobante" | "acta" | "otro"
+  publico            Boolean  @default(false)
+  // La §11 del sistema de diseño: sin esta confirmación explícita, el
+  // documento no puede marcarse público.
+  datosPersonalesTachados Boolean @default(false)
+  subidoPorEmail     String
+  creadoEn           DateTime @default(now())
 }
