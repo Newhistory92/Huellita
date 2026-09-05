@@ -167,11 +167,11 @@ model AsientoContable {
   creadoEn         DateTime    @default(now())
 
   intencionId String?            @unique
-  intencion   IntencionDonacion? @relation(fields: [intencionId], references: [id])
+  intencion   IntencionDonacion? @relation(fields: [intencionId], references: [id], onDelete: Restrict)
 
   // Las dos puntas de un traslado entre casos quedan vinculadas.
   contraparteId String?          @unique
-  contraparte   AsientoContable? @relation("Traslado", fields: [contraparteId], references: [id])
+  contraparte   AsientoContable? @relation("Traslado", fields: [contraparteId], references: [id], onDelete: Restrict)
   reverso       AsientoContable? @relation("Traslado")
 
   @@index([casoId, fechaEfectiva])
