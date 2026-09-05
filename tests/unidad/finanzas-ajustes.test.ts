@@ -39,6 +39,24 @@ describe("registrarAjuste", () => {
     expect((await ctx.repositorio.casoPorId(caso.id))!.gastadoCentavos).toBe(2500000n);
   });
 
+  it("corrige un caso cerrado", async () => {
+    const ctx = contexto();
+    const caso = await crearCaso({ titulo: "Luna — cirugía", situacion: "La atropellaron y necesita cirugía de cadera urgente.", metaCentavos: 50000000n }, ctx);
+    const original = await registrarAsiento({ casoId: caso.id, tipo: "DONACION", centavos: 2500000n, descripcion: "Donación", fechaEfectiva: new Date(), proveedor: "mercadopago", pagoExternoId: "1327884391" }, ctx);
+
+    // Cerrar el caso
+    await ctx.repositorio.actualizarCaso(caso.id, { estado: "CERRADO" });
+
+    // El ajuste debería funcionar igual aunque el caso esté cerrado
+    const ajuste = await registrarAjuste(
+      { casoId: caso.id, centavos: -2500000n, ajustaAId: original.id, motivo: "Contracargo del pago 1327884391", documentoId: "doc-contracargo" },
+      ctx
+    );
+
+    expect(ajuste.tipo).toBe("AJUSTE");
+    expect(ajuste.ajustaAId).toBe(original.id);
+  });
+
   it("exige motivo: el ajuste queda publicado", async () => {
     const ctx = contexto();
     const caso = await crearCaso({ titulo: "Luna", situacion: "La atropellaron y necesita cirugía de cadera urgente.", metaCentavos: 50000000n }, ctx);

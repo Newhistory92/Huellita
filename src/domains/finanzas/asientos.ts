@@ -41,7 +41,7 @@ export async function registrarAsiento(entrada: EntradaAsiento, ctx: ContextoFin
   exigirPermisoSobreFinanzas(ctx);
   const caso = await exigirCaso(entrada.casoId, ctx);
 
-  if (caso.estado === "CERRADO") {
+  if (caso.estado === "CERRADO" && entrada.tipo !== "AJUSTE") {
     throw new Error("El caso está cerrado: no acepta movimientos nuevos. Si hay que corregir algo, registrá un ajuste.");
   }
   if (entrada.centavos === 0n) {
