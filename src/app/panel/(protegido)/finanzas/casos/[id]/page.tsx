@@ -1,12 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { auth } from "@/infra/auth";
-import { repositorioFinanzasPrisma } from "@/infra/repositorios/finanzas";
-import { auditoriaPrisma } from "@/infra/repositorios/animales";
+import { contextoFinanzas } from "@/infra/contexto-finanzas";
 import { obtenerCaso, listarCasosFinanzas } from "@/domains/finanzas/casos";
 import { libroDeCaso, pendienteDeCaso } from "@/domains/finanzas/consultas";
 import { formatearCentavos } from "@/domains/finanzas/dinero";
-import type { ContextoFinanzas } from "@/domains/finanzas/tipos";
 import { Card, CardCuerpo } from "@/ui/componentes/Card";
 import { Campo } from "@/ui/componentes/Campo";
 import { CampoCalculado } from "@/ui/componentes/CampoCalculado";
@@ -21,21 +18,10 @@ import {
 } from "../../acciones";
 import estilos from "./page.module.css";
 
-async function contexto(): Promise<ContextoFinanzas> {
-  const sesion = await auth();
-  if (!sesion?.user?.email || !sesion.user.rol) throw new Error("Sesión requerida");
-  return {
-    usuarioEmail: sesion.user.email,
-    rol: sesion.user.rol as ContextoFinanzas["rol"],
-    repositorio: repositorioFinanzasPrisma(),
-    auditoria: auditoriaPrisma(),
-  };
-}
-
 export default async function FormularioDeCaso({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const esAlta = id === "nuevo";
-  const ctx = await contexto();
+  const ctx = await contextoFinanzas();
 
   const caso = esAlta ? null : await obtenerCaso(id, ctx).catch(() => null);
   if (!esAlta && !caso) notFound();

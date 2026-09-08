@@ -1,27 +1,14 @@
 import Link from "next/link";
-import { auth } from "@/infra/auth";
-import { repositorioFinanzasPrisma } from "@/infra/repositorios/finanzas";
-import { auditoriaPrisma } from "@/infra/repositorios/animales";
+import { contextoFinanzas } from "@/infra/contexto-finanzas";
 import { listarCasosFinanzas } from "@/domains/finanzas/casos";
 import { transferenciasPendientes } from "@/domains/finanzas/donaciones";
 import { sumarCentavos } from "@/domains/finanzas/dinero";
-import type { ContextoFinanzas, EstadoCaso } from "@/domains/finanzas/tipos";
+import type { EstadoCaso } from "@/domains/finanzas/tipos";
 import { Boton } from "@/ui/componentes/Boton";
 import { Pildora } from "@/ui/componentes/Pildora";
 import { Card } from "@/ui/componentes/Card";
 import { Importe } from "@/ui/finanzas/Importe";
 import estilos from "./page.module.css";
-
-async function contexto(): Promise<ContextoFinanzas> {
-  const sesion = await auth();
-  if (!sesion?.user?.email || !sesion.user.rol) throw new Error("Sesión requerida");
-  return {
-    usuarioEmail: sesion.user.email,
-    rol: sesion.user.rol as ContextoFinanzas["rol"],
-    repositorio: repositorioFinanzasPrisma(),
-    auditoria: auditoriaPrisma(),
-  };
-}
 
 const TONO_POR_ESTADO: Record<EstadoCaso, "ok" | "warn" | "marca"> = {
   ABIERTO: "ok",
@@ -30,7 +17,7 @@ const TONO_POR_ESTADO: Record<EstadoCaso, "ok" | "warn" | "marca"> = {
 };
 
 export default async function PanelDeFinanzas() {
-  const ctx = await contexto();
+  const ctx = await contextoFinanzas();
   const [casos, pendientes] = await Promise.all([listarCasosFinanzas({}, ctx), transferenciasPendientes(ctx)]);
   const totalPendienteCentavos = sumarCentavos(pendientes.map((i) => i.centavos));
 

@@ -1,11 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { auth } from "@/infra/auth";
 import { documentoPublico } from "@/domains/finanzas/consultas";
 import { obtenerDocumento } from "@/domains/finanzas/documentos";
-import { repositorioFinanzasPrisma } from "@/infra/repositorios/finanzas";
-import { auditoriaPrisma } from "@/infra/repositorios/animales";
+import { contextoFinanzas } from "@/infra/contexto-finanzas";
 import { almacen } from "@/infra/almacen";
-import type { ContextoFinanzas } from "@/domains/finanzas/tipos";
 
 /**
  * Público si el documento está marcado como tal. Si no, solo lo sirve a una
@@ -18,14 +15,8 @@ export async function GET(_solicitud: NextRequest, { params }: { params: Promise
   const publico = await documentoPublico(id);
   if (publico) return NextResponse.redirect(almacen().url(publico.claveArchivo));
 
-  const sesion = await auth();
-  if (sesion?.user?.email && sesion.user.rol) {
-    const ctx: ContextoFinanzas = {
-      usuarioEmail: sesion.user.email,
-      rol: sesion.user.rol as ContextoFinanzas["rol"],
-      repositorio: repositorioFinanzasPrisma(),
-      auditoria: auditoriaPrisma(),
-    };
+  const ctx = await contextoFinanzas().catch(() => null);
+  if (ctx) {
     const privado = await obtenerDocumento(id, ctx).catch(() => null);
     if (privado) return NextResponse.redirect(almacen().url(privado.claveArchivo));
   }

@@ -1,27 +1,13 @@
 import Link from "next/link";
-import { auth } from "@/infra/auth";
-import { repositorioFinanzasPrisma } from "@/infra/repositorios/finanzas";
-import { auditoriaPrisma } from "@/infra/repositorios/animales";
+import { contextoFinanzas } from "@/infra/contexto-finanzas";
 import { listarCasosFinanzas } from "@/domains/finanzas/casos";
 import { transferenciasPendientes } from "@/domains/finanzas/donaciones";
 import { sumarCentavos } from "@/domains/finanzas/dinero";
-import type { ContextoFinanzas } from "@/domains/finanzas/tipos";
 import { Card } from "@/ui/componentes/Card";
 import { Boton } from "@/ui/componentes/Boton";
 import { Importe } from "@/ui/finanzas/Importe";
 import { accionVerificarTransferencia, accionRechazarTransferencia } from "../acciones";
 import estilos from "./page.module.css";
-
-async function contexto(): Promise<ContextoFinanzas> {
-  const sesion = await auth();
-  if (!sesion?.user?.email || !sesion.user.rol) throw new Error("Sesión requerida");
-  return {
-    usuarioEmail: sesion.user.email,
-    rol: sesion.user.rol as ContextoFinanzas["rol"],
-    repositorio: repositorioFinanzasPrisma(),
-    auditoria: auditoriaPrisma(),
-  };
-}
 
 async function accionRechazar(intencionId: string, formulario: FormData) {
   "use server";
@@ -29,7 +15,7 @@ async function accionRechazar(intencionId: string, formulario: FormData) {
 }
 
 export default async function BandejaDeTransferencias() {
-  const ctx = await contexto();
+  const ctx = await contextoFinanzas();
   const [pendientes, casos] = await Promise.all([transferenciasPendientes(ctx), listarCasosFinanzas({}, ctx)]);
   const tituloDelCaso = new Map(casos.map((c) => [c.id, c.titulo]));
   const totalCentavos = sumarCentavos(pendientes.map((i) => i.centavos));
