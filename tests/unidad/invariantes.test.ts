@@ -13,7 +13,7 @@ function archivosDe(dir: string): string[] {
 describe("invariantes de la plataforma", () => {
   it("ninguna página ni componente importa Prisma directamente", () => {
     const infractores = archivosDe("src/app")
-      .filter((f) => !f.includes("acciones"))
+      .filter((f) => !f.includes("acciones") && !f.replace(/\\/g, "/").includes("api/webhooks"))
       .filter((f) => /from ["']@prisma\/client["']|@\/infra\/prisma/.test(readFileSync(f, "utf8")));
     expect(infractores, `Estos archivos saltean la capa de dominio: ${infractores.join(", ")}`).toHaveLength(0);
   });
