@@ -1,0 +1,108 @@
+.pestanas {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--line);
+  scrollbar-width: none;
+}
+.pestanas::-webkit-scrollbar {
+  display: none;
+}
+.pestana,
+.activa {
+  flex: none;
+  padding: 14px 18px;
+  font-size: var(--step--1);
+  font-weight: 600;
+  color: var(--ink-2);
+  border: 0;
+  background: none;
+  border-bottom: 2px solid transparent;
+}
+.activa {
+  color: var(--ink);
+  /* El subrayado usa el verde de marca: acá no hay dinero de por medio. */
+  border-bottom-color: var(--mark);
+}
+.panel {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+@media (min-width: 620px) {
+  .panel {
+    padding: 24px;
+  }
+}
+.resumen {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+}
+.resumen > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+.resumen dt {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: var(--step--1);
+}
+.resumen dd {
+  margin: 0;
+}
+.pendiente {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: var(--warn-soft);
+  color: var(--warn);
+  font-size: var(--step--1);
+}
+.lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.fila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+.fila:first-child {
+  border-top: 0;
+}
+.meta {
+  display: block;
+  margin-top: 3px;
+  font-size: var(--step--2);
+  color: var(--ink-3);
+}
+.identificador {
+  flex-basis: 100%;
+  font-family: var(--mono);
+  font-size: var(--step--2);
+  color: var(--ink-3);
+  letter-spacing: 0.01em;
+}
+.sinComprobante {
+  font-size: var(--step--2);
+  color: var(--ink-3);
+}
+.aclaracion {
+  margin: 0;
+  font-size: var(--step--1);
+  color: var(--ink-2);
+}
