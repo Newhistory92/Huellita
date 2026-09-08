@@ -1,0 +1,13 @@
+.contenedor {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 40px 18px 80px;
+}
+.texto {
+  color: var(--ink-2);
+}
+.volver {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: var(--step--1);
+}

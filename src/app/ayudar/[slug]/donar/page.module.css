@@ -1,0 +1,22 @@
+.contenedor {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 40px 18px 80px;
+}
+.volver {
+  display: inline-block;
+  margin-bottom: 12px;
+  font-size: var(--step--1);
+  color: var(--ink-2);
+}
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.casilla {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--step--1);
+}

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   casoPorSlug,
@@ -11,6 +12,7 @@ import {
 import { metadatosDeCaso } from "@/domains/finanzas/metadatos";
 import { Card, CardCuerpo } from "@/ui/componentes/Card";
 import { Pildora } from "@/ui/componentes/Pildora";
+import { Boton } from "@/ui/componentes/Boton";
 import { Medidor } from "@/ui/finanzas/Medidor";
 import { Pestanas } from "./Pestanas";
 import estilos from "./page.module.css";
@@ -67,8 +69,11 @@ export default async function Caso({ params }: { params: Promise<{ slug: string 
               falta={faltaParaLaMeta(caso)}
               cantidadDonaciones={caso.cantidadDonantes}
             />
-            {/* El botón de donar llega en la tarea 16; hasta entonces, el CBU
-                se declara desde el panel de finanzas. */}
+            {caso.estado !== "CERRADO" ? (
+              <Link href={`/ayudar/${caso.slug}/donar`}>
+                <Boton variante="donar">Donar ahora</Boton>
+              </Link>
+            ) : null}
           </CardCuerpo>
         </Card>
 
