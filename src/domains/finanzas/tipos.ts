@@ -63,6 +63,18 @@ export interface SaldoDelCaso {
   cantidadDonaciones: number;
 }
 
+export interface Documento {
+  id: string;
+  claveArchivo: string;
+  nombre: string;
+  tipo: string;
+  publico: boolean;
+  /** La §11 del sistema de diseño: sin esta confirmación, el documento no puede ser público. */
+  datosPersonalesTachados: boolean;
+  subidoPorEmail: string;
+  creadoEn: Date;
+}
+
 export interface FiltroCasos {
   estado?: EstadoCaso;
   soloAbiertos?: boolean;
@@ -86,6 +98,9 @@ export interface RepositorioFinanzas {
   intencionPorId(id: string): Promise<Intencion | null>;
   actualizarIntencion(id: string, cambios: Partial<Intencion>): Promise<Intencion>;
   intencionesPendientes(): Promise<Intencion[]>;
+
+  crearDocumento(datos: Omit<Documento, "id" | "creadoEn">): Promise<Documento>;
+  documentoPorId(id: string): Promise<Documento | null>;
 }
 
 export interface ContextoFinanzas {

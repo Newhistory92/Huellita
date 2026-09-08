@@ -1,5 +1,5 @@
 import { registrarAsiento } from "./asientos";
-import { exigirPermisoSobreFinanzas } from "./casos";
+import { exigirLecturaDeFinanzas, exigirPermisoSobreFinanzas } from "./casos";
 import type { ContextoFinanzas, Intencion, RepositorioFinanzas } from "./tipos";
 
 export interface EntradaTransferencia {
@@ -43,6 +43,12 @@ export async function declararTransferencia(
 export async function totalPendienteDeVerificar(casoId: string, repositorio: RepositorioFinanzas): Promise<bigint> {
   const pendientes = await repositorio.intencionesPendientes();
   return pendientes.filter((i) => i.casoId === casoId).reduce((total, i) => total + i.centavos, 0n);
+}
+
+/** La bandeja del panel: todo lo que todavía no se comparó contra el extracto bancario. */
+export async function transferenciasPendientes(ctx: ContextoFinanzas): Promise<Intencion[]> {
+  exigirLecturaDeFinanzas(ctx);
+  return ctx.repositorio.intencionesPendientes();
 }
 
 async function exigirPendiente(intencionId: string, ctx: ContextoFinanzas): Promise<Intencion> {

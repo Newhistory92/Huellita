@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { crearCaso, editarCaso, cerrarCaso } from "@/domains/finanzas/casos";
+import { crearCaso, editarCaso, cerrarCaso, listarCasosFinanzas, obtenerCaso } from "@/domains/finanzas/casos";
 import { repositorioFinanzasEnMemoria } from "../dobles/repositorio-finanzas-memoria";
 import { auditoriaEnMemoria } from "../dobles/repositorio-animales-memoria";
 
@@ -83,5 +83,26 @@ describe("cerrarCaso", () => {
     const cerrado = await cerrarCaso(caso.id, ctx);
     expect(cerrado.estado).toBe("CERRADO");
     expect(await ctx.repositorio.casoPorSlug(caso.slug)).not.toBeNull();
+  });
+});
+
+describe("listarCasosFinanzas", () => {
+  it("devuelve los casos para el panel, sin filtrar por publicación", async () => {
+    const ctx = contexto();
+    await crearCaso(base, ctx);
+    const casos = await listarCasosFinanzas({}, ctx);
+    expect(casos).toHaveLength(1);
+  });
+});
+
+describe("obtenerCaso", () => {
+  it("devuelve el caso por id", async () => {
+    const ctx = contexto();
+    const caso = await crearCaso(base, ctx);
+    expect((await obtenerCaso(caso.id, ctx)).titulo).toBe(base.titulo);
+  });
+
+  it("avisa si el caso no existe", async () => {
+    await expect(obtenerCaso("no-existe", contexto())).rejects.toThrow(/no existe/i);
   });
 });

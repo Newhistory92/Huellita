@@ -1,6 +1,6 @@
 import type { Prisma, PrismaClient } from "@prisma/client";
 import { prisma as clientePorDefecto } from "@/infra/prisma";
-import type { Asiento, Caso, FiltroCasos, Intencion, RepositorioFinanzas, SaldoDelCaso } from "@/domains/finanzas/tipos";
+import type { Asiento, Caso, Documento, FiltroCasos, Intencion, RepositorioFinanzas, SaldoDelCaso } from "@/domains/finanzas/tipos";
 
 type ClienteBase = PrismaClient | Prisma.TransactionClient;
 
@@ -84,6 +84,13 @@ export function repositorioFinanzasPrisma(cliente: ClienteBase = clientePorDefec
         where: { estado: "PENDIENTE_VERIFICACION" },
         orderBy: [{ creadoEn: "asc" }],
       })) as unknown as Intencion[];
+    },
+
+    async crearDocumento(datos) {
+      return (await cliente.documento.create({ data: datos as never })) as unknown as Documento;
+    },
+    async documentoPorId(id) {
+      return (await cliente.documento.findUnique({ where: { id } })) as unknown as Documento | null;
     },
   };
 }

@@ -1,7 +1,7 @@
 import { unstable_cache } from "next/cache";
 import { repositorioFinanzasPrisma } from "@/infra/repositorios/finanzas";
 import { totalPendienteDeVerificar } from "./donaciones";
-import type { Asiento, Caso, FiltroCasos } from "./tipos";
+import type { Asiento, Caso, Documento, FiltroCasos } from "./tipos";
 
 type ConMetaYRecibido = Pick<Caso, "recibidoCentavos" | "metaCentavos">;
 
@@ -125,4 +125,10 @@ const totalesGeneralesCacheado = unstable_cache(
 );
 export async function totalesGenerales(): Promise<TotalesGenerales> {
   return desdeCache(await totalesGeneralesCacheado()) as TotalesGenerales;
+}
+
+/** Solo devuelve el documento si está marcado público: la ruta que lo sirve no distingue quién pide. */
+export async function documentoPublico(id: string): Promise<Documento | null> {
+  const documento = await repositorioFinanzasPrisma().documentoPorId(id);
+  return documento && documento.publico ? documento : null;
 }

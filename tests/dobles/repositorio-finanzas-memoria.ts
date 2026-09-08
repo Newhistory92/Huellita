@@ -1,9 +1,10 @@
-import type { Asiento, Caso, FiltroCasos, Intencion, RepositorioFinanzas, SaldoDelCaso } from "@/domains/finanzas/tipos";
+import type { Asiento, Caso, Documento, FiltroCasos, Intencion, RepositorioFinanzas, SaldoDelCaso } from "@/domains/finanzas/tipos";
 
 export function repositorioFinanzasEnMemoria(casosIniciales: Caso[] = []) {
   const casos = [...casosIniciales];
   const asientos: Asiento[] = [];
   const intenciones: Intencion[] = [];
+  const documentos: Documento[] = [];
   let secuencia = 0;
   const id = (p: string) => `${p}-${++secuencia}`;
 
@@ -78,7 +79,15 @@ export function repositorioFinanzasEnMemoria(casosIniciales: Caso[] = []) {
     async intencionesPendientes() {
       return intenciones.filter((i) => i.estado === "PENDIENTE_VERIFICACION");
     },
+    async crearDocumento(datos) {
+      const documento = { ...datos, id: id("documento"), creadoEn: new Date() } as Documento;
+      documentos.push(documento);
+      return documento;
+    },
+    async documentoPorId(idDocumento) {
+      return documentos.find((d) => d.id === idDocumento) ?? null;
+    },
   };
 
-  return Object.assign(repo, { casos, asientos, intenciones });
+  return Object.assign(repo, { casos, asientos, intenciones, documentos });
 }

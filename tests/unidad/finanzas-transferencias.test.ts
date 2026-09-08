@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { declararTransferencia, verificarTransferencia, rechazarTransferencia, totalPendienteDeVerificar } from "@/domains/finanzas/donaciones";
+import { declararTransferencia, verificarTransferencia, rechazarTransferencia, totalPendienteDeVerificar, transferenciasPendientes } from "@/domains/finanzas/donaciones";
 import { crearCaso } from "@/domains/finanzas/casos";
 import { repositorioFinanzasEnMemoria } from "../dobles/repositorio-finanzas-memoria";
 import { auditoriaEnMemoria } from "../dobles/repositorio-animales-memoria";
@@ -99,5 +99,20 @@ describe("rechazarTransferencia", () => {
   it("exige un motivo: el rechazo también se audita", async () => {
     const { ctx, intencion } = await casoConTransferencia();
     await expect(rechazarTransferencia(intencion.id, "", ctx)).rejects.toThrow(/motivo/i);
+  });
+});
+
+describe("transferenciasPendientes", () => {
+  it("lista las intenciones pendientes, para la bandeja del panel", async () => {
+    const { ctx, intencion } = await casoConTransferencia();
+    const pendientes = await transferenciasPendientes(ctx);
+    expect(pendientes.map((i) => i.id)).toContain(intencion.id);
+  });
+
+  it("no incluye las ya resueltas", async () => {
+    const { ctx, intencion } = await casoConTransferencia();
+    await verificarTransferencia(intencion.id, ctx);
+    const pendientes = await transferenciasPendientes(ctx);
+    expect(pendientes.map((i) => i.id)).not.toContain(intencion.id);
   });
 });

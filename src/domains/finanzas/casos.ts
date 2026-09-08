@@ -1,7 +1,7 @@
 import { generarSlug, slugDisponible } from "@/domains/animales/slug";
 import { puede } from "@/domains/usuarios/autorizacion";
 import { esquemaCaso, type EntradaCaso } from "./esquemas";
-import type { Caso, ContextoFinanzas } from "./tipos";
+import type { Caso, ContextoFinanzas, FiltroCasos } from "./tipos";
 
 /** El permiso se verifica acá, no en la pantalla: esconder un botón no es seguridad. */
 export function exigirPermisoSobreFinanzas(ctx: ContextoFinanzas): void {
@@ -10,10 +10,27 @@ export function exigirPermisoSobreFinanzas(ctx: ContextoFinanzas): void {
   }
 }
 
+export function exigirLecturaDeFinanzas(ctx: ContextoFinanzas): void {
+  if (!puede(ctx.rol, "finanzas.leer")) {
+    throw new Error(`El rol ${ctx.rol} no tiene permiso para ver las finanzas`);
+  }
+}
+
 export async function exigirCaso(id: string, ctx: ContextoFinanzas): Promise<Caso> {
   const caso = await ctx.repositorio.casoPorId(id);
   if (!caso) throw new Error("No existe el caso");
   return caso;
+}
+
+/** Lista todos los casos para el panel, sin el recorte que aplica la consulta pública. */
+export async function listarCasosFinanzas(filtro: FiltroCasos, ctx: ContextoFinanzas): Promise<Caso[]> {
+  exigirLecturaDeFinanzas(ctx);
+  return ctx.repositorio.listarCasos(filtro);
+}
+
+export async function obtenerCaso(id: string, ctx: ContextoFinanzas): Promise<Caso> {
+  exigirLecturaDeFinanzas(ctx);
+  return exigirCaso(id, ctx);
 }
 
 export async function crearCaso(entrada: EntradaCaso, ctx: ContextoFinanzas): Promise<Caso> {

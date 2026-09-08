@@ -1,0 +1,41 @@
+.contenedor {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 40px 18px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.volver {
+  display: inline-block;
+  margin-bottom: 12px;
+  font-size: var(--step--1);
+  color: var(--ink-2);
+}
+.permanente {
+  color: var(--ink-2);
+}
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.casilla {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--step--1);
+}
+.pendiente {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: var(--warn-soft);
+  color: var(--warn);
+  font-size: var(--step--1);
+}
+.aclaracion {
+  margin: 0 0 4px;
+  font-size: var(--step--1);
+  color: var(--ink-2);
+}

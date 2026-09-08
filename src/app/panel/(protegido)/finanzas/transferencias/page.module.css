@@ -1,0 +1,69 @@
+.contenedor {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 40px 18px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.volver {
+  display: inline-block;
+  margin-bottom: 12px;
+  font-size: var(--step--1);
+  color: var(--ink-2);
+}
+.leyenda {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: var(--warn-soft);
+  color: var(--warn);
+  font-size: var(--step--1);
+  font-weight: 600;
+}
+.vacio {
+  padding: 24px;
+  color: var(--ink-2);
+}
+.lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.fila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 18px;
+  padding: 16px 20px;
+  border-top: 1px solid var(--line);
+}
+.fila:first-child {
+  border-top: 0;
+}
+.meta {
+  display: block;
+  margin-top: 3px;
+  font-size: var(--step--2);
+  color: var(--ink-3);
+}
+.sinComprobante {
+  font-size: var(--step--2);
+  color: var(--ink-3);
+}
+.acciones {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+.rechazo {
+  display: flex;
+  gap: 8px;
+}
+.rechazo input {
+  font-size: var(--step--2);
+}
