@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { porcentajeDeAvance, faltaParaLaMeta, excedente } from "@/domains/finanzas/consultas";
+import { porcentajeDeAvance, faltaParaLaMeta, excedente, paraCache, desdeCache } from "@/domains/finanzas/consultas";
 
 const caso = (recibido: bigint, meta: bigint) => ({ recibidoCentavos: recibido, metaCentavos: meta });
 
@@ -34,5 +34,26 @@ describe("excedente", () => {
 
   it("es lo que pasó de la meta", () => {
     expect(excedente(caso(62000000n, 50000000n))).toBe(12000000n);
+  });
+});
+
+describe("paraCache / desdeCache", () => {
+  it("hace ida y vuelta sin perder los BigInt ni las fechas: unstable_cache serializa con JSON.stringify y no sabe hacerlo con esos tipos", () => {
+    const original = {
+      titulo: "Firulais",
+      metaCentavos: 500000n,
+      creadoEn: new Date("2026-09-08T00:48:38.715Z"),
+      asientos: [{ centavos: -50000n, fechaEfectiva: new Date("2026-09-08T00:48:39.074Z") }],
+      animalId: null,
+    };
+
+    const idaYVuelta = desdeCache(JSON.parse(JSON.stringify(paraCache(original))));
+
+    expect(idaYVuelta).toEqual(original);
+  });
+
+  it("no toca los valores que ya son seguros para JSON", () => {
+    const original = { estado: "ABIERTO" as const, cantidadDonantes: 2, nombreDonante: null };
+    expect(desdeCache(JSON.parse(JSON.stringify(paraCache(original))))).toEqual(original);
   });
 });
