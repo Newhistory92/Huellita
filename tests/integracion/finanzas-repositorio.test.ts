@@ -112,4 +112,27 @@ describe("repositorio Prisma de finanzas", () => {
     expect(saldo.gastadoCentavos).toBe(500000n);
     expect(saldo.cantidadDonaciones).toBe(2);
   });
+
+  it("listarCasos combina estado y soloAbiertos con AND, no reemplaza uno con el otro", async () => {
+    const caso = await prisma.$transaction(async (tx) =>
+      crearCaso({ ...base, titulo: `Caso listado ${Date.now()}` }, {
+        usuarioEmail: "prueba@huellas.org.ar",
+        rol: "FINANZAS",
+        repositorio: repositorioFinanzasPrisma(tx),
+        auditoria: auditoriaPrisma(tx),
+      })
+    );
+    casos.push(caso.id);
+    await prisma.casoFinanciero.update({ where: { id: caso.id }, data: { estado: "CERRADO" } });
+
+    const repositorio = repositorioFinanzasPrisma(prisma);
+
+    // Coincide en estado, pero soloAbiertos lo excluye: no debe aparecer.
+    const contradictorio = await repositorio.listarCasos({ estado: "CERRADO", soloAbiertos: true });
+    expect(contradictorio.some((c) => c.id === caso.id)).toBe(false);
+
+    // Coincide en estado y no pide soloAbiertos: debe aparecer.
+    const soloPorEstado = await repositorio.listarCasos({ estado: "CERRADO" });
+    expect(soloPorEstado.some((c) => c.id === caso.id)).toBe(true);
+  });
 });

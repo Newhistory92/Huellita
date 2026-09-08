@@ -25,8 +25,10 @@ export function repositorioFinanzasPrisma(cliente: ClienteBase = clientePorDefec
     async listarCasos(filtro: FiltroCasos) {
       return (await cliente.casoFinanciero.findMany({
         where: {
-          estado: filtro.estado,
-          ...(filtro.soloAbiertos ? { estado: { not: "CERRADO" } } : {}),
+          AND: [
+            filtro.estado ? { estado: filtro.estado } : {},
+            filtro.soloAbiertos ? { estado: { not: "CERRADO" } } : {},
+          ],
         },
         orderBy: [{ creadoEn: "desc" }],
       })) as unknown as Caso[];
