@@ -33,6 +33,8 @@ model Animal {
   atributos            Json             @default("{}")
   fotos                FotoAnimal[]
   casos                CasoFinanciero[]
+  preguntas            PreguntaFormulario[]
+  postulaciones        Postulacion[]
   creadoEn             DateTime         @default(now())
   actualizadoEn        DateTime         @updatedAt
 
@@ -237,6 +239,99 @@ enum EstadoIntencion {
   APROBADA                  // hay asiento
   RECHAZADA                 // el proveedor la rechazó, o Finanzas no la encontró en el extracto
   ABANDONADA                // se inició y nunca se completó
+}
+
+// Dominio postulaciones (entrega 3)
+
+model FormularioAdopcion {
+  id            String               @id @default(cuid())
+  nombre        String               @default("Formulario base")
+  preguntas     PreguntaFormulario[]
+  actualizadoEn DateTime             @updatedAt
+}
+
+model PreguntaFormulario {
+  id           String              @id @default(cuid())
+  // Una pregunta pertenece al formulario base o a un animal, nunca a los dos.
+  formularioId String?
+  formulario   FormularioAdopcion? @relation(fields: [formularioId], references: [id])
+  animalId     String?
+  animal       Animal?             @relation(fields: [animalId], references: [id])
+
+  texto        String
+  ayuda        String?
+  tipo         TipoRespuesta
+  opciones     String[]            // solo para OPCION_MULTIPLE y SELECCION_MULTIPLE
+  obligatoria  Boolean             @default(false)
+  orden        Int
+  // Se archiva, no se borra: igual que los animales.
+  archivada    Boolean             @default(false)
+  creadoEn     DateTime            @default(now())
+
+  @@index([formularioId, orden])
+  @@index([animalId, orden])
+}
+
+enum TipoRespuesta {
+  TEXTO_CORTO
+  TEXTO_LARGO
+  SI_NO
+  OPCION_MULTIPLE      // elige una
+  SELECCION_MULTIPLE   // elige varias
+  NUMERO
+  EMAIL
+  TELEFONO
+}
+
+model Postulacion {
+  id            String                 @id @default(cuid())
+  animalId      String
+  animal        Animal                 @relation(fields: [animalId], references: [id])
+  estado        EstadoPostulacion      @default(NUEVA)
+
+  // Contacto: columnas propias, no preguntas configurables. Ver §3.3.
+  nombre        String
+  email         String
+  telefono      String
+
+  respuestas    RespuestaPostulacion[]
+  // Queda marcado si alguien pidió que borraran sus datos.
+  anonimizadaEn DateTime?
+  creadoEn      DateTime               @default(now())
+  actualizadoEn DateTime               @updatedAt
+
+  @@index([animalId, estado])
+  @@index([estado, creadoEn])
+  // Contra el envío repetido por doble clic. Ver §5.3.
+  @@index([animalId, email, creadoEn])
+}
+
+enum EstadoPostulacion {
+  NUEVA
+  EN_REVISION
+  CONTACTADA
+  ENTREVISTA
+  APROBADA
+  RECHAZADA
+  ADOPCION_CONCRETADA
+}
+
+model RespuestaPostulacion {
+  id            String        @id @default(cuid())
+  postulacionId String
+  postulacion   Postulacion   @relation(fields: [postulacionId], references: [id])
+  // Puede quedar en null si la pregunta se archivó: la respuesta sobrevive igual.
+  preguntaId    String?
+
+  // El recorte: qué se preguntó exactamente, en ese momento.
+  textoPregunta String
+  tipo          TipoRespuesta
+  // Siempre texto. El tipo dice cómo leerlo; una selección múltiple guarda
+  // los valores separados por salto de línea.
+  valor         String
+  orden         Int
+
+  @@index([postulacionId, orden])
 }
 
 model Documento {
