@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { formatearCentavos, esIngreso, sumarCentavos, separarPorSigno } from "@/domains/finanzas/dinero";
+import { formatearCentavos, esIngreso, sumarCentavos, separarPorSigno, referenciaDeAsiento } from "@/domains/finanzas/dinero";
 
 describe("formatearCentavos", () => {
   it("usa el formato argentino, con punto de miles", () => {
@@ -33,5 +33,25 @@ describe("signo de los movimientos", () => {
 
   it("separa entradas de salidas y devuelve las salidas en positivo", () => {
     expect(separarPorSigno([10000n, -3000n, 5000n, -2000n])).toEqual({ entradas: 15000n, salidas: 5000n });
+  });
+});
+
+describe("referenciaDeAsiento", () => {
+  it("acorta el identificador a algo que una persona pueda dictar por teléfono", () => {
+    expect(referenciaDeAsiento("cmtrybavq0002t9fgfcbk7ms5")).toBe("MOV-K7MS5");
+  });
+
+  it("dos asientos distintos dan referencias distintas", () => {
+    const a = referenciaDeAsiento("cmtrybavq0002t9fgfcbk7ms5");
+    const b = referenciaDeAsiento("cmtrybazu0004t9fgq6s534iu");
+    expect(a).not.toBe(b);
+  });
+
+  it("tolera un identificador más corto que el recorte", () => {
+    expect(referenciaDeAsiento("abc")).toBe("MOV-ABC");
+  });
+
+  it("nunca devuelve solo el prefijo", () => {
+    expect(referenciaDeAsiento("")).toBe("MOV-?");
   });
 });

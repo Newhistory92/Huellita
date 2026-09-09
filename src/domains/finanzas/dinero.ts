@@ -46,3 +46,17 @@ export function separarPorSigno(valores: bigint[]): { entradas: bigint; salidas:
   }
   return { entradas, salidas };
 }
+
+/**
+ * Referencia corta de un asiento, para mostrar en el libro público.
+ *
+ * El identificador interno tiene veinticinco caracteres: sirve para la base,
+ * pero en pantalla es ruido, y nadie puede dictarlo por teléfono para
+ * preguntar por un movimiento. Se muestran los últimos cinco, que alcanzan
+ * para distinguir movimientos dentro de un mismo caso; el identificador
+ * completo queda en el atributo title, para quien necesite el dato exacto.
+ */
+export function referenciaDeAsiento(id: string): string {
+  const cola = id.slice(-5).toUpperCase();
+  return `MOV-${cola.length > 0 ? cola : "?"}`;
+}

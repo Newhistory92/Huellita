@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Card } from "@/ui/componentes/Card";
 import { Importe } from "@/ui/finanzas/Importe";
+import { referenciaDeAsiento } from "@/domains/finanzas/dinero";
 import type { Asiento, Caso } from "@/domains/finanzas/tipos";
 import estilos from "./Pestanas.module.css";
 
@@ -125,7 +126,7 @@ export function Pestanas({
                   </span>
                 </div>
                 <Importe centavos={asiento.centavos} conSigno />
-                <span className={estilos.identificador}>{asiento.id}</span>
+                <span className={estilos.identificador} title={asiento.id}>{referenciaDeAsiento(asiento.id)}</span>
               </li>
             ))}
           </ul>
