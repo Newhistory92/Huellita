@@ -45,7 +45,7 @@ export function repositorioPostulacionesPrisma(cliente: ClienteBase = clientePor
 
     async crearPostulacion(datos, respuestas) {
       return (await cliente.postulacion.create({
-        data: { ...(datos as never), respuestas: { create: respuestas as never } },
+        data: { ...(datos as any), respuestas: { create: respuestas as never } },
       })) as unknown as Postulacion;
     },
     async actualizarPostulacion(id, cambios) {
