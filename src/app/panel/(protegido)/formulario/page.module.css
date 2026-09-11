@@ -1,0 +1,11 @@
+.contenedor {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 40px 18px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.ayuda {
+  color: var(--ink-2);
+}

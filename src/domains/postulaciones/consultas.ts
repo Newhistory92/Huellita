@@ -54,6 +54,21 @@ export async function postulacionesDelPanel(filtro: FiltroPostulaciones): Promis
   return repositorioPostulacionesPrisma().listarPostulaciones(filtro);
 }
 
+/**
+ * Todas las preguntas del formulario base para el panel: activas y
+ * archivadas. A diferencia de `preguntasDelFormularioDe`, no oculta las
+ * archivadas (quien administra el formulario necesita verlas) y no se
+ * cachea, para que un alta o una edición se vean de inmediato.
+ */
+export async function preguntasDelFormularioPanel(): Promise<Pregunta[]> {
+  return repositorioPostulacionesPrisma().preguntasDelFormulario();
+}
+
+/** Igual que `preguntasDelFormularioPanel`, pero las preguntas propias de un animal. */
+export async function preguntasDelAnimalPanel(animalId: string): Promise<Pregunta[]> {
+  return repositorioPostulacionesPrisma().preguntasDelAnimal(animalId);
+}
+
 export async function detalleDePostulacion(
   id: string
 ): Promise<{ postulacion: Postulacion; respuestas: Respuesta[] } | null> {

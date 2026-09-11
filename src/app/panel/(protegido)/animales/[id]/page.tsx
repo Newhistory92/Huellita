@@ -5,10 +5,12 @@ import { repositorioPrisma, auditoriaPrisma } from "@/infra/repositorios/animale
 import { repositorioFotosPrisma } from "@/infra/repositorios/fotos";
 import { obtenerAnimal } from "@/domains/animales/servicio";
 import { listarFotos } from "@/domains/animales/fotos-servicio";
+import { preguntasDelAnimalPanel } from "@/domains/postulaciones/consultas";
 import type { Contexto, ContextoFotos, Especie, Sexo, Tamano } from "@/domains/animales/tipos";
 import { Card, CardCuerpo } from "@/ui/componentes/Card";
 import { Campo } from "@/ui/componentes/Campo";
 import { Boton } from "@/ui/componentes/Boton";
+import { ListaPreguntas } from "@/app/panel/(protegido)/formulario/ListaPreguntas";
 import { accionCrearAnimal, accionEditarAnimal, accionPublicarAnimal, accionArchivarAnimal } from "../acciones";
 import { Fotos } from "./fotos";
 import estilos from "./page.module.css";
@@ -47,6 +49,7 @@ export default async function FormularioDeAnimal({ params }: { params: Promise<{
   if (!esAlta && !animal) notFound();
 
   const fotos = animal ? await listarFotos(animal.id, await contextoFotos()) : [];
+  const preguntasPropias = animal ? await preguntasDelAnimalPanel(animal.id) : [];
   const accionGuardar = esAlta ? accionCrearAnimal : accionEditarAnimal.bind(null, id);
 
   return (
@@ -156,6 +159,18 @@ export default async function FormularioDeAnimal({ params }: { params: Promise<{
       ) : null}
 
       {animal ? <Fotos animalId={animal.id} fotos={fotos} /> : null}
+
+      {animal ? (
+        <Card>
+          <CardCuerpo>
+            <h2>Preguntas propias de {animal.nombre}</h2>
+            <p className={estilos.permanente}>
+              Se suman a las del formulario base solo para quien postula por {animal.nombre}.
+            </p>
+            <ListaPreguntas preguntas={preguntasPropias} animalId={animal.id} />
+          </CardCuerpo>
+        </Card>
+      ) : null}
     </main>
   );
 }
