@@ -11,6 +11,7 @@ import {
 } from "@/domains/postulaciones/consultas";
 import { puede } from "@/domains/usuarios/autorizacion";
 import type { Contexto as ContextoAnimales } from "@/domains/animales/tipos";
+import { TONO_POR_ESTADO, etiquetaEstado } from "@/ui/postulaciones/estado-texto";
 import { Card, CardCuerpo } from "@/ui/componentes/Card";
 import { Pildora } from "@/ui/componentes/Pildora";
 import { Ofertas } from "./Ofertas";
@@ -93,7 +94,7 @@ export default async function DetalleDePostulacion({ params }: { params: Promise
       <Card>
         <CardCuerpo>
           <h2>Estado</h2>
-          <Pildora tono="neutro">{postulacion.estado}</Pildora>
+          <Pildora tono={TONO_POR_ESTADO[postulacion.estado]}>{etiquetaEstado(postulacion.estado)}</Pildora>
           {editable ? <CambiarEstado id={postulacion.id} estadoActual={postulacion.estado} /> : null}
         </CardCuerpo>
       </Card>

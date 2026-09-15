@@ -5,6 +5,7 @@ import { Campo } from "@/ui/componentes/Campo";
 import { Boton } from "@/ui/componentes/Boton";
 import { accionCambiarEstado } from "../acciones";
 import type { EstadoPostulacion } from "@/domains/postulaciones/tipos";
+import { etiquetaEstado } from "@/ui/postulaciones/estado-texto";
 import estilos from "./page.module.css";
 
 const ESTADOS: EstadoPostulacion[] = [
@@ -40,7 +41,7 @@ export function CambiarEstado({ id, estadoActual }: { id: string; estadoActual: 
         >
           {ESTADOS.map((e) => (
             <option key={e} value={e}>
-              {e}
+              {etiquetaEstado(e)}
             </option>
           ))}
         </select>

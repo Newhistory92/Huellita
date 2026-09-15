@@ -13,6 +13,7 @@ import {
 import { puede } from "@/domains/usuarios/autorizacion";
 import type { Contexto as ContextoAnimales } from "@/domains/animales/tipos";
 import type { EstadoPostulacion } from "@/domains/postulaciones/tipos";
+import { TONO_POR_ESTADO, etiquetaEstado } from "@/ui/postulaciones/estado-texto";
 import { Card } from "@/ui/componentes/Card";
 import { Pildora } from "@/ui/componentes/Pildora";
 import { Boton } from "@/ui/componentes/Boton";
@@ -27,16 +28,6 @@ const ESTADOS: EstadoPostulacion[] = [
   "RECHAZADA",
   "ADOPCION_CONCRETADA",
 ];
-
-const TONO_POR_ESTADO: Record<EstadoPostulacion, "ok" | "warn" | "bad" | "neutro" | "marca" | "adoptado"> = {
-  NUEVA: "warn",
-  EN_REVISION: "neutro",
-  CONTACTADA: "neutro",
-  ENTREVISTA: "marca",
-  APROBADA: "ok",
-  RECHAZADA: "bad",
-  ADOPCION_CONCRETADA: "adoptado",
-};
 
 async function contextoAnimales(): Promise<ContextoAnimales> {
   const sesion = await auth();
@@ -97,13 +88,13 @@ export default async function BandejaDePostulaciones({
         {ESTADOS.map((e) => (
           <Link key={e} href={`/panel/postulaciones?estado=${e}`} className={estilos.pildoraLink}>
             <Pildora tono={TONO_POR_ESTADO[e]}>
-              {e}: {conteo[e]}
+              {etiquetaEstado(e)}: {conteo[e]}
             </Pildora>
           </Link>
         ))}
       </div>
 
-      <form className={estilos.filtros}>
+      <form className={estilos.filtros} key={`${animalId ?? ""}-${estado ?? ""}-${q ?? ""}`}>
         <select name="animalId" defaultValue={animalId ?? ""}>
           <option value="">Todos los animales</option>
           {animales.map((animal) => (
@@ -116,7 +107,7 @@ export default async function BandejaDePostulaciones({
           <option value="">Todos los estados</option>
           {ESTADOS.map((e) => (
             <option key={e} value={e}>
-              {e}
+              {etiquetaEstado(e)}
             </option>
           ))}
         </select>
@@ -151,7 +142,7 @@ export default async function BandejaDePostulaciones({
                   <td>{postulacion.anonimizadaEn ? "Datos borrados a pedido" : postulacion.nombre}</td>
                   <td>{nombreDeAnimal.get(postulacion.animalId) ?? "—"}</td>
                   <td>
-                    <Pildora tono={TONO_POR_ESTADO[postulacion.estado]}>{postulacion.estado}</Pildora>
+                    <Pildora tono={TONO_POR_ESTADO[postulacion.estado]}>{etiquetaEstado(postulacion.estado)}</Pildora>
                   </td>
                   <td>{new Date(postulacion.creadoEn).toLocaleDateString("es-AR")}</td>
                   <td>
