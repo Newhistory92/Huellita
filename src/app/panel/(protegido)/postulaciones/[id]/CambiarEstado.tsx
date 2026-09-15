@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { unstable_rethrow } from "next/navigation";
+import { unstable_rethrow, useRouter } from "next/navigation";
 import { Campo } from "@/ui/componentes/Campo";
 import { Boton } from "@/ui/componentes/Boton";
 import { useToast } from "@/ui/componentes/Toast";
@@ -25,12 +25,14 @@ export function CambiarEstado({ id, estadoActual }: { id: string; estadoActual: 
   const [comentario, setComentario] = useState("");
   const [pendiente, iniciarTransicion] = useTransition();
   const mostrarToast = useToast();
+  const router = useRouter();
 
   function enviar() {
     iniciarTransicion(async () => {
       try {
         await accionCambiarEstado(id, estado, comentario.trim() || null);
         setComentario("");
+        router.refresh();
       } catch (error) {
         unstable_rethrow(error);
         mostrarToast(error instanceof Error ? error.message : "Ocurrió un error inesperado");

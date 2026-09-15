@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useTransition, type FormEvent, type ReactNode } from "react";
-import { unstable_rethrow } from "next/navigation";
+import { unstable_rethrow, useRouter } from "next/navigation";
 import { useToast } from "./Toast";
 
 /**
@@ -22,6 +22,7 @@ export function FormularioConToast({
   const formRef = useRef<HTMLFormElement>(null);
   const [, iniciarTransicion] = useTransition();
   const mostrarToast = useToast();
+  const router = useRouter();
 
   function alEnviar(evento: FormEvent<HTMLFormElement>) {
     evento.preventDefault();
@@ -30,6 +31,10 @@ export function FormularioConToast({
       try {
         await accion(formulario);
         formRef.current?.reset();
+        // Sin esto la pantalla queda con los datos viejos: llamar a la acción
+        // directo (sin pasar por el action prop del <form>) no dispara sola
+        // la actualización que sí dispara Next.js con un form nativo.
+        router.refresh();
       } catch (error) {
         unstable_rethrow(error);
         mostrarToast(error instanceof Error ? error.message : "Ocurrió un error inesperado");

@@ -1,7 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
-import { unstable_rethrow } from "next/navigation";
+import { unstable_rethrow, useRouter } from "next/navigation";
 import { Boton } from "@/ui/componentes/Boton";
 import { useToast } from "@/ui/componentes/Toast";
 import { accionMarcarAnimal, accionCerrarOtras } from "../acciones";
@@ -32,6 +32,7 @@ export function Ofertas({
 }) {
   const [pendiente, iniciarTransicion] = useTransition();
   const mostrarToast = useToast();
+  const router = useRouter();
 
   function manejarError(error: unknown) {
     unstable_rethrow(error);
@@ -57,6 +58,7 @@ export function Ofertas({
               iniciarTransicion(async () => {
                 try {
                   await accionMarcarAnimal(animalId, "RESERVADO");
+                  router.refresh();
                 } catch (error) {
                   manejarError(error);
                 }
@@ -79,6 +81,7 @@ export function Ofertas({
               iniciarTransicion(async () => {
                 try {
                   await accionMarcarAnimal(animalId, "ADOPTADO");
+                  router.refresh();
                 } catch (error) {
                   manejarError(error);
                 }
@@ -102,6 +105,7 @@ export function Ofertas({
               iniciarTransicion(async () => {
                 try {
                   await accionCerrarOtras(animalId, postulacionId);
+                  router.refresh();
                 } catch (error) {
                   manejarError(error);
                 }
