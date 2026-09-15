@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import { animalPorSlug, animalesPublicados, fotosDeAnimal, slugActualDe } from "@/domains/animales/consultas";
 import { metadatosDeAnimal } from "@/domains/animales/metadatos";
 import { Card, CardCuerpo } from "@/ui/componentes/Card";
+import { Boton } from "@/ui/componentes/Boton";
 import { Pildora } from "@/ui/componentes/Pildora";
 import { ESPECIE_EN_TEXTO, SEXO_EN_TEXTO, TAMANO_EN_TEXTO, TONO_POR_ESTADO, etiquetaEstado } from "@/ui/animales/estado-texto";
 import { Compartir } from "./Compartir";
@@ -62,6 +64,12 @@ export default async function FichaAnimal({ params }: { params: Promise<{ slug: 
           <h1>{animal.nombre}</h1>
           <p className={estilos.bajada}>{animal.descripcion}</p>
         </div>
+
+        {animal.estado === "DISPONIBLE" ? (
+          <Link href={`/adopcion/${animal.slug}/postular`}>
+            <Boton variante="primario">Postularme para adoptar a {animal.nombre}</Boton>
+          </Link>
+        ) : null}
 
         <dl className={estilos.datagrid}>
           <div>
