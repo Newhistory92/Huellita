@@ -8,6 +8,7 @@ import { Card, CardCuerpo } from "@/ui/componentes/Card";
 import { Campo } from "@/ui/componentes/Campo";
 import { CampoCalculado } from "@/ui/componentes/CampoCalculado";
 import { Boton } from "@/ui/componentes/Boton";
+import { FormularioConToast } from "@/ui/componentes/FormularioConToast";
 import { Importe } from "@/ui/finanzas/Importe";
 import {
   accionCrearCaso,
@@ -45,7 +46,7 @@ export default async function FormularioDeCaso({ params }: { params: Promise<{ i
 
       <Card>
         <CardCuerpo>
-          <form action={accionGuardar} className={estilos.formulario}>
+          <FormularioConToast accion={accionGuardar} className={estilos.formulario}>
             <Campo etiqueta="Título" nombre="titulo">
               <input id="titulo" name="titulo" defaultValue={caso?.titulo} required />
             </Campo>
@@ -92,7 +93,7 @@ export default async function FormularioDeCaso({ params }: { params: Promise<{ i
             <Boton type="submit" variante="primario">
               {esAlta ? "Crear caso" : "Guardar cambios"}
             </Boton>
-          </form>
+          </FormularioConToast>
         </CardCuerpo>
       </Card>
 
@@ -100,7 +101,7 @@ export default async function FormularioDeCaso({ params }: { params: Promise<{ i
         <Card>
           <CardCuerpo>
             <h2>Registrar un gasto</h2>
-            <form action={accionRegistrarGasto} className={estilos.formulario}>
+            <FormularioConToast accion={accionRegistrarGasto} className={estilos.formulario}>
               <input type="hidden" name="casoId" value={caso.id} />
               <Campo etiqueta="Importe (en pesos)" nombre="pesos">
                 <input id="pesos" name="pesos" type="number" step="0.01" min="0.01" required />
@@ -125,7 +126,7 @@ export default async function FormularioDeCaso({ params }: { params: Promise<{ i
               <Boton type="submit" variante="primario">
                 Registrar gasto
               </Boton>
-            </form>
+            </FormularioConToast>
           </CardCuerpo>
         </Card>
       ) : null}
@@ -137,7 +138,7 @@ export default async function FormularioDeCaso({ params }: { params: Promise<{ i
             <p className={estilos.aclaracion}>
               El ajuste corrige un movimiento sin borrarlo: queda publicado en el libro del caso, junto al motivo.
             </p>
-            <form action={accionRegistrarAjuste} className={estilos.formulario}>
+            <FormularioConToast accion={accionRegistrarAjuste} className={estilos.formulario}>
               <input type="hidden" name="casoId" value={caso.id} />
               <Campo etiqueta="Movimiento que corrige" nombre="ajustaAId">
                 <select id="ajustaAId" name="ajustaAId" required>
@@ -164,7 +165,7 @@ export default async function FormularioDeCaso({ params }: { params: Promise<{ i
               <Boton type="submit" variante="primario">
                 Registrar ajuste
               </Boton>
-            </form>
+            </FormularioConToast>
           </CardCuerpo>
         </Card>
       ) : null}
@@ -173,7 +174,7 @@ export default async function FormularioDeCaso({ params }: { params: Promise<{ i
         <Card>
           <CardCuerpo>
             <h2>Trasladar excedente a otro caso</h2>
-            <form action={accionTrasladar} className={estilos.formulario}>
+            <FormularioConToast accion={accionTrasladar} className={estilos.formulario}>
               <input type="hidden" name="origenId" value={caso.id} />
               <Campo etiqueta="Caso destino" nombre="destinoId">
                 <select id="destinoId" name="destinoId" required>
@@ -193,7 +194,7 @@ export default async function FormularioDeCaso({ params }: { params: Promise<{ i
               <Boton type="submit" variante="primario">
                 Trasladar
               </Boton>
-            </form>
+            </FormularioConToast>
           </CardCuerpo>
         </Card>
       ) : null}

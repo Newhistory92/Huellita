@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { unstable_rethrow } from "next/navigation";
 import { Boton } from "@/ui/componentes/Boton";
+import { useToast } from "@/ui/componentes/Toast";
 import { accionBorrarDatosPersonales } from "../acciones";
 import estilos from "./page.module.css";
 
@@ -12,6 +14,7 @@ import estilos from "./page.module.css";
 export function BorrarDatosPersonales({ id }: { id: string }) {
   const [confirmando, setConfirmando] = useState(false);
   const [pendiente, iniciarTransicion] = useTransition();
+  const mostrarToast = useToast();
 
   if (!confirmando) {
     return (
@@ -33,7 +36,16 @@ export function BorrarDatosPersonales({ id }: { id: string }) {
           variante="primario"
           tamano="sm"
           disabled={pendiente}
-          onClick={() => iniciarTransicion(() => accionBorrarDatosPersonales(id))}
+          onClick={() =>
+            iniciarTransicion(async () => {
+              try {
+                await accionBorrarDatosPersonales(id);
+              } catch (error) {
+                unstable_rethrow(error);
+                mostrarToast(error instanceof Error ? error.message : "Ocurrió un error inesperado");
+              }
+            })
+          }
         >
           Confirmar borrado
         </Boton>

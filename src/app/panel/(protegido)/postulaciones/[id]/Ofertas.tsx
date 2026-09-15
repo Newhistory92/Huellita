@@ -1,7 +1,9 @@
 "use client";
 
 import { useTransition } from "react";
+import { unstable_rethrow } from "next/navigation";
 import { Boton } from "@/ui/componentes/Boton";
+import { useToast } from "@/ui/componentes/Toast";
 import { accionMarcarAnimal, accionCerrarOtras } from "../acciones";
 import type { EstadoPostulacion } from "@/domains/postulaciones/tipos";
 import estilos from "./page.module.css";
@@ -29,6 +31,12 @@ export function Ofertas({
   abiertasDelAnimal: number;
 }) {
   const [pendiente, iniciarTransicion] = useTransition();
+  const mostrarToast = useToast();
+
+  function manejarError(error: unknown) {
+    unstable_rethrow(error);
+    mostrarToast(error instanceof Error ? error.message : "Ocurrió un error inesperado");
+  }
 
   const ofreceReservar = estado === "APROBADA" && estadoAnimal !== "RESERVADO";
   const ofreceAdoptado = estado === "ADOPCION_CONCRETADA" && estadoAnimal !== "ADOPTADO";
@@ -45,7 +53,15 @@ export function Ofertas({
             variante="fantasma"
             tamano="sm"
             disabled={pendiente}
-            onClick={() => iniciarTransicion(() => accionMarcarAnimal(animalId, "RESERVADO"))}
+            onClick={() =>
+              iniciarTransicion(async () => {
+                try {
+                  await accionMarcarAnimal(animalId, "RESERVADO");
+                } catch (error) {
+                  manejarError(error);
+                }
+              })
+            }
           >
             Marcar como reservado
           </Boton>
@@ -59,7 +75,15 @@ export function Ofertas({
             variante="fantasma"
             tamano="sm"
             disabled={pendiente}
-            onClick={() => iniciarTransicion(() => accionMarcarAnimal(animalId, "ADOPTADO"))}
+            onClick={() =>
+              iniciarTransicion(async () => {
+                try {
+                  await accionMarcarAnimal(animalId, "ADOPTADO");
+                } catch (error) {
+                  manejarError(error);
+                }
+              })
+            }
           >
             Marcar como adoptado
           </Boton>
@@ -76,7 +100,11 @@ export function Ofertas({
             disabled={pendiente}
             onClick={() =>
               iniciarTransicion(async () => {
-                await accionCerrarOtras(animalId, postulacionId);
+                try {
+                  await accionCerrarOtras(animalId, postulacionId);
+                } catch (error) {
+                  manejarError(error);
+                }
               })
             }
           >

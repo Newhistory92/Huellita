@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { unstable_rethrow } from "next/navigation";
 import { Campo } from "@/ui/componentes/Campo";
 import { Boton } from "@/ui/componentes/Boton";
+import { useToast } from "@/ui/componentes/Toast";
 import { accionCambiarEstado } from "../acciones";
 import type { EstadoPostulacion } from "@/domains/postulaciones/tipos";
 import { etiquetaEstado } from "@/ui/postulaciones/estado-texto";
@@ -22,11 +24,17 @@ export function CambiarEstado({ id, estadoActual }: { id: string; estadoActual: 
   const [estado, setEstado] = useState<EstadoPostulacion>(estadoActual);
   const [comentario, setComentario] = useState("");
   const [pendiente, iniciarTransicion] = useTransition();
+  const mostrarToast = useToast();
 
   function enviar() {
     iniciarTransicion(async () => {
-      await accionCambiarEstado(id, estado, comentario.trim() || null);
-      setComentario("");
+      try {
+        await accionCambiarEstado(id, estado, comentario.trim() || null);
+        setComentario("");
+      } catch (error) {
+        unstable_rethrow(error);
+        mostrarToast(error instanceof Error ? error.message : "Ocurrió un error inesperado");
+      }
     });
   }
 
