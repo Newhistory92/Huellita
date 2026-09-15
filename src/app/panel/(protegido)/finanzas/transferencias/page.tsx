@@ -58,7 +58,10 @@ export default async function BandejaDeTransferencias() {
                   <span className={estilos.sinComprobante}>Sin comprobante</span>
                 )}
                 <div className={estilos.acciones}>
-                  <FormularioConToast accion={accionVerificarTransferencia.bind(null, intencion.id)}>
+                  <FormularioConToast
+                    accion={accionVerificarTransferencia.bind(null, intencion.id)}
+                    mensajeExito="Transferencia verificada."
+                  >
                     <Boton type="submit" variante="primario" tamano="sm">
                       Verificar
                     </Boton>
@@ -66,6 +69,7 @@ export default async function BandejaDeTransferencias() {
                   <FormularioConToast
                     accion={accionRechazar.bind(null, intencion.id)}
                     className={estilos.rechazo}
+                    mensajeExito="Transferencia rechazada."
                   >
                     <input name="motivo" placeholder="Motivo del rechazo" required />
                     <Boton type="submit" variante="fantasma" tamano="sm">

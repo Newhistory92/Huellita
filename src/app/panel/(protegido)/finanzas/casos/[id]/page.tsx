@@ -46,7 +46,11 @@ export default async function FormularioDeCaso({ params }: { params: Promise<{ i
 
       <Card>
         <CardCuerpo>
-          <FormularioConToast accion={accionGuardar} className={estilos.formulario}>
+          <FormularioConToast
+            accion={accionGuardar}
+            className={estilos.formulario}
+            mensajeExito={esAlta ? "Caso creado." : "Cambios guardados."}
+          >
             <Campo etiqueta="Título" nombre="titulo">
               <input id="titulo" name="titulo" defaultValue={caso?.titulo} required />
             </Campo>
@@ -101,7 +105,11 @@ export default async function FormularioDeCaso({ params }: { params: Promise<{ i
         <Card>
           <CardCuerpo>
             <h2>Registrar un gasto</h2>
-            <FormularioConToast accion={accionRegistrarGasto} className={estilos.formulario}>
+            <FormularioConToast
+              accion={accionRegistrarGasto}
+              className={estilos.formulario}
+              mensajeExito="Gasto registrado."
+            >
               <input type="hidden" name="casoId" value={caso.id} />
               <Campo etiqueta="Importe (en pesos)" nombre="pesos">
                 <input id="pesos" name="pesos" type="number" step="0.01" min="0.01" required />
@@ -138,7 +146,11 @@ export default async function FormularioDeCaso({ params }: { params: Promise<{ i
             <p className={estilos.aclaracion}>
               El ajuste corrige un movimiento sin borrarlo: queda publicado en el libro del caso, junto al motivo.
             </p>
-            <FormularioConToast accion={accionRegistrarAjuste} className={estilos.formulario}>
+            <FormularioConToast
+              accion={accionRegistrarAjuste}
+              className={estilos.formulario}
+              mensajeExito="Ajuste registrado."
+            >
               <input type="hidden" name="casoId" value={caso.id} />
               <Campo etiqueta="Movimiento que corrige" nombre="ajustaAId">
                 <select id="ajustaAId" name="ajustaAId" required>
@@ -174,7 +186,12 @@ export default async function FormularioDeCaso({ params }: { params: Promise<{ i
         <Card>
           <CardCuerpo>
             <h2>Trasladar excedente a otro caso</h2>
-            <FormularioConToast accion={accionTrasladar} className={estilos.formulario}>
+            <CampoCalculado
+              etiqueta="Disponible para trasladar"
+              valor={<Importe centavos={caso.recibidoCentavos - caso.gastadoCentavos} conSigno />}
+              explicacion="Recaudado menos gastado. Si da negativo, este caso gastó de más y no se puede trasladar nada hasta que se corrija."
+            />
+            <FormularioConToast accion={accionTrasladar} className={estilos.formulario} mensajeExito="Traslado realizado.">
               <input type="hidden" name="origenId" value={caso.id} />
               <Campo etiqueta="Caso destino" nombre="destinoId">
                 <select id="destinoId" name="destinoId" required>

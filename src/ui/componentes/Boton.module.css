@@ -25,6 +25,11 @@
 .boton:active {
   transform: translateY(0);
 }
+.boton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
 
 .donar {
   background: var(--accent);

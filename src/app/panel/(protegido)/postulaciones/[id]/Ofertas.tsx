@@ -59,6 +59,7 @@ export function Ofertas({
                 try {
                   await accionMarcarAnimal(animalId, "RESERVADO");
                   router.refresh();
+                  mostrarToast(`${nombreAnimal} quedó reservado.`);
                 } catch (error) {
                   manejarError(error);
                 }
@@ -82,6 +83,7 @@ export function Ofertas({
                 try {
                   await accionMarcarAnimal(animalId, "ADOPTADO");
                   router.refresh();
+                  mostrarToast(`${nombreAnimal} quedó marcado como adoptado.`);
                 } catch (error) {
                   manejarError(error);
                 }
@@ -106,6 +108,7 @@ export function Ofertas({
                 try {
                   await accionCerrarOtras(animalId, postulacionId);
                   router.refresh();
+                  mostrarToast("Se rechazaron las demás postulaciones.");
                 } catch (error) {
                   manejarError(error);
                 }

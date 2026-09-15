@@ -1,0 +1,15 @@
+.forma[aria-busy="true"] {
+  opacity: 0.6;
+  cursor: wait;
+  transition: opacity 0.15s ease;
+}
+
+/* Sin caja propia: hereda el layout (grilla, flex) del className que le pasa
+   quien usa el formulario, como si el <fieldset> no estuviera. */
+.campos {
+  display: contents;
+  border: none;
+  margin: 0;
+  padding: 0;
+  min-inline-size: 0;
+}

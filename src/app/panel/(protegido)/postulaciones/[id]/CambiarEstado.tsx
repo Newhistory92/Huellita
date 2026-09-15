@@ -33,6 +33,7 @@ export function CambiarEstado({ id, estadoActual }: { id: string; estadoActual: 
         await accionCambiarEstado(id, estado, comentario.trim() || null);
         setComentario("");
         router.refresh();
+        mostrarToast("Estado actualizado.");
       } catch (error) {
         unstable_rethrow(error);
         mostrarToast(error instanceof Error ? error.message : "Ocurrió un error inesperado");

@@ -24,7 +24,7 @@ export default async function DonarParaElCaso({ params }: { params: Promise<{ sl
 
       <Card>
         <CardCuerpo>
-          <FormularioConToast accion={accionIniciarDonacion} className={estilos.formulario}>
+          <FormularioConToast accion={accionIniciarDonacion} className={estilos.formulario} mensajeExito={null}>
             <input type="hidden" name="slug" value={caso.slug} />
 
             <Campo etiqueta="Importe (en pesos)" nombre="pesos" ayuda="El importe mínimo es de $100.">

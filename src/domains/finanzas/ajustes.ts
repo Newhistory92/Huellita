@@ -1,6 +1,7 @@
 import { esquemaAjuste, type EntradaAjuste } from "./esquemas";
 import { registrarAsiento } from "./asientos";
 import { exigirCaso, exigirPermisoSobreFinanzas } from "./casos";
+import { formatearCentavos } from "./dinero";
 import type { Asiento, ContextoFinanzas } from "./tipos";
 
 /**
@@ -59,7 +60,8 @@ export async function trasladarEntreCasos(
 
   const disponible = origen.recibidoCentavos - origen.gastadoCentavos;
   if (entrada.centavos > disponible) {
-    throw new Error(`El caso de origen no tiene ese saldo disponible: quedan ${disponible} centavos`);
+    const signo = disponible < 0n ? "-" : "";
+    throw new Error(`El caso de origen no tiene ese saldo disponible: quedan ${signo}${formatearCentavos(disponible)}`);
   }
 
   // El orden importa y no es arbitrario. Los asientos son inmutables: el

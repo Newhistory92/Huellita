@@ -72,7 +72,11 @@ export default async function FormularioDeAnimal({ params }: { params: Promise<{
 
       <Card>
         <CardCuerpo>
-          <FormularioConToast accion={accionGuardar} className={estilos.formulario}>
+          <FormularioConToast
+            accion={accionGuardar}
+            className={estilos.formulario}
+            mensajeExito={esAlta ? "Animal creado en borrador." : "Cambios guardados."}
+          >
             <Campo etiqueta="Nombre" nombre="nombre">
               <input id="nombre" name="nombre" defaultValue={animal?.nombre} required />
             </Campo>
@@ -148,14 +152,14 @@ export default async function FormularioDeAnimal({ params }: { params: Promise<{
           <CardCuerpo>
             <div className={estilos.acciones}>
               {animal.estado !== "DISPONIBLE" ? (
-                <FormularioConToast accion={accionPublicarAnimal.bind(null, animal.id)}>
+                <FormularioConToast accion={accionPublicarAnimal.bind(null, animal.id)} mensajeExito="Animal publicado.">
                   <Boton type="submit" variante="primario">
                     Publicar
                   </Boton>
                 </FormularioConToast>
               ) : null}
               {!animal.archivado ? (
-                <FormularioConToast accion={accionArchivarAnimal.bind(null, animal.id)}>
+                <FormularioConToast accion={accionArchivarAnimal.bind(null, animal.id)} mensajeExito="Animal archivado.">
                   <Boton type="submit" variante="fantasma">
                     Archivar
                   </Boton>

@@ -42,6 +42,7 @@ export function BorrarDatosPersonales({ id }: { id: string }) {
               try {
                 await accionBorrarDatosPersonales(id);
                 router.refresh();
+                mostrarToast("Datos personales borrados.");
               } catch (error) {
                 unstable_rethrow(error);
                 mostrarToast(error instanceof Error ? error.message : "Ocurrió un error inesperado");

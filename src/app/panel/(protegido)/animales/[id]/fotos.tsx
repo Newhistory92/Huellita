@@ -18,6 +18,7 @@ export function Fotos({ animalId, fotos }: { animalId: string; fotos: FotoDeAnim
   const [orden, setOrden] = useState(fotos.map((f) => f.id));
   const [arrastrada, setArrastrada] = useState<string | null>(null);
   const [pendiente, iniciarTransicion] = useTransition();
+  const [subiendo, setSubiendo] = useState(false);
 
   // router.refresh() trae fotos nuevas desde el servidor: sin esto, el
   // estado local se queda con la lista vieja y la foto recién subida no
@@ -82,7 +83,7 @@ export function Fotos({ animalId, fotos }: { animalId: string; fotos: FotoDeAnim
                     <button
                       type="button"
                       aria-label={`Mover "${foto.alt}" antes`}
-                      disabled={indice === 0}
+                      disabled={indice === 0 || pendiente}
                       onClick={() => moverA(foto.id, indice - 1)}
                     >
                       ↑
@@ -90,7 +91,7 @@ export function Fotos({ animalId, fotos }: { animalId: string; fotos: FotoDeAnim
                     <button
                       type="button"
                       aria-label={`Mover "${foto.alt}" después`}
-                      disabled={indice === ordenadas.length - 1}
+                      disabled={indice === ordenadas.length - 1 || pendiente}
                       onClick={() => moverA(foto.id, indice + 1)}
                     >
                       ↓
@@ -101,6 +102,7 @@ export function Fotos({ animalId, fotos }: { animalId: string; fotos: FotoDeAnim
                     <input
                       type="checkbox"
                       checked={foto.sensible}
+                      disabled={pendiente}
                       onChange={(evento) => ejecutar(() => accionMarcarSensible(foto.id, evento.target.checked))}
                     />
                     Puede impresionar
@@ -110,7 +112,7 @@ export function Fotos({ animalId, fotos }: { animalId: string; fotos: FotoDeAnim
                     type="button"
                     variante="fantasma"
                     tamano="sm"
-                    disabled={foto.principal}
+                    disabled={foto.principal || pendiente}
                     onClick={() => ejecutar(() => accionDefinirPrincipal(foto.id))}
                   >
                     {foto.principal ? "Es la principal" : "Definir como principal"}
@@ -123,32 +125,45 @@ export function Fotos({ animalId, fotos }: { animalId: string; fotos: FotoDeAnim
 
         <form
           action={async (formulario) => {
+            setSubiendo(true);
             try {
               await accionSubirFoto(animalId, formulario);
               router.refresh();
+              mostrarToast("Foto subida.");
             } catch (error) {
               unstable_rethrow(error);
               mostrarToast(error instanceof Error ? error.message : "Ocurrió un error inesperado");
+            } finally {
+              setSubiendo(false);
             }
           }}
           className={estilos.subida}
+          aria-busy={subiendo}
         >
           <Campo etiqueta="Nuevas fotos" nombre="archivo" ayuda="Podés elegir varias a la vez.">
-            <input id="archivo" name="archivo" type="file" accept="image/png,image/jpeg,image/webp" multiple required />
+            <input
+              id="archivo"
+              name="archivo"
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              multiple
+              required
+              disabled={subiendo}
+            />
           </Campo>
           <Campo
             etiqueta="Descripción de la imagen"
             nombre="alt"
             ayuda="Obligatoria: la necesita quien no puede ver la foto. Si subís varias, se numera automáticamente."
           >
-            <input id="alt" name="alt" required />
+            <input id="alt" name="alt" required disabled={subiendo} />
           </Campo>
           <label className={estilos.casilla}>
-            <input type="checkbox" name="sensible" />
+            <input type="checkbox" name="sensible" disabled={subiendo} />
             Esta imagen puede impresionar
           </label>
-          <Boton type="submit" variante="primario">
-            Subir fotos
+          <Boton type="submit" variante="primario" disabled={subiendo}>
+            {subiendo ? "Subiendo…" : "Subir fotos"}
           </Boton>
         </form>
       </CardCuerpo>

@@ -26,7 +26,7 @@ export default async function Postular({ params }: { params: Promise<{ slug: str
         adopciones. Nunca aparecen en la parte pública del sitio.
       </p>
 
-      <FormularioConToast accion={accionEnviarPostulacion}>
+      <FormularioConToast accion={accionEnviarPostulacion} mensajeExito={null}>
         <input type="hidden" name="slug" value={slug} />
 
         <Campo etiqueta="Nombre y apellido *" nombre="nombre">
