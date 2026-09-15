@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { contextoFinanzas } from "@/infra/contexto-finanzas";
 import { obtenerCaso, listarCasosFinanzas } from "@/domains/finanzas/casos";
 import { libroDeCaso, pendienteDeCaso } from "@/domains/finanzas/consultas";
-import { formatearCentavos } from "@/domains/finanzas/dinero";
+import { formatearCentavos, referenciaDeAsiento } from "@/domains/finanzas/dinero";
 import { Card, CardCuerpo } from "@/ui/componentes/Card";
 import { Campo } from "@/ui/componentes/Campo";
 import { CampoCalculado } from "@/ui/componentes/CampoCalculado";
@@ -100,6 +100,42 @@ export default async function FormularioDeCaso({ params }: { params: Promise<{ i
           </FormularioConToast>
         </CardCuerpo>
       </Card>
+
+      {caso ? (
+        <Card>
+          <CardCuerpo>
+            <h2>Movimientos registrados</h2>
+            {asientos.length === 0 ? (
+              <p className={estilos.aclaracion}>Todavía no se registró ningún movimiento en este caso.</p>
+            ) : (
+              <ul className={estilos.lista}>
+                {asientos.map((asiento) => (
+                  <li key={asiento.id} className={estilos.fila}>
+                    <div>
+                      <strong>{asiento.descripcion}</strong>
+                      <span className={estilos.meta}>
+                        {asiento.fechaEfectiva.toLocaleDateString("es-AR")}
+                        {asiento.ajustaAId ? " · corrige un movimiento anterior" : ""}
+                      </span>
+                    </div>
+                    <Importe centavos={asiento.centavos} conSigno />
+                    {asiento.documentoId ? (
+                      <a href={`/documentos/${asiento.documentoId}`} target="_blank" rel="noreferrer">
+                        Ver comprobante
+                      </a>
+                    ) : (
+                      <span className={estilos.sinComprobante}>Sin comprobante</span>
+                    )}
+                    <span className={estilos.identificador} title={asiento.id}>
+                      {referenciaDeAsiento(asiento.id)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </CardCuerpo>
+        </Card>
+      ) : null}
 
       {caso ? (
         <Card>
