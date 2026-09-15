@@ -4,6 +4,7 @@ import { casoPorSlug } from "@/domains/finanzas/consultas";
 import { Card, CardCuerpo } from "@/ui/componentes/Card";
 import { Campo } from "@/ui/componentes/Campo";
 import { Boton } from "@/ui/componentes/Boton";
+import { FormularioConToast } from "@/ui/componentes/FormularioConToast";
 import { accionIniciarDonacion } from "./acciones";
 import estilos from "./page.module.css";
 
@@ -23,7 +24,7 @@ export default async function DonarParaElCaso({ params }: { params: Promise<{ sl
 
       <Card>
         <CardCuerpo>
-          <form action={accionIniciarDonacion} className={estilos.formulario}>
+          <FormularioConToast accion={accionIniciarDonacion} className={estilos.formulario}>
             <input type="hidden" name="slug" value={caso.slug} />
 
             <Campo etiqueta="Importe (en pesos)" nombre="pesos" ayuda="El importe mínimo es de $100.">
@@ -51,7 +52,7 @@ export default async function DonarParaElCaso({ params }: { params: Promise<{ sl
             <Boton type="submit" variante="donar">
               Donar con Mercado Pago
             </Boton>
-          </form>
+          </FormularioConToast>
         </CardCuerpo>
       </Card>
     </main>

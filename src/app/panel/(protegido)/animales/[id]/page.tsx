@@ -12,6 +12,7 @@ import type { Contexto, ContextoFotos, Especie, Sexo, Tamano } from "@/domains/a
 import { Card, CardCuerpo } from "@/ui/componentes/Card";
 import { Campo } from "@/ui/componentes/Campo";
 import { Boton } from "@/ui/componentes/Boton";
+import { FormularioConToast } from "@/ui/componentes/FormularioConToast";
 import { ListaPreguntas } from "@/app/panel/(protegido)/formulario/ListaPreguntas";
 import { accionCrearAnimal, accionEditarAnimal, accionPublicarAnimal, accionArchivarAnimal } from "../acciones";
 import { Fotos } from "./fotos";
@@ -71,7 +72,7 @@ export default async function FormularioDeAnimal({ params }: { params: Promise<{
 
       <Card>
         <CardCuerpo>
-          <form action={accionGuardar} className={estilos.formulario}>
+          <FormularioConToast accion={accionGuardar} className={estilos.formulario}>
             <Campo etiqueta="Nombre" nombre="nombre">
               <input id="nombre" name="nombre" defaultValue={animal?.nombre} required />
             </Campo>
@@ -138,7 +139,7 @@ export default async function FormularioDeAnimal({ params }: { params: Promise<{
             <Boton type="submit" variante="primario">
               {esAlta ? "Crear en borrador" : "Guardar cambios"}
             </Boton>
-          </form>
+          </FormularioConToast>
         </CardCuerpo>
       </Card>
 
@@ -147,18 +148,18 @@ export default async function FormularioDeAnimal({ params }: { params: Promise<{
           <CardCuerpo>
             <div className={estilos.acciones}>
               {animal.estado !== "DISPONIBLE" ? (
-                <form action={accionPublicarAnimal.bind(null, animal.id)}>
+                <FormularioConToast accion={accionPublicarAnimal.bind(null, animal.id)}>
                   <Boton type="submit" variante="primario">
                     Publicar
                   </Boton>
-                </form>
+                </FormularioConToast>
               ) : null}
               {!animal.archivado ? (
-                <form action={accionArchivarAnimal.bind(null, animal.id)}>
+                <FormularioConToast accion={accionArchivarAnimal.bind(null, animal.id)}>
                   <Boton type="submit" variante="fantasma">
                     Archivar
                   </Boton>
-                </form>
+                </FormularioConToast>
               ) : null}
             </div>
           </CardCuerpo>

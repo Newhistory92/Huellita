@@ -3,6 +3,7 @@ import { animalPorSlug } from "@/domains/animales/consultas";
 import { preguntasDelFormularioDe } from "@/domains/postulaciones/consultas";
 import { Boton } from "@/ui/componentes/Boton";
 import { Campo } from "@/ui/componentes/Campo";
+import { FormularioConToast } from "@/ui/componentes/FormularioConToast";
 import { CampoDePregunta } from "@/ui/postulaciones/CampoDePregunta";
 import { accionEnviarPostulacion } from "./acciones";
 
@@ -25,7 +26,7 @@ export default async function Postular({ params }: { params: Promise<{ slug: str
         adopciones. Nunca aparecen en la parte pública del sitio.
       </p>
 
-      <form action={accionEnviarPostulacion}>
+      <FormularioConToast accion={accionEnviarPostulacion}>
         <input type="hidden" name="slug" value={slug} />
 
         <Campo etiqueta="Nombre y apellido *" nombre="nombre">
@@ -45,7 +46,7 @@ export default async function Postular({ params }: { params: Promise<{ slug: str
         <Boton type="submit" variante="primario">
           Enviar postulación
         </Boton>
-      </form>
+      </FormularioConToast>
     </main>
   );
 }

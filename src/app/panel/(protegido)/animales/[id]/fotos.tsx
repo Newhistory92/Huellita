@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { unstable_rethrow, useRouter } from "next/navigation";
 import { Boton } from "@/ui/componentes/Boton";
 import { Card, CardCuerpo } from "@/ui/componentes/Card";
 import { Campo } from "@/ui/componentes/Campo";
 import { Foto } from "@/ui/componentes/Foto";
+import { useToast } from "@/ui/componentes/Toast";
 import type { Foto as FotoDeAnimal } from "@/domains/animales/tipos";
 import { accionSubirFoto, accionReordenarFotos, accionMarcarSensible, accionDefinirPrincipal } from "./acciones-fotos";
 import { urlDeFoto } from "@/domains/animales/fotos";
@@ -13,6 +14,7 @@ import estilos from "./fotos.module.css";
 
 export function Fotos({ animalId, fotos }: { animalId: string; fotos: FotoDeAnimal[] }) {
   const router = useRouter();
+  const mostrarToast = useToast();
   const [orden, setOrden] = useState(fotos.map((f) => f.id));
   const [arrastrada, setArrastrada] = useState<string | null>(null);
   const [pendiente, iniciarTransicion] = useTransition();
@@ -29,8 +31,13 @@ export function Fotos({ animalId, fotos }: { animalId: string; fotos: FotoDeAnim
 
   function ejecutar(accion: () => Promise<void>) {
     iniciarTransicion(async () => {
-      await accion();
-      router.refresh();
+      try {
+        await accion();
+        router.refresh();
+      } catch (error) {
+        unstable_rethrow(error);
+        mostrarToast(error instanceof Error ? error.message : "Ocurrió un error inesperado");
+      }
     });
   }
 
@@ -116,8 +123,13 @@ export function Fotos({ animalId, fotos }: { animalId: string; fotos: FotoDeAnim
 
         <form
           action={async (formulario) => {
-            await accionSubirFoto(animalId, formulario);
-            router.refresh();
+            try {
+              await accionSubirFoto(animalId, formulario);
+              router.refresh();
+            } catch (error) {
+              unstable_rethrow(error);
+              mostrarToast(error instanceof Error ? error.message : "Ocurrió un error inesperado");
+            }
           }}
           className={estilos.subida}
         >

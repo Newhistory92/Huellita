@@ -5,6 +5,7 @@ import { transferenciasPendientes } from "@/domains/finanzas/donaciones";
 import { sumarCentavos } from "@/domains/finanzas/dinero";
 import { Card } from "@/ui/componentes/Card";
 import { Boton } from "@/ui/componentes/Boton";
+import { FormularioConToast } from "@/ui/componentes/FormularioConToast";
 import { Importe } from "@/ui/finanzas/Importe";
 import { accionVerificarTransferencia, accionRechazarTransferencia } from "../acciones";
 import estilos from "./page.module.css";
@@ -57,17 +58,20 @@ export default async function BandejaDeTransferencias() {
                   <span className={estilos.sinComprobante}>Sin comprobante</span>
                 )}
                 <div className={estilos.acciones}>
-                  <form action={accionVerificarTransferencia.bind(null, intencion.id)}>
+                  <FormularioConToast accion={accionVerificarTransferencia.bind(null, intencion.id)}>
                     <Boton type="submit" variante="primario" tamano="sm">
                       Verificar
                     </Boton>
-                  </form>
-                  <form action={accionRechazar.bind(null, intencion.id)} className={estilos.rechazo}>
+                  </FormularioConToast>
+                  <FormularioConToast
+                    accion={accionRechazar.bind(null, intencion.id)}
+                    className={estilos.rechazo}
+                  >
                     <input name="motivo" placeholder="Motivo del rechazo" required />
                     <Boton type="submit" variante="fantasma" tamano="sm">
                       Rechazar
                     </Boton>
-                  </form>
+                  </FormularioConToast>
                 </div>
               </li>
             ))}
