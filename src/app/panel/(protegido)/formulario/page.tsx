@@ -1,10 +1,17 @@
+import { notFound } from "next/navigation";
+import { contextoPostulaciones } from "@/infra/contexto-postulaciones";
 import { preguntasDelFormularioPanel } from "@/domains/postulaciones/consultas";
+import { puede } from "@/domains/usuarios/autorizacion";
 import { Card, CardCuerpo } from "@/ui/componentes/Card";
 import { ListaPreguntas } from "./ListaPreguntas";
 import estilos from "./page.module.css";
 
 export default async function PanelDeFormulario() {
-  const preguntas = await preguntasDelFormularioPanel();
+  const ctx = await contextoPostulaciones();
+  // El rol de Finanzas no tiene ningún acceso a postulaciones, ni de lectura.
+  if (!puede(ctx.rol, "postulaciones.leer")) notFound();
+
+  const preguntas = await preguntasDelFormularioPanel(ctx);
 
   return (
     <main className={estilos.contenedor}>

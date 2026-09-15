@@ -5,7 +5,9 @@ import { repositorioPrisma, auditoriaPrisma } from "@/infra/repositorios/animale
 import { repositorioFotosPrisma } from "@/infra/repositorios/fotos";
 import { obtenerAnimal } from "@/domains/animales/servicio";
 import { listarFotos } from "@/domains/animales/fotos-servicio";
+import { contextoPostulaciones } from "@/infra/contexto-postulaciones";
 import { preguntasDelAnimalPanel } from "@/domains/postulaciones/consultas";
+import { puede } from "@/domains/usuarios/autorizacion";
 import type { Contexto, ContextoFotos, Especie, Sexo, Tamano } from "@/domains/animales/tipos";
 import { Card, CardCuerpo } from "@/ui/componentes/Card";
 import { Campo } from "@/ui/componentes/Campo";
@@ -49,7 +51,12 @@ export default async function FormularioDeAnimal({ params }: { params: Promise<{
   if (!esAlta && !animal) notFound();
 
   const fotos = animal ? await listarFotos(animal.id, await contextoFotos()) : [];
-  const preguntasPropias = animal ? await preguntasDelAnimalPanel(animal.id) : [];
+  // El rol de Finanzas no tiene ningún acceso a postulaciones, ni de lectura:
+  // esta sección se omite en vez de romper la ficha entera del animal.
+  const ctxPostulaciones = await contextoPostulaciones();
+  const puedeVerPostulaciones = puede(ctxPostulaciones.rol, "postulaciones.leer");
+  const preguntasPropias =
+    animal && puedeVerPostulaciones ? await preguntasDelAnimalPanel(animal.id, ctxPostulaciones) : [];
   const accionGuardar = esAlta ? accionCrearAnimal : accionEditarAnimal.bind(null, id);
 
   return (
@@ -160,7 +167,7 @@ export default async function FormularioDeAnimal({ params }: { params: Promise<{
 
       {animal ? <Fotos animalId={animal.id} fotos={fotos} /> : null}
 
-      {animal ? (
+      {animal && puedeVerPostulaciones ? (
         <Card>
           <CardCuerpo>
             <h2>Preguntas propias de {animal.nombre}</h2>

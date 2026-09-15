@@ -12,6 +12,13 @@ export function exigirPermisoSobrePostulaciones(ctx: ContextoPostulaciones): voi
   }
 }
 
+/** El rol de Finanzas no tiene ningún acceso a postulaciones, ni de lectura. Ver §7 de la entrega 1. */
+export function exigirLecturaDePostulaciones(ctx: ContextoPostulaciones): void {
+  if (!puede(ctx.rol, "postulaciones.leer")) {
+    throw new Error(`El rol ${ctx.rol} no tiene permiso para ver las postulaciones`);
+  }
+}
+
 export interface EntradaPregunta {
   texto: string;
   tipo: TipoRespuesta;

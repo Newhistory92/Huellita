@@ -1,8 +1,17 @@
 import { unstable_cache } from "next/cache";
+import { prisma } from "@/infra/prisma";
 import { paraCache, desdeCache } from "@/domains/finanzas/consultas";
 import { repositorioPostulacionesPrisma } from "@/infra/repositorios/postulaciones";
 import { armarFormulario } from "./formulario";
-import type { EstadoPostulacion, FiltroPostulaciones, Postulacion, Pregunta, Respuesta } from "./tipos";
+import { exigirLecturaDePostulaciones } from "./preguntas";
+import type {
+  ContextoPostulaciones,
+  EstadoPostulacion,
+  FiltroPostulaciones,
+  Postulacion,
+  Pregunta,
+  Respuesta,
+} from "./tipos";
 
 /** Quita acentos y mayúsculas para comparar como compara una persona. */
 function normalizar(texto: string): string {
@@ -49,8 +58,15 @@ export const preguntasDelFormularioDe = unstable_cache(
 /**
  * El listado del panel no se cachea: la bandeja tiene que mostrar lo que llegó
  * hace un minuto, y cachearla sería mostrar una bandeja vieja.
+ *
+ * El permiso se verifica acá, no en la pantalla: el rol de Finanzas no tiene
+ * ningún acceso a postulaciones, ni de lectura.
  */
-export async function postulacionesDelPanel(filtro: FiltroPostulaciones): Promise<Postulacion[]> {
+export async function postulacionesDelPanel(
+  filtro: FiltroPostulaciones,
+  ctx: ContextoPostulaciones
+): Promise<Postulacion[]> {
+  exigirLecturaDePostulaciones(ctx);
   return repositorioPostulacionesPrisma().listarPostulaciones(filtro);
 }
 
@@ -60,25 +76,30 @@ export async function postulacionesDelPanel(filtro: FiltroPostulaciones): Promis
  * archivadas (quien administra el formulario necesita verlas) y no se
  * cachea, para que un alta o una edición se vean de inmediato.
  */
-export async function preguntasDelFormularioPanel(): Promise<Pregunta[]> {
+export async function preguntasDelFormularioPanel(ctx: ContextoPostulaciones): Promise<Pregunta[]> {
+  exigirLecturaDePostulaciones(ctx);
   return repositorioPostulacionesPrisma().preguntasDelFormulario();
 }
 
 /** Igual que `preguntasDelFormularioPanel`, pero las preguntas propias de un animal. */
-export async function preguntasDelAnimalPanel(animalId: string): Promise<Pregunta[]> {
+export async function preguntasDelAnimalPanel(animalId: string, ctx: ContextoPostulaciones): Promise<Pregunta[]> {
+  exigirLecturaDePostulaciones(ctx);
   return repositorioPostulacionesPrisma().preguntasDelAnimal(animalId);
 }
 
 export async function detalleDePostulacion(
-  id: string
+  id: string,
+  ctx: ContextoPostulaciones
 ): Promise<{ postulacion: Postulacion; respuestas: Respuesta[] } | null> {
+  exigirLecturaDePostulaciones(ctx);
   const repositorio = repositorioPostulacionesPrisma();
   const postulacion = await repositorio.postulacionPorId(id);
   if (!postulacion) return null;
   return { postulacion, respuestas: await repositorio.respuestasDe(id) };
 }
 
-export async function contarPorEstado(): Promise<Record<EstadoPostulacion, number>> {
+export async function contarPorEstado(ctx: ContextoPostulaciones): Promise<Record<EstadoPostulacion, number>> {
+  exigirLecturaDePostulaciones(ctx);
   const todas = await repositorioPostulacionesPrisma().listarPostulaciones({});
   const conteo = {
     NUEVA: 0,
@@ -94,9 +115,40 @@ export async function contarPorEstado(): Promise<Record<EstadoPostulacion, numbe
   return conteo;
 }
 
-export async function respuestasPorPostulacion(ids: string[]): Promise<Map<string, Respuesta[]>> {
+export async function respuestasPorPostulacion(
+  ids: string[],
+  ctx: ContextoPostulaciones
+): Promise<Map<string, Respuesta[]>> {
+  exigirLecturaDePostulaciones(ctx);
   const repositorio = repositorioPostulacionesPrisma();
   const mapa = new Map<string, Respuesta[]>();
   for (const id of ids) mapa.set(id, await repositorio.respuestasDe(id));
   return mapa;
+}
+
+export interface EntradaHistorial {
+  usuarioEmail: string;
+  accion: string;
+  valorAnterior: unknown;
+  valorNuevo: unknown;
+  creadoEn: Date;
+}
+
+/** El historial de una postulación es la secuencia de acciones administrativas que ya vive en la auditoría. */
+export async function historialDePostulacion(
+  id: string,
+  ctx: ContextoPostulaciones
+): Promise<EntradaHistorial[]> {
+  exigirLecturaDePostulaciones(ctx);
+  const entradas = await prisma.registroAuditoria.findMany({
+    where: { entidad: "Postulacion", entidadId: id },
+    orderBy: { creadoEn: "asc" },
+  });
+  return entradas.map((entrada) => ({
+    usuarioEmail: entrada.usuarioEmail,
+    accion: entrada.accion,
+    valorAnterior: entrada.valorAnterior,
+    valorNuevo: entrada.valorNuevo,
+    creadoEn: entrada.creadoEn,
+  }));
 }
