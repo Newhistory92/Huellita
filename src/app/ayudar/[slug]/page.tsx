@@ -8,8 +8,11 @@ import {
   pendienteDeCaso,
   porcentajeDeAvance,
   faltaParaLaMeta,
+  desdeCache,
 } from "@/domains/finanzas/consultas";
+import { novedadesDelCaso } from "@/domains/novedades/consultas";
 import { metadatosDeCaso } from "@/domains/finanzas/metadatos";
+import type { Novedad } from "@/domains/novedades/tipos";
 import { Card, CardCuerpo } from "@/ui/componentes/Card";
 import { Pildora } from "@/ui/componentes/Pildora";
 import { Boton } from "@/ui/componentes/Boton";
@@ -44,6 +47,7 @@ export default async function Caso({ params }: { params: Promise<{ slug: string 
 
   const asientos = await libroDeCaso(caso.id);
   const pendiente = await pendienteDeCaso(caso.id);
+  const novedades = desdeCache(await novedadesDelCaso(caso.id)) as Novedad[];
   const pildora = ESTADO_EN_PILDORA[caso.estado];
 
   return (
@@ -77,7 +81,7 @@ export default async function Caso({ params }: { params: Promise<{ slug: string 
           </CardCuerpo>
         </Card>
 
-        <Pestanas caso={caso} asientos={asientos} pendienteCentavos={pendiente} />
+        <Pestanas caso={caso} asientos={asientos} pendienteCentavos={pendiente} novedades={novedades} />
 
         <div className={estilos.confianza}>
           <p className={estilos.eyebrow}>Por qué podés confiar en este número</p>

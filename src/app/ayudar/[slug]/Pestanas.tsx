@@ -4,13 +4,16 @@ import { useState } from "react";
 import { Card } from "@/ui/componentes/Card";
 import { Importe } from "@/ui/finanzas/Importe";
 import { referenciaDeAsiento } from "@/domains/finanzas/dinero";
+import { ListaDeNovedades } from "@/ui/novedades/ListaDeNovedades";
 import type { Asiento, Caso } from "@/domains/finanzas/tipos";
+import type { Novedad } from "@/domains/novedades/tipos";
 import estilos from "./Pestanas.module.css";
 
 const PESTANAS = [
   { id: "resumen", etiqueta: "Resumen" },
   { id: "gastos", etiqueta: "Gastos" },
   { id: "libro", etiqueta: "Libro contable" },
+  { id: "novedades", etiqueta: "Novedades" },
 ] as const;
 
 type IdPestana = (typeof PESTANAS)[number]["id"];
@@ -21,10 +24,12 @@ export function Pestanas({
   caso,
   asientos,
   pendienteCentavos,
+  novedades,
 }: {
   caso: Caso;
   asientos: Asiento[];
   pendienteCentavos: bigint;
+  novedades: Novedad[];
 }) {
   const [activa, setActiva] = useState<IdPestana>("resumen");
   const gastos = asientos.filter((a) => a.tipo === "GASTO");
@@ -130,6 +135,16 @@ export function Pestanas({
               </li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {activa === "novedades" && (
+        <div role="tabpanel" id="panel-novedades" aria-labelledby="pestana-novedades" className={estilos.panel}>
+          <h2>Qué pasó con {caso.titulo}</h2>
+          <ListaDeNovedades
+            novedades={novedades}
+            vacio="Todavía no hay novedades de este caso. Cuando la asociación publique una, aparece acá."
+          />
         </div>
       )}
     </Card>
