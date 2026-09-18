@@ -11,6 +11,7 @@
     "test:watch": "vitest",
     "test:invariantes": "vitest run tests/unidad/invariantes.test.ts",
     "verificar:saldos": "tsx scripts/verificar-saldos.ts",
+    "avisos": "tsx scripts/vaciar-avisos.ts",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio"
   },
@@ -22,6 +23,7 @@
     "next-auth": "^5.0.0-beta.32",
     "react": "19.2.8",
     "react-dom": "19.2.8",
+    "resend": "^6.28.1",
     "sharp": "^0.35.4",
     "zod": "^4.5.4"
   },

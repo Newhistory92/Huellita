@@ -70,6 +70,41 @@ Las cuatro primeras van juntas: con una sola que falte, la aplicación considera
 
 Si ya se cargaron animales con el almacén local, hay que copiar el contenido de `almacenamiento/` al bucket conservando la estructura de carpetas. La base guarda la clave del archivo, nunca la dirección completa, así que no hace falta tocar ningún dato.
 
+## Avisos por correo
+
+Cuando pasa algo que alguien del equipo tiene que ver sin estar mirando el panel —una donación se verificó, una postulación llegó, una transferencia quedó pendiente, un caso alcanzó la meta—, la aplicación anota un aviso en una cola. Un proceso aparte vacía esa cola y manda los correos. Mientras no haya cuenta de Resend configurada, los correos no se pierden: se escriben en la consola del servidor, que es el comportamiento correcto para desarrollo.
+
+### Crear la cuenta y verificar el dominio
+
+1. Crear una cuenta en [resend.com](https://resend.com).
+2. En **Domains → Add Domain**, agregar el dominio propio (por ejemplo `refugiohuellas.org.ar`) y cargar los registros DNS (SPF, DKIM) que Resend indica en el proveedor donde esté delegado el dominio.
+3. Esperar a que el dominio quede en estado **Verified**. Sin el dominio verificado, Resend solo deja mandar correos a la dirección con la que se creó la cuenta: sirve para probar, no para producción.
+4. En **API Keys**, crear una clave con permiso de envío.
+5. Completar las variables de entorno:
+
+```
+RESEND_API_KEY="<la clave creada>"
+CORREO_REMITENTE="Huellas <avisos@refugiohuellas.org.ar>"
+```
+
+`CORREO_REMITENTE` tiene que usar el dominio ya verificado: con un dominio distinto, Resend rechaza el envío.
+
+### Programar el vaciado de la cola
+
+Anotar el aviso no manda el correo: eso lo hace `POST /api/tareas/avisos`, protegida con un secreto propio para que no la dispare cualquiera.
+
+1. Generar un secreto y completar `TAREAS_SECRETO` en las variables de entorno.
+2. Programar una tarea periódica (cron del proveedor de hosting, GitHub Actions con `schedule`, o cualquier programador de tareas) que llame a la ruta cada pocos minutos:
+
+```bash
+curl -X POST "https://<dominio-de-la-app>/api/tareas/avisos" \
+  -H "x-tareas-secreto: <el mismo valor de TAREAS_SECRETO>"
+```
+
+Sin esta tarea programada, los avisos se siguen anotando en la cola pero nadie los recibe por correo: se van acumulando hasta que algo llame a la ruta.
+
+También se puede vaciar la cola a mano desde el servidor, útil para verificar que la configuración quedó bien: `npm run avisos`.
+
 ## Qué cambia si mañana hay presupuesto
 
 | Con plan gratuito | Con presupuesto |
