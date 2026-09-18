@@ -380,3 +380,26 @@ model Novedad {
   @@index([casoId, creadoEn])
   @@index([animalId, creadoEn])
 }
+
+model AvisoPendiente {
+  id          String    @id @default(cuid())
+  tipo        TipoAviso
+  // El hecho, no el correo ya escrito. Ver §4.2.
+  datos       Json
+  // Para no avisarle a quien hizo la acción. Ver §5.2.
+  originadoPorEmail String?
+
+  creadoEn    DateTime  @default(now())
+  enviadoEn   DateTime?
+  intentos    Int       @default(0)
+  ultimoError String?
+
+  @@index([enviadoEn, creadoEn])
+}
+
+enum TipoAviso {
+  POSTULACION_NUEVA
+  TRANSFERENCIA_PENDIENTE
+  DONACION_VERIFICADA
+  META_ALCANZADA
+}
