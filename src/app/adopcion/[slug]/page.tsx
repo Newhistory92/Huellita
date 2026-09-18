@@ -3,10 +3,14 @@ import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import { animalPorSlug, animalesPublicados, fotosDeAnimal, slugActualDe } from "@/domains/animales/consultas";
 import { metadatosDeAnimal } from "@/domains/animales/metadatos";
+import { desdeCache } from "@/domains/finanzas/consultas";
+import { novedadesDelAnimal } from "@/domains/novedades/consultas";
+import type { Novedad } from "@/domains/novedades/tipos";
 import { Card, CardCuerpo } from "@/ui/componentes/Card";
 import { Boton } from "@/ui/componentes/Boton";
 import { Pildora } from "@/ui/componentes/Pildora";
 import { ESPECIE_EN_TEXTO, SEXO_EN_TEXTO, TAMANO_EN_TEXTO, TONO_POR_ESTADO, etiquetaEstado } from "@/ui/animales/estado-texto";
+import { ListaDeNovedades } from "@/ui/novedades/ListaDeNovedades";
 import { Compartir } from "./Compartir";
 import { Galeria } from "./Galeria";
 import estilos from "./page.module.css";
@@ -38,6 +42,7 @@ export default async function FichaAnimal({ params }: { params: Promise<{ slug: 
 
   const fotos = await fotosDeAnimal(animal.id);
   const indicePrincipal = fotos.findIndex((foto) => foto.principal);
+  const novedades = desdeCache(await novedadesDelAnimal(animal.id)) as Novedad[];
 
   // La caché de unstable_cache serializa a JSON entre builds: publicadoEn puede llegar como texto, no como Date.
   const publicada = animal.publicadoEn
@@ -116,6 +121,13 @@ export default async function FichaAnimal({ params }: { params: Promise<{ slug: 
               <p>{animal.requisitos}</p>
             </CardCuerpo>
           </Card>
+        )}
+
+        {novedades.length > 0 && (
+          <section aria-labelledby="novedades-del-animal">
+            <h2 id="novedades-del-animal">Cómo sigue {animal.nombre}</h2>
+            <ListaDeNovedades novedades={novedades} vacio="" />
+          </section>
         )}
 
         <Compartir nombre={`${animal.nombre} — ${ESPECIE_EN_TEXTO[animal.especie]} en adopción`} />

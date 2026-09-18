@@ -1,4 +1,5 @@
 import type { PuertoAuditoria } from "@/domains/animales/tipos";
+import type { PuertoAvisos } from "@/domains/avisos/tipos";
 
 export type TipoRespuesta =
   | "TEXTO_CORTO"
@@ -87,4 +88,5 @@ export interface ContextoPostulaciones {
   rol: Rol;
   repositorio: RepositorioPostulaciones;
   auditoria: PuertoAuditoria;
+  avisos: PuertoAvisos;
 }

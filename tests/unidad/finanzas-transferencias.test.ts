@@ -3,6 +3,8 @@ import { declararTransferencia, verificarTransferencia, rechazarTransferencia, t
 import { crearCaso } from "@/domains/finanzas/casos";
 import { repositorioFinanzasEnMemoria } from "../dobles/repositorio-finanzas-memoria";
 import { auditoriaEnMemoria } from "../dobles/repositorio-animales-memoria";
+import { repositorioAvisosEnMemoria } from "../dobles/repositorio-avisos-memoria";
+import { puertoAvisos } from "@/domains/avisos/cola";
 
 const base = {
   titulo: "Luna — cirugía",
@@ -11,7 +13,13 @@ const base = {
 };
 
 function contexto(rol: "ADMINISTRACION" | "FINANZAS" | "REDACCION" = "FINANZAS") {
-  return { usuarioEmail: "carla@huellas.org.ar", rol, repositorio: repositorioFinanzasEnMemoria(), auditoria: auditoriaEnMemoria() };
+  return {
+    usuarioEmail: "carla@huellas.org.ar",
+    rol,
+    repositorio: repositorioFinanzasEnMemoria(),
+    auditoria: auditoriaEnMemoria(),
+    avisos: puertoAvisos(repositorioAvisosEnMemoria()),
+  };
 }
 
 async function casoConTransferencia() {
@@ -19,7 +27,8 @@ async function casoConTransferencia() {
   const caso = await crearCaso(base, ctx);
   const intencion = await declararTransferencia(
     { casoId: caso.id, centavos: 1000000n, nombreDonante: "Marina", publicarNombre: false, comprobanteId: "doc-1" },
-    ctx.repositorio
+    ctx.repositorio,
+    ctx.avisos
   );
   return { ctx, caso, intencion };
 }
@@ -47,7 +56,8 @@ describe("declararTransferencia", () => {
     const caso = await crearCaso(base, ctx);
     const intencion = await declararTransferencia(
       { casoId: caso.id, centavos: 500000n, nombreDonante: null, publicarNombre: false, comprobanteId: "doc-2" },
-      ctx.repositorio
+      ctx.repositorio,
+      ctx.avisos
     );
     expect(intencion.id).toBeTruthy();
   });

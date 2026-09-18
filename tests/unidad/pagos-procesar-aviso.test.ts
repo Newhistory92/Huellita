@@ -3,6 +3,8 @@ import { procesarAviso } from "@/domains/pagos/procesar-aviso";
 import { crearCaso } from "@/domains/finanzas/casos";
 import { repositorioFinanzasEnMemoria } from "../dobles/repositorio-finanzas-memoria";
 import { auditoriaEnMemoria } from "../dobles/repositorio-animales-memoria";
+import { repositorioAvisosEnMemoria } from "../dobles/repositorio-avisos-memoria";
+import { puertoAvisos } from "@/domains/avisos/cola";
 import { proveedorFalso } from "../dobles/proveedor-pagos-falso";
 
 const base = {
@@ -14,7 +16,8 @@ const base = {
 async function escenario(estadoDelPago: "aprobado" | "rechazado" | "pendiente" | "inexistente" = "aprobado") {
   const repositorio = repositorioFinanzasEnMemoria();
   const auditoria = auditoriaEnMemoria();
-  const ctxAlta = { usuarioEmail: "carla@huellas.org.ar", rol: "FINANZAS" as const, repositorio, auditoria };
+  const avisos = puertoAvisos(repositorioAvisosEnMemoria());
+  const ctxAlta = { usuarioEmail: "carla@huellas.org.ar", rol: "FINANZAS" as const, repositorio, auditoria, avisos };
   const caso = await crearCaso(base, ctxAlta);
 
   const intencion = await repositorio.crearIntencion({
@@ -35,11 +38,11 @@ async function escenario(estadoDelPago: "aprobado" | "rechazado" | "pendiente" |
     "1327884391": { estado: estadoDelPago, centavos: 2500000n, referenciaExterna: intencion.id },
   });
 
-  return { repositorio, auditoria, proveedor, caso, intencion };
+  return { repositorio, auditoria, avisos, proveedor, caso, intencion };
 }
 
 function contextoAviso(e: Awaited<ReturnType<typeof escenario>>) {
-  return { repositorio: e.repositorio, auditoria: e.auditoria, proveedor: e.proveedor };
+  return { repositorio: e.repositorio, auditoria: e.auditoria, proveedor: e.proveedor, avisos: e.avisos };
 }
 
 describe("procesarAviso", () => {

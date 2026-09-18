@@ -1,6 +1,8 @@
 import { auth } from "@/infra/auth";
 import { auditoriaPrisma } from "@/infra/repositorios/animales";
 import { repositorioFinanzasPrisma } from "@/infra/repositorios/finanzas";
+import { repositorioAvisosPrisma } from "@/infra/repositorios/avisos";
+import { puertoAvisos } from "@/domains/avisos/cola";
 import type { ContextoFinanzas } from "@/domains/finanzas/tipos";
 
 /**
@@ -18,5 +20,6 @@ export async function contextoFinanzas(): Promise<ContextoFinanzas> {
     rol: sesion.user.rol as ContextoFinanzas["rol"],
     repositorio: repositorioFinanzasPrisma(),
     auditoria: auditoriaPrisma(),
+    avisos: puertoAvisos(repositorioAvisosPrisma()),
   };
 }

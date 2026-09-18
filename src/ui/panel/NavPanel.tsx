@@ -10,6 +10,7 @@ const SECCIONES: { etiqueta: string; href: string; accion: Accion }[] = [
   { etiqueta: "Postulaciones", href: "/panel/postulaciones", accion: "postulaciones.leer" },
   { etiqueta: "Formulario", href: "/panel/formulario", accion: "postulaciones.leer" },
   { etiqueta: "Finanzas", href: "/panel/finanzas", accion: "finanzas.leer" },
+  { etiqueta: "Novedades", href: "/panel/novedades", accion: "novedades.escribir" },
 ];
 
 /**

@@ -2,6 +2,8 @@ import { describe, it, expect, afterAll } from "vitest";
 import { PrismaClient } from "@prisma/client";
 import { repositorioFinanzasPrisma } from "@/infra/repositorios/finanzas";
 import { auditoriaPrisma } from "@/infra/repositorios/animales";
+import { repositorioAvisosPrisma } from "@/infra/repositorios/avisos";
+import { puertoAvisos } from "@/domains/avisos/cola";
 import { crearCaso } from "@/domains/finanzas/casos";
 import { registrarAsiento } from "@/domains/finanzas/asientos";
 
@@ -42,6 +44,7 @@ describe("repositorio Prisma de finanzas", () => {
         rol: "FINANZAS",
         repositorio: repositorioFinanzasPrisma(tx),
         auditoria: auditoriaPrisma(tx),
+        avisos: puertoAvisos(repositorioAvisosPrisma(tx)),
       })
     );
     casos.push(caso.id);
@@ -49,7 +52,13 @@ describe("repositorio Prisma de finanzas", () => {
     await prisma.$transaction(async (tx) =>
       registrarAsiento(
         { casoId: caso.id, tipo: "DONACION", centavos: 2500000n, descripcion: "Donación", fechaEfectiva: new Date() },
-        { usuarioEmail: "prueba@huellas.org.ar", rol: "FINANZAS", repositorio: repositorioFinanzasPrisma(tx), auditoria: auditoriaPrisma(tx) }
+        {
+          usuarioEmail: "prueba@huellas.org.ar",
+          rol: "FINANZAS",
+          repositorio: repositorioFinanzasPrisma(tx),
+          auditoria: auditoriaPrisma(tx),
+          avisos: puertoAvisos(repositorioAvisosPrisma(tx)),
+        }
       )
     );
 
@@ -64,6 +73,7 @@ describe("repositorio Prisma de finanzas", () => {
         rol: "FINANZAS",
         repositorio: repositorioFinanzasPrisma(tx),
         auditoria: auditoriaPrisma(tx),
+        avisos: puertoAvisos(repositorioAvisosPrisma(tx)),
       })
     );
     casos.push(caso.id);
@@ -77,6 +87,7 @@ describe("repositorio Prisma de finanzas", () => {
             rol: "FINANZAS",
             repositorio: repositorioFinanzasPrisma(tx),
             auditoria: { async registrar() { throw new Error("auditoría caída"); } },
+            avisos: puertoAvisos(repositorioAvisosPrisma(tx)),
           }
         )
       )
@@ -94,6 +105,7 @@ describe("repositorio Prisma de finanzas", () => {
         rol: "FINANZAS",
         repositorio: repositorioFinanzasPrisma(tx),
         auditoria: auditoriaPrisma(tx),
+        avisos: puertoAvisos(repositorioAvisosPrisma(tx)),
       })
     );
     casos.push(caso.id);
@@ -102,7 +114,13 @@ describe("repositorio Prisma de finanzas", () => {
       await prisma.$transaction(async (tx) =>
         registrarAsiento(
           { casoId: caso.id, tipo: centavos > 0n ? "DONACION" : "GASTO", centavos, descripcion: "Movimiento", fechaEfectiva: new Date() },
-          { usuarioEmail: "prueba@huellas.org.ar", rol: "FINANZAS", repositorio: repositorioFinanzasPrisma(tx), auditoria: auditoriaPrisma(tx) }
+          {
+            usuarioEmail: "prueba@huellas.org.ar",
+            rol: "FINANZAS",
+            repositorio: repositorioFinanzasPrisma(tx),
+            auditoria: auditoriaPrisma(tx),
+            avisos: puertoAvisos(repositorioAvisosPrisma(tx)),
+          }
         )
       );
     }
@@ -120,6 +138,7 @@ describe("repositorio Prisma de finanzas", () => {
         rol: "FINANZAS",
         repositorio: repositorioFinanzasPrisma(tx),
         auditoria: auditoriaPrisma(tx),
+        avisos: puertoAvisos(repositorioAvisosPrisma(tx)),
       })
     );
     casos.push(caso.id);

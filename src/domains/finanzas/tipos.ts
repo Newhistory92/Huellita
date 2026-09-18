@@ -1,4 +1,5 @@
 import type { PuertoAuditoria } from "@/domains/animales/tipos";
+import type { PuertoAvisos } from "@/domains/avisos/tipos";
 
 export type TipoAsiento = "DONACION" | "GASTO" | "REEMBOLSO" | "TRANSFERENCIA" | "AJUSTE";
 export type EstadoCaso = "ABIERTO" | "META_ALCANZADA" | "CERRADO";
@@ -108,4 +109,5 @@ export interface ContextoFinanzas {
   rol: Rol;
   repositorio: RepositorioFinanzas;
   auditoria: PuertoAuditoria;
+  avisos: PuertoAvisos;
 }

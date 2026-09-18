@@ -2,6 +2,8 @@ import { describe, it, expect } from "vitest";
 import { crearCaso, editarCaso, cerrarCaso, listarCasosFinanzas, obtenerCaso } from "@/domains/finanzas/casos";
 import { repositorioFinanzasEnMemoria } from "../dobles/repositorio-finanzas-memoria";
 import { auditoriaEnMemoria } from "../dobles/repositorio-animales-memoria";
+import { repositorioAvisosEnMemoria } from "../dobles/repositorio-avisos-memoria";
+import { puertoAvisos } from "@/domains/avisos/cola";
 
 const base = {
   titulo: "Luna — cirugía de cadera",
@@ -10,7 +12,13 @@ const base = {
 };
 
 function contexto(rol: "ADMINISTRACION" | "FINANZAS" | "ANIMALES" | "REDACCION" = "FINANZAS") {
-  return { usuarioEmail: "carla@huellas.org.ar", rol, repositorio: repositorioFinanzasEnMemoria(), auditoria: auditoriaEnMemoria() };
+  return {
+    usuarioEmail: "carla@huellas.org.ar",
+    rol,
+    repositorio: repositorioFinanzasEnMemoria(),
+    auditoria: auditoriaEnMemoria(),
+    avisos: puertoAvisos(repositorioAvisosEnMemoria()),
+  };
 }
 
 describe("crearCaso", () => {

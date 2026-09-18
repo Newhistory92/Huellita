@@ -1,5 +1,7 @@
 import { registrarAsiento } from "@/domains/finanzas/asientos";
+import { formatearCentavos } from "@/domains/finanzas/dinero";
 import type { PuertoAuditoria } from "@/domains/animales/tipos";
+import type { PuertoAvisos } from "@/domains/avisos/tipos";
 import type { RepositorioFinanzas } from "@/domains/finanzas/tipos";
 import type { ProveedorDePagos } from "./tipos";
 
@@ -11,6 +13,7 @@ export interface ContextoAviso {
   repositorio: RepositorioFinanzas;
   auditoria: PuertoAuditoria;
   proveedor: ProveedorDePagos;
+  avisos: PuertoAvisos;
 }
 
 export type ResultadoAviso =
@@ -78,6 +81,7 @@ export async function procesarAviso(aviso: Aviso, ctx: ContextoAviso): Promise<R
       rol: "ADMINISTRACION",
       repositorio: ctx.repositorio,
       auditoria: ctx.auditoria,
+      avisos: ctx.avisos,
     }
   );
 
@@ -85,6 +89,13 @@ export async function procesarAviso(aviso: Aviso, ctx: ContextoAviso): Promise<R
     estado: "APROBADA",
     pagoExternoId: aviso.pagoExternoId,
     resueltoEn: new Date(),
+  });
+
+  const caso = await ctx.repositorio.casoPorId(intencion.casoId);
+  await ctx.avisos.anotar({
+    tipo: "DONACION_VERIFICADA",
+    datos: { casoId: intencion.casoId, tituloCaso: caso?.titulo ?? "", montoTexto: formatearCentavos(pago.centavos) },
+    originadoPorEmail: null,
   });
 
   return { tipo: "asentado", asientoId: asiento.id };

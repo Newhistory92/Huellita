@@ -3,6 +3,8 @@ import { registrarAsiento, registrarGasto } from "@/domains/finanzas/asientos";
 import { crearCaso } from "@/domains/finanzas/casos";
 import { repositorioFinanzasEnMemoria } from "../dobles/repositorio-finanzas-memoria";
 import { auditoriaEnMemoria } from "../dobles/repositorio-animales-memoria";
+import { repositorioAvisosEnMemoria } from "../dobles/repositorio-avisos-memoria";
+import { puertoAvisos } from "@/domains/avisos/cola";
 
 const base = {
   titulo: "Luna — cirugía",
@@ -11,7 +13,13 @@ const base = {
 };
 
 function contexto(rol: "ADMINISTRACION" | "FINANZAS" | "REDACCION" = "FINANZAS") {
-  return { usuarioEmail: "carla@huellas.org.ar", rol, repositorio: repositorioFinanzasEnMemoria(), auditoria: auditoriaEnMemoria() };
+  return {
+    usuarioEmail: "carla@huellas.org.ar",
+    rol,
+    repositorio: repositorioFinanzasEnMemoria(),
+    auditoria: auditoriaEnMemoria(),
+    avisos: puertoAvisos(repositorioAvisosEnMemoria()),
+  };
 }
 
 async function casoConContexto() {

@@ -1,0 +1,51 @@
+.contenedor {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 40px 18px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.vacio {
+  margin: 0;
+  color: var(--ink-2);
+}
+.lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.lista li {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.lista li:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+.lista li.atenuada {
+  opacity: 0.55;
+}
+.encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.meta {
+  display: block;
+  margin-top: 3px;
+  font-size: var(--step--2);
+  color: var(--ink-3);
+}
+.edicion {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

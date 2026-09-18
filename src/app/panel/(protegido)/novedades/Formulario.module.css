@@ -1,0 +1,13 @@
+.forma {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.forma[aria-busy="true"] {
+  opacity: 0.7;
+}
+.duenos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+}

@@ -2,6 +2,8 @@ import { describe, it, expect } from "vitest";
 import { crearPregunta, editarPregunta, archivarPregunta, reordenarPreguntas } from "@/domains/postulaciones/preguntas";
 import { repositorioPostulacionesEnMemoria } from "../dobles/repositorio-postulaciones-memoria";
 import { auditoriaEnMemoria } from "../dobles/repositorio-animales-memoria";
+import { repositorioAvisosEnMemoria } from "../dobles/repositorio-avisos-memoria";
+import { puertoAvisos } from "@/domains/avisos/cola";
 import type { Rol } from "@/domains/postulaciones/tipos";
 
 function contexto(rol: Rol = "ANIMALES") {
@@ -10,6 +12,7 @@ function contexto(rol: Rol = "ANIMALES") {
     rol,
     repositorio: repositorioPostulacionesEnMemoria(),
     auditoria: auditoriaEnMemoria(),
+    avisos: puertoAvisos(repositorioAvisosEnMemoria()),
   };
 }
 

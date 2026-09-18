@@ -35,6 +35,7 @@ model Animal {
   casos                CasoFinanciero[]
   preguntas            PreguntaFormulario[]
   postulaciones        Postulacion[]
+  novedades            Novedad[]
   creadoEn             DateTime         @default(now())
   actualizadoEn        DateTime         @updatedAt
 
@@ -148,6 +149,7 @@ model CasoFinanciero {
   cantidadDonantes Int               @default(0)
   asientos         AsientoContable[]
   intenciones      IntencionDonacion[]
+  novedades        Novedad[]
   creadoEn         DateTime          @default(now())
 }
 
@@ -345,4 +347,59 @@ model Documento {
   datosPersonalesTachados Boolean @default(false)
   subidoPorEmail     String
   creadoEn           DateTime @default(now())
+  novedades          Novedad[]
+}
+
+// Dominio novedades (entrega 4)
+
+model Novedad {
+  id          String     @id @default(cuid())
+  // Cuelga de un caso o de un animal, nunca de los dos.
+  casoId      String?
+  caso        CasoFinanciero? @relation(fields: [casoId], references: [id])
+  animalId    String?
+  animal      Animal?    @relation(fields: [animalId], references: [id])
+
+  titulo      String
+  cuerpo      String
+  // Opcionales. La foto reutiliza el pipeline de imágenes de la entrega 1.
+  fotoClave   String?
+  fotoAlt     String?
+  fotoAncho   Int?
+  fotoAlto    Int?
+  fotoPlaceholder String?
+  documentoId String?
+  documento   Documento? @relation(fields: [documentoId], references: [id])
+
+  autorEmail  String
+  // Se archiva, no se borra: igual que los animales y las preguntas.
+  archivada   Boolean    @default(false)
+  creadoEn    DateTime   @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  @@index([casoId, creadoEn])
+  @@index([animalId, creadoEn])
+}
+
+model AvisoPendiente {
+  id          String    @id @default(cuid())
+  tipo        TipoAviso
+  // El hecho, no el correo ya escrito. Ver §4.2.
+  datos       Json
+  // Para no avisarle a quien hizo la acción. Ver §5.2.
+  originadoPorEmail String?
+
+  creadoEn    DateTime  @default(now())
+  enviadoEn   DateTime?
+  intentos    Int       @default(0)
+  ultimoError String?
+
+  @@index([enviadoEn, creadoEn])
+}
+
+enum TipoAviso {
+  POSTULACION_NUEVA
+  TRANSFERENCIA_PENDIENTE
+  DONACION_VERIFICADA
+  META_ALCANZADA
 }

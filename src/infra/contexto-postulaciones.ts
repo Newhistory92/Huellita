@@ -1,6 +1,8 @@
 import { auth } from "@/infra/auth";
 import { auditoriaPrisma } from "@/infra/repositorios/animales";
 import { repositorioPostulacionesPrisma } from "@/infra/repositorios/postulaciones";
+import { repositorioAvisosPrisma } from "@/infra/repositorios/avisos";
+import { puertoAvisos } from "@/domains/avisos/cola";
 import type { ContextoPostulaciones } from "@/domains/postulaciones/tipos";
 
 /**
@@ -19,5 +21,6 @@ export async function contextoPostulaciones(): Promise<ContextoPostulaciones> {
     rol: sesion.user.rol as ContextoPostulaciones["rol"],
     repositorio: repositorioPostulacionesPrisma(),
     auditoria: auditoriaPrisma(),
+    avisos: puertoAvisos(repositorioAvisosPrisma()),
   };
 }
