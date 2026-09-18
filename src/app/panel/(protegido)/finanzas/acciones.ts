@@ -7,6 +7,8 @@ import { auth } from "@/infra/auth";
 import { prisma } from "@/infra/prisma";
 import { repositorioFinanzasPrisma } from "@/infra/repositorios/finanzas";
 import { auditoriaPrisma } from "@/infra/repositorios/animales";
+import { repositorioAvisosPrisma } from "@/infra/repositorios/avisos";
+import { puertoAvisos } from "@/domains/avisos/cola";
 import { almacen } from "@/infra/almacen";
 import { exigirAlmacenPersistente } from "@/infra/almacen/configuracion";
 import { crearCaso, editarCaso } from "@/domains/finanzas/casos";
@@ -27,6 +29,7 @@ async function conContextoFinanzas<T>(fn: (ctx: ContextoFinanzas) => Promise<T>)
       rol: sesion.user.rol as ContextoFinanzas["rol"],
       repositorio: repositorioFinanzasPrisma(tx),
       auditoria: auditoriaPrisma(tx),
+      avisos: puertoAvisos(repositorioAvisosPrisma(tx)),
     })
   );
 }

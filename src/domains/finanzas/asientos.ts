@@ -66,12 +66,23 @@ export async function registrarAsiento(entrada: EntradaAsiento, ctx: ContextoFin
   });
 
   const saldo = await ctx.repositorio.saldoDeCaso(caso.id);
+  const estadoNuevo = estadoSegunSaldo(caso.estado, saldo.recibidoCentavos, caso.metaCentavos);
   await ctx.repositorio.actualizarCaso(caso.id, {
     recibidoCentavos: saldo.recibidoCentavos,
     gastadoCentavos: saldo.gastadoCentavos,
     cantidadDonantes: saldo.cantidadDonaciones,
-    estado: estadoSegunSaldo(caso.estado, saldo.recibidoCentavos, caso.metaCentavos),
+    estado: estadoNuevo,
   });
+
+  // Solo en la transición: si ya estaba en meta alcanzada, no se vuelve a
+  // avisar con cada donación posterior.
+  if (estadoNuevo === "META_ALCANZADA" && caso.estado !== "META_ALCANZADA") {
+    await ctx.avisos.anotar({
+      tipo: "META_ALCANZADA",
+      datos: { casoId: caso.id, tituloCaso: caso.titulo },
+      originadoPorEmail: entrada.creadoPorSistema ? null : ctx.usuarioEmail,
+    });
+  }
 
   await ctx.auditoria.registrar({
     usuarioEmail: entrada.creadoPorSistema ? "sistema" : ctx.usuarioEmail,

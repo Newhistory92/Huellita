@@ -5,6 +5,8 @@ import { auth } from "@/infra/auth";
 import { prisma } from "@/infra/prisma";
 import { repositorioPostulacionesPrisma } from "@/infra/repositorios/postulaciones";
 import { auditoriaPrisma } from "@/infra/repositorios/animales";
+import { repositorioAvisosPrisma } from "@/infra/repositorios/avisos";
+import { puertoAvisos } from "@/domains/avisos/cola";
 import { crearPregunta, editarPregunta, archivarPregunta, reordenarPreguntas } from "@/domains/postulaciones/preguntas";
 import type { ContextoPostulaciones, TipoRespuesta } from "@/domains/postulaciones/tipos";
 
@@ -18,6 +20,7 @@ export async function conContextoPostulaciones<T>(fn: (ctx: ContextoPostulacione
       rol: sesion.user.rol as ContextoPostulaciones["rol"],
       repositorio: repositorioPostulacionesPrisma(tx),
       auditoria: auditoriaPrisma(tx),
+      avisos: puertoAvisos(repositorioAvisosPrisma(tx)),
     })
   );
 }

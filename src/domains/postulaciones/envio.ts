@@ -1,4 +1,5 @@
 import type { PuertoAuditoria } from "@/domains/animales/tipos";
+import type { PuertoAvisos } from "@/domains/avisos/tipos";
 import { armarFormulario } from "./formulario";
 import { validarRespuesta } from "./validacion";
 import type { Postulacion, RepositorioPostulaciones, Respuesta } from "./tipos";
@@ -8,6 +9,8 @@ export const MINUTOS_CONTRA_REPETIDO = 5;
 
 export interface EntradaPostulacion {
   animalId: string;
+  /** Quien llama ya tiene el animal cargado: evita que este puerto necesite leerlo. */
+  nombreAnimal: string;
   nombre: string;
   email: string;
   telefono: string;
@@ -33,7 +36,8 @@ function validarContacto(entrada: EntradaPostulacion): void {
 export async function enviarPostulacion(
   entrada: EntradaPostulacion,
   repositorio: RepositorioPostulaciones,
-  auditoria: PuertoAuditoria
+  auditoria: PuertoAuditoria,
+  avisos: PuertoAvisos
 ): Promise<{ postulacion: Postulacion; repetida: boolean }> {
   validarContacto(entrada);
 
@@ -90,6 +94,12 @@ export async function enviarPostulacion(
     // Sin datos de contacto: la bitácora no es lugar para una segunda copia,
     // y el borrado a pedido no la alcanzaría.
     valorNuevo: { animalId: entrada.animalId, cantidadRespuestas: respuestas.length },
+  });
+
+  await avisos.anotar({
+    tipo: "POSTULACION_NUEVA",
+    datos: { postulacionId: postulacion.id, animalId: entrada.animalId, nombreAnimal: entrada.nombreAnimal },
+    originadoPorEmail: null,
   });
 
   return { postulacion, repetida: false };

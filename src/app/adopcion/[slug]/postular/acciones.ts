@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/infra/prisma";
 import { repositorioPostulacionesPrisma } from "@/infra/repositorios/postulaciones";
 import { auditoriaPrisma } from "@/infra/repositorios/animales";
+import { repositorioAvisosPrisma } from "@/infra/repositorios/avisos";
+import { puertoAvisos } from "@/domains/avisos/cola";
 import { enviarPostulacion } from "@/domains/postulaciones/envio";
 import { animalPorSlug } from "@/domains/animales/consultas";
 
@@ -28,13 +30,15 @@ export async function accionEnviarPostulacion(formulario: FormData) {
     enviarPostulacion(
       {
         animalId: animal.id,
+        nombreAnimal: animal.nombre,
         nombre: String(formulario.get("nombre") ?? ""),
         email: String(formulario.get("email") ?? ""),
         telefono: String(formulario.get("telefono") ?? ""),
         respuestas,
       },
       repositorioPostulacionesPrisma(tx),
-      auditoriaPrisma(tx)
+      auditoriaPrisma(tx),
+      puertoAvisos(repositorioAvisosPrisma(tx))
     )
   );
 

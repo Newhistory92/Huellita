@@ -1,6 +1,8 @@
 import { registrarAsiento } from "./asientos";
 import { exigirLecturaDeFinanzas, exigirPermisoSobreFinanzas } from "./casos";
+import { formatearCentavos } from "./dinero";
 import type { ContextoFinanzas, Intencion, RepositorioFinanzas } from "./tipos";
+import type { PuertoAvisos } from "@/domains/avisos/tipos";
 
 export interface EntradaTransferencia {
   casoId: string;
@@ -18,13 +20,14 @@ export interface EntradaTransferencia {
  */
 export async function declararTransferencia(
   entrada: EntradaTransferencia,
-  repositorio: RepositorioFinanzas
+  repositorio: RepositorioFinanzas,
+  avisos: PuertoAvisos
 ): Promise<Intencion> {
   if (entrada.centavos <= 0n) throw new Error("El importe tiene que ser mayor que cero");
   const caso = await repositorio.casoPorId(entrada.casoId);
   if (!caso) throw new Error("No existe el caso");
 
-  return repositorio.crearIntencion({
+  const intencion = await repositorio.crearIntencion({
     casoId: entrada.casoId,
     centavos: entrada.centavos,
     moneda: caso.moneda,
@@ -37,6 +40,15 @@ export async function declararTransferencia(
     pagoExternoId: null,
     comprobanteId: entrada.comprobanteId,
   });
+
+  // La declaró alguien de afuera: nadie del equipo la hizo, así que avisa.
+  await avisos.anotar({
+    tipo: "TRANSFERENCIA_PENDIENTE",
+    datos: { casoId: caso.id, tituloCaso: caso.titulo, montoTexto: formatearCentavos(entrada.centavos) },
+    originadoPorEmail: null,
+  });
+
+  return intencion;
 }
 
 /** Lo pendiente se muestra aparte y nunca entra en el total público. */

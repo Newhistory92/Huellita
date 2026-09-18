@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/infra/prisma";
 import { repositorioFinanzasPrisma } from "@/infra/repositorios/finanzas";
 import { auditoriaPrisma } from "@/infra/repositorios/animales";
+import { repositorioAvisosPrisma } from "@/infra/repositorios/avisos";
+import { puertoAvisos } from "@/domains/avisos/cola";
 import { mercadoPago } from "@/infra/pagos/mercadopago";
 import { firmaValida } from "@/infra/pagos/firma";
 import { procesarAviso } from "@/domains/pagos/procesar-aviso";
@@ -43,7 +45,12 @@ export async function POST(pedido: Request) {
     const resultado = await prisma.$transaction(async (tx) =>
       procesarAviso(
         { pagoExternoId: idDelRecurso },
-        { repositorio: repositorioFinanzasPrisma(tx), auditoria: auditoriaPrisma(tx), proveedor: mercadoPago() }
+        {
+          repositorio: repositorioFinanzasPrisma(tx),
+          auditoria: auditoriaPrisma(tx),
+          proveedor: mercadoPago(),
+          avisos: puertoAvisos(repositorioAvisosPrisma(tx)),
+        }
       )
     );
 
