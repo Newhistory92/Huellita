@@ -3,6 +3,8 @@ import { armarFormulario } from "@/domains/postulaciones/formulario";
 import { crearPregunta, archivarPregunta } from "@/domains/postulaciones/preguntas";
 import { repositorioPostulacionesEnMemoria } from "../dobles/repositorio-postulaciones-memoria";
 import { auditoriaEnMemoria } from "../dobles/repositorio-animales-memoria";
+import { repositorioAvisosEnMemoria } from "../dobles/repositorio-avisos-memoria";
+import { puertoAvisos } from "@/domains/avisos/cola";
 
 function contexto() {
   return {
@@ -10,6 +12,7 @@ function contexto() {
     rol: "ANIMALES" as const,
     repositorio: repositorioPostulacionesEnMemoria(),
     auditoria: auditoriaEnMemoria(),
+    avisos: puertoAvisos(repositorioAvisosEnMemoria()),
   };
 }
 

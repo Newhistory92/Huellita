@@ -4,12 +4,15 @@ import { enviarPostulacion } from "@/domains/postulaciones/envio";
 import { crearPregunta } from "@/domains/postulaciones/preguntas";
 import { repositorioPostulacionesEnMemoria } from "../dobles/repositorio-postulaciones-memoria";
 import { auditoriaEnMemoria } from "../dobles/repositorio-animales-memoria";
+import { repositorioAvisosEnMemoria } from "../dobles/repositorio-avisos-memoria";
+import { puertoAvisos } from "@/domains/avisos/cola";
 import type { Rol } from "@/domains/postulaciones/tipos";
 
 async function escenario(rol: Rol = "ANIMALES") {
   const repositorio = repositorioPostulacionesEnMemoria();
   const auditoria = auditoriaEnMemoria();
-  const ctx = { usuarioEmail: "marina@huellas.org.ar", rol, repositorio, auditoria };
+  const avisos = puertoAvisos(repositorioAvisosEnMemoria());
+  const ctx = { usuarioEmail: "marina@huellas.org.ar", rol, repositorio, auditoria, avisos };
 
   const patio = await crearPregunta(
     { texto: "¿Tenés patio cerrado?", tipo: "SI_NO" },
@@ -17,12 +20,20 @@ async function escenario(rol: Rol = "ANIMALES") {
   );
 
   const { postulacion } = await enviarPostulacion(
-    { animalId: "animal-1", nombre: "Marina Gómez", email: "marina@ejemplo.org", telefono: "341 555 0000", respuestas: { [patio.id]: "sí" } },
+    {
+      animalId: "animal-1",
+      nombreAnimal: "Rocky",
+      nombre: "Marina Gómez",
+      email: "marina@ejemplo.org",
+      telefono: "341 555 0000",
+      respuestas: { [patio.id]: "sí" },
+    },
     repositorio,
-    auditoria
+    auditoria,
+    avisos
   );
 
-  return { ctx, repositorio, auditoria, postulacion };
+  return { ctx, repositorio, auditoria, avisos, postulacion };
 }
 
 describe("cambiarEstado", () => {
@@ -99,9 +110,17 @@ describe("cerrarOtrasPostulaciones", () => {
   it("rechaza las demás del mismo animal y deja la elegida", async () => {
     const e = await escenario();
     const otra = await enviarPostulacion(
-      { animalId: "animal-1", nombre: "Otra persona", email: "otra@ejemplo.org", telefono: "341 555 1111", respuestas: {} },
+      {
+        animalId: "animal-1",
+        nombreAnimal: "Rocky",
+        nombre: "Otra persona",
+        email: "otra@ejemplo.org",
+        telefono: "341 555 1111",
+        respuestas: {},
+      },
       e.repositorio,
-      e.auditoria
+      e.auditoria,
+      e.avisos
     );
 
     const cerradas = await cerrarOtrasPostulaciones("animal-1", e.postulacion.id, e.ctx);
@@ -114,9 +133,17 @@ describe("cerrarOtrasPostulaciones", () => {
   it("no toca las de otros animales", async () => {
     const e = await escenario();
     const deOtroAnimal = await enviarPostulacion(
-      { animalId: "animal-2", nombre: "Tercera", email: "tercera@ejemplo.org", telefono: "341 555 2222", respuestas: {} },
+      {
+        animalId: "animal-2",
+        nombreAnimal: "Luna",
+        nombre: "Tercera",
+        email: "tercera@ejemplo.org",
+        telefono: "341 555 2222",
+        respuestas: {},
+      },
       e.repositorio,
-      e.auditoria
+      e.auditoria,
+      e.avisos
     );
 
     await cerrarOtrasPostulaciones("animal-1", e.postulacion.id, e.ctx);

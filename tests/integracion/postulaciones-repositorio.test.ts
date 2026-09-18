@@ -2,6 +2,8 @@ import { describe, it, expect, afterAll } from "vitest";
 import { PrismaClient } from "@prisma/client";
 import { repositorioPostulacionesPrisma } from "@/infra/repositorios/postulaciones";
 import { auditoriaPrisma } from "@/infra/repositorios/animales";
+import { repositorioAvisosPrisma } from "@/infra/repositorios/avisos";
+import { puertoAvisos } from "@/domains/avisos/cola";
 import { enviarPostulacion } from "@/domains/postulaciones/envio";
 import { crearPregunta } from "@/domains/postulaciones/preguntas";
 
@@ -45,6 +47,7 @@ describe("repositorio Prisma de postulaciones", () => {
           rol: "ANIMALES",
           repositorio: repositorioPostulacionesPrisma(tx),
           auditoria: auditoriaPrisma(tx),
+          avisos: puertoAvisos(repositorioAvisosPrisma(tx)),
         }
       )
     );
@@ -52,9 +55,17 @@ describe("repositorio Prisma de postulaciones", () => {
 
     const { postulacion } = await prisma.$transaction(async (tx) =>
       enviarPostulacion(
-        { animalId: animal.id, nombre: "Marina", email: "marina@ejemplo.org", telefono: "341 555 0000", respuestas: { [pregunta.id]: "sí" } },
+        {
+          animalId: animal.id,
+          nombreAnimal: animal.nombre,
+          nombre: "Marina",
+          email: "marina@ejemplo.org",
+          telefono: "341 555 0000",
+          respuestas: { [pregunta.id]: "sí" },
+        },
         repositorioPostulacionesPrisma(tx),
-        auditoriaPrisma(tx)
+        auditoriaPrisma(tx),
+        puertoAvisos(repositorioAvisosPrisma(tx))
       )
     );
 
@@ -70,9 +81,17 @@ describe("repositorio Prisma de postulaciones", () => {
     await expect(
       prisma.$transaction(async (tx) =>
         enviarPostulacion(
-          { animalId: animal.id, nombre: "No debe quedar", email: "no@ejemplo.org", telefono: "341 555 0000", respuestas: { [preguntas[0]]: "sí" } },
+          {
+            animalId: animal.id,
+            nombreAnimal: animal.nombre,
+            nombre: "No debe quedar",
+            email: "no@ejemplo.org",
+            telefono: "341 555 0000",
+            respuestas: { [preguntas[0]]: "sí" },
+          },
           repositorioPostulacionesPrisma(tx),
-          { async registrar() { throw new Error("auditoría caída"); } }
+          { async registrar() { throw new Error("auditoría caída"); } },
+          puertoAvisos(repositorioAvisosPrisma(tx))
         )
       )
     ).rejects.toThrow(/auditoría caída/);
@@ -84,9 +103,17 @@ describe("repositorio Prisma de postulaciones", () => {
     const animal = await animalDePrueba();
     const { postulacion } = await prisma.$transaction(async (tx) =>
       enviarPostulacion(
-        { animalId: animal.id, nombre: "Marina", email: "Marina@Ejemplo.org", telefono: "341 555 0000", respuestas: { [preguntas[0]]: "sí" } },
+        {
+          animalId: animal.id,
+          nombreAnimal: animal.nombre,
+          nombre: "Marina",
+          email: "Marina@Ejemplo.org",
+          telefono: "341 555 0000",
+          respuestas: { [preguntas[0]]: "sí" },
+        },
         repositorioPostulacionesPrisma(tx),
-        auditoriaPrisma(tx)
+        auditoriaPrisma(tx),
+        puertoAvisos(repositorioAvisosPrisma(tx))
       )
     );
 

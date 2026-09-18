@@ -6,6 +6,8 @@ import { crearPregunta } from "@/domains/postulaciones/preguntas";
 import { enviarPostulacion } from "@/domains/postulaciones/envio";
 import { repositorioPostulacionesEnMemoria } from "../dobles/repositorio-postulaciones-memoria";
 import { auditoriaEnMemoria } from "../dobles/repositorio-animales-memoria";
+import { repositorioAvisosEnMemoria } from "../dobles/repositorio-avisos-memoria";
+import { puertoAvisos } from "@/domains/avisos/cola";
 
 function archivosDe(dir: string): string[] {
   return readdirSync(dir, { recursive: true, encoding: "utf8" })
@@ -37,12 +39,14 @@ describe("invariantes de la entrega 3", () => {
   it("el rol de finanzas no puede leer ni escribir postulaciones", async () => {
     const repositorio = repositorioPostulacionesEnMemoria();
     const auditoria = auditoriaEnMemoria();
-    const ctxAnimales = { usuarioEmail: "a@b.c", rol: "ANIMALES" as const, repositorio, auditoria };
+    const avisos = puertoAvisos(repositorioAvisosEnMemoria());
+    const ctxAnimales = { usuarioEmail: "a@b.c", rol: "ANIMALES" as const, repositorio, auditoria, avisos };
 
     const { postulacion } = await enviarPostulacion(
-      { animalId: "animal-1", nombre: "Marina", email: "marina@ejemplo.org", telefono: "341 555 0000", respuestas: {} },
+      { animalId: "animal-1", nombreAnimal: "Rocky", nombre: "Marina", email: "marina@ejemplo.org", telefono: "341 555 0000", respuestas: {} },
       repositorio,
-      auditoria
+      auditoria,
+      avisos
     );
 
     const ctxFinanzas = { ...ctxAnimales, rol: "FINANZAS" as const };
@@ -54,13 +58,22 @@ describe("invariantes de la entrega 3", () => {
   it("borrar los datos personales no deja rastro del contacto", async () => {
     const repositorio = repositorioPostulacionesEnMemoria();
     const auditoria = auditoriaEnMemoria();
-    const ctx = { usuarioEmail: "a@b.c", rol: "ANIMALES" as const, repositorio, auditoria };
+    const avisos = puertoAvisos(repositorioAvisosEnMemoria());
+    const ctx = { usuarioEmail: "a@b.c", rol: "ANIMALES" as const, repositorio, auditoria, avisos };
 
     const pregunta = await crearPregunta({ texto: "¿Tenés patio?", tipo: "SI_NO" }, ctx);
     const { postulacion } = await enviarPostulacion(
-      { animalId: "animal-1", nombre: "Marina Gómez", email: "marina@ejemplo.org", telefono: "341 555 0000", respuestas: { [pregunta.id]: "sí" } },
+      {
+        animalId: "animal-1",
+        nombreAnimal: "Rocky",
+        nombre: "Marina Gómez",
+        email: "marina@ejemplo.org",
+        telefono: "341 555 0000",
+        respuestas: { [pregunta.id]: "sí" },
+      },
       repositorio,
-      auditoria
+      auditoria,
+      avisos
     );
 
     await borrarDatosPersonales(postulacion.id, ctx);
